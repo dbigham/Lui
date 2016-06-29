@@ -43,7 +43,7 @@ public abstract class PatternMatch implements IPatternMatch
 				{
 					if (match.isMatchComplete())
 					{
-						state.matchCompleted(match);
+						state.matchCompleted(match, state);
 					}
 				}
 				

@@ -83,7 +83,7 @@ public class SequencePatternMatch extends PatternMatch
 				boolean theMatchWereExtendingIsAlreadyInPartialsChart = extensionPositions != null;
 				if (!theMatchWereExtendingIsAlreadyInPartialsChart)
 				{
-					chart.addStartPosPartial(this, endPos + 1, nextPattern.resultSymbol());
+					chart.addStartPosPartial(this, endPos + 1, nextPattern.resultSymbol(), state.iterationCounter());
 				}
 			}
 			
@@ -107,7 +107,7 @@ public class SequencePatternMatch extends PatternMatch
 				boolean theMatchWereExtendingIsAlreadyInPartialsChart = extensionPositions != null;
 				if (!theMatchWereExtendingIsAlreadyInPartialsChart)
 				{
-					chart.addEndPosPartial(this, startPos - 1, nextPattern.resultSymbol());
+					chart.addEndPosPartial(this, startPos - 1, nextPattern.resultSymbol(), state.iterationCounter());
 				}
 			}
 			

@@ -162,5 +162,8 @@ public class TestChartParser
 		assertEquals("[0, 1, 2, 3]", TestUtils.intArrayToStr(matches.get(0).subPatternStartPositions()));
 		
 		assertEquals(1, state.results().size());
+		
+		// See: AvoidingUnnecessaryPartialExtension.md
+		assertEquals(1, state.numTimesWeCheckedAPartialForPossibleExtension);
 	}
 }

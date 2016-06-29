@@ -17,7 +17,7 @@ public interface IPatternMatch
 	
 	/**
 	 * Extends the match using the given pattern, and then attempts to
-	 * continue extending the match as far as possible.
+	 * continue extending the partial match as far as possible.
 	 * 
 	 * @param state			the parser state.
 	 * @param dir			the direction of the match extension.

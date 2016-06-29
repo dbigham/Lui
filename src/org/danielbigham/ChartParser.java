@@ -3,6 +3,7 @@ package org.danielbigham;
 import java.util.List;
 
 import org.danielbigham.patternmatch.IPatternMatch;
+import org.danielbigham.patternmatch.PatternMatchWrapper;
 
 
 public class ChartParser
@@ -54,7 +55,7 @@ public class ChartParser
 						if (match.isMatchComplete())
 						{
 							// This pattern only required its trigger to match.
-							state.matchCompleted(match);
+							state.matchCompleted(match, state);
 							continue;
 						}
 						
@@ -94,36 +95,55 @@ public class ChartParser
 	 * Check whether any partial matches should be continued due to
 	 * new matches having been made.
 	 * 
-	 * @param state		the parser state.
+	 * @param state					the parser state.
 	 */
 	private static void continuationsPartialMatches(ParserState state)
 	{
 		Chart chart = state.chart();
-		List<IPatternMatch> newMatches = chart.getAndResetPartialQueue();
+		List<PatternMatchWrapper> newMatches = chart.getAndResetPartialQueue();
 		
 		while (newMatches != null && newMatches.size() > 0)
 		{
-			for (IPatternMatch trigger : newMatches)
+			for (PatternMatchWrapper trigger : newMatches)
 			{
-				List<IPatternMatch> partials = chart.getRightPartialsTriggeredBy(trigger);
+				List<PatternMatchWrapper> partials = chart.getRightPartialsTriggeredBy(trigger.match);
+				
+				// See: AvoidingUnnecessaryPartialExtension.md
+				int valueOfIterationCounterWhenTriggeringMatchCreated = trigger.valueOfIterationCounterWhenCreated;
 				
 				if (partials != null)
 				{
-					for (IPatternMatch partial : partials)
+					for (PatternMatchWrapper wrapper : partials)
 					{
-						System.out.println("Continue partial right: " + partial.toString());
-						partial.extendMatchAsFarAsPossibleUsing(state, 1, trigger);
+						if (valueOfIterationCounterWhenTriggeringMatchCreated > wrapper.valueOfIterationCounterWhenCreated)
+						{
+							System.out.println("Continue partial right: " + wrapper.match.toString());
+							++state.numTimesWeCheckedAPartialForPossibleExtension;
+							wrapper.match.extendMatchAsFarAsPossibleUsing(state, 1, trigger.match);
+						}
+						else
+						{
+							System.out.println("Skip partial:\n  Value of iteration counter when triggering token created: " + valueOfIterationCounterWhenTriggeringMatchCreated + "\n  Value of iteration counter when partial formed: " + wrapper.valueOfIterationCounterWhenCreated);
+						}
 					}
 				}
 				
-				partials = chart.getLeftPartialsTriggeredBy(trigger);
+				partials = chart.getLeftPartialsTriggeredBy(trigger.match);
 				
 				if (partials != null)
 				{
-					for (IPatternMatch partial : partials)
+					for (PatternMatchWrapper wrapper : partials)
 					{
-						System.out.println("Continue partial left: " + partial.toString());
-						partial.extendMatchAsFarAsPossibleUsing(state, -1, trigger);
+						if (valueOfIterationCounterWhenTriggeringMatchCreated > wrapper.valueOfIterationCounterWhenCreated)
+						{
+							System.out.println("Continue partial left: " + wrapper.match.toString());
+							++state.numTimesWeCheckedAPartialForPossibleExtension;
+							wrapper.match.extendMatchAsFarAsPossibleUsing(state, -1, trigger.match);
+						}
+						else
+						{
+							System.out.println("Skip partial:\n  Value of iteration counter when triggering token created: " + valueOfIterationCounterWhenTriggeringMatchCreated + "\n  Value of iteration counter when partial formed: " + wrapper.valueOfIterationCounterWhenCreated);
+						}
 					}
 				}
 			}

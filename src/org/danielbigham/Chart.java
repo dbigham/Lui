@@ -9,6 +9,7 @@ import java.util.Set;
 
 import org.danielbigham.pattern.LiteralPattern;
 import org.danielbigham.patternmatch.IPatternMatch;
+import org.danielbigham.patternmatch.PatternMatchWrapper;
 
 public class Chart
 {
@@ -50,7 +51,7 @@ public class Chart
 	// string span, we need to extend any partials waiting for it.
 	// This map keeps track of what partials are waiting for new
 	// matches with a given START position.
-	private final Map<Integer, List<IPatternMatch>> partialsTriggeredByStartPos;
+	private final Map<Integer, List<PatternMatchWrapper>> partialsTriggeredByStartPos;
 	
 	// The key for this map is computed from:
 	//		(literal or symbol) + input pos
@@ -58,10 +59,10 @@ public class Chart
 	// string span, we need to extend any partials waiting for it.
 	// This map keeps track of what partials are waiting for new
 	// matches with a given END position.
-	private final Map<Integer, List<IPatternMatch>> partialsTriggeredByEndPos;
+	private final Map<Integer, List<PatternMatchWrapper>> partialsTriggeredByEndPos;
 	
-	// Unsure if we'll end up using this or not.
-	private final List<IPatternMatch> toTriggerPartials;
+	// The new matches that might trigger partials to be extended.
+	private List<PatternMatchWrapper> toTriggerPartials;
 	
 	private final int inputLengthInTokens;
 	private final int numTokenIds;
@@ -72,9 +73,9 @@ public class Chart
 		this.matchesForSpan = new HashMap<Integer, List<IPatternMatch>>();
 		this.matchesStartingAt = new HashMap<Integer, Set<Integer>>();
 		this.matchesEndingAt = new HashMap<Integer, Set<Integer>>();
-		this.partialsTriggeredByStartPos = new HashMap<Integer, List<IPatternMatch>>();
-		this.partialsTriggeredByEndPos = new HashMap<Integer, List<IPatternMatch>>();
-		this.toTriggerPartials = new ArrayList<IPatternMatch>();
+		this.partialsTriggeredByStartPos = new HashMap<Integer, List<PatternMatchWrapper>>();
+		this.partialsTriggeredByEndPos = new HashMap<Integer, List<PatternMatchWrapper>>();
+		this.toTriggerPartials = new ArrayList<PatternMatchWrapper>();
 		this.inputLengthInTokens = inputLengthInTokens;
 		this.numTokenIds = numTokenIds;
 		this.inputEndPos = inputEndPos;
@@ -87,7 +88,7 @@ public class Chart
 	 * @param triggerPartials	should the addition of this match check whether
 	 * 							partials need to be extended?
 	 */
-	public void add(IPatternMatch match, boolean triggerPartials)
+	public void add(IPatternMatch match, boolean triggerPartials, ParserState state)
 	{
 		// Theoretically we could bail out of the match spans the entire
 		// input. Could experiment whether that speeds the parser up or not,
@@ -112,7 +113,11 @@ public class Chart
 					!(match.startPos() == 0 && match.endPos() == inputEndPos))
 				{
 					System.out.println("New result might trigger partials: " + match.toString());
-					toTriggerPartials.add(match);
+					// Important to increment this BEFORE creating the PatternMatchWrapper
+					// below, otherwise the previous partial we created (if any) will believe
+					// that it shouldn't be extended by this token.
+					state.incrementIterationCounter();
+					toTriggerPartials.add(new PatternMatchWrapper(match, state.iterationCounter()));
 				}
 			}
 			matchesForThisSpan.add(match);
@@ -225,42 +230,45 @@ public class Chart
 	 * Add a partial match to the partials chart, awaiting a new
 	 * sub-match to the right.
 	 * 
-	 * @param match			the partial match.
-	 * @param startPos		the starting position of the new sub-match we're waiting for.
-	 * @param symbol		the symbol of the new sub-match we're waiting for.
+	 * @param match				the partial match.
+	 * @param startPos			the starting position of the new sub-match we're waiting for.
+	 * @param symbol			the symbol of the new sub-match we're waiting for.
+	 * @param iterationCounter	See: AvoidingUnnecessaryPartialExtension.md
 	 */
-	public void addStartPosPartial(IPatternMatch match, int startPos, int symbol)
+	public void addStartPosPartial(IPatternMatch match, int startPos, int symbol, int iterationCounter)
 	{
 		int key = chartKey(startPos, symbol);
-		List<IPatternMatch> partials = partialsTriggeredByStartPos.get(key);
+		List<PatternMatchWrapper> partials = partialsTriggeredByStartPos.get(key);
 		if (partials == null)
 		{
-			partials = new ArrayList<IPatternMatch>();
+			partials = new ArrayList<PatternMatchWrapper>();
 			partialsTriggeredByStartPos.put(key, partials);
 		}
-		partials.add(match);
+		partials.add(new PatternMatchWrapper(match, iterationCounter));
 		
-		System.out.println(match.toString() + " -> Partials\n  Start: " + startPos + "\n  Symbol: " + symbol);
+		System.out.println(match.toString() + " -> Partials\n  Start pos: " + startPos + "\n  Symbol: " + symbol);
+		System.out.println("  Iteration counter: " + iterationCounter);
 	}
 	
 	/**
 	 * Add a partial match to the partials chart, awaiting a new
 	 * sub-match to the right.
 	 * 
-	 * @param match			the partial match.
-	 * @param startPos		the starting position of the new sub-match we're waiting for.
-	 * @param symbol		the symbol of the new sub-match we're waiting for.
+	 * @param match				the partial match.
+	 * @param startPos			the starting position of the new sub-match we're waiting for.
+	 * @param symbol			the symbol of the new sub-match we're waiting for.
+	 * @param iterationCounter	See: AvoidingUnnecessaryPartialExtension.md
 	 */
-	public void addEndPosPartial(IPatternMatch match, int endPos, int symbol)
+	public void addEndPosPartial(IPatternMatch match, int endPos, int symbol, int iterationCounter)
 	{
 		int key = chartKey(endPos, symbol);
-		List<IPatternMatch> partials = partialsTriggeredByEndPos.get(key);
+		List<PatternMatchWrapper> partials = partialsTriggeredByEndPos.get(key);
 		if (partials == null)
 		{
-			partials = new ArrayList<IPatternMatch>();
+			partials = new ArrayList<PatternMatchWrapper>();
 			partialsTriggeredByEndPos.put(key, partials);
 		}
-		partials.add(match);
+		partials.add(new PatternMatchWrapper(match, iterationCounter));
 		
 		System.out.println(match.toString() + " -> Partials\n  End: " + endPos + "\n  Symbol: " + symbol);
 	}
@@ -282,11 +290,14 @@ public class Chart
 	 * Returns the new matches that we determined might trigger partial
 	 * matches to continue.
 	 */
-	public List<IPatternMatch> getAndResetPartialQueue()
+	public List<PatternMatchWrapper> getAndResetPartialQueue()
 	{
-		List<IPatternMatch> res = new ArrayList<IPatternMatch>(toTriggerPartials);
-		toTriggerPartials.clear();
-		return res;
+		List<PatternMatchWrapper> tmp = toTriggerPartials;
+		// Would be more efficient to have two instances of ArrayList<PatternMatchWrapper>
+		// and just alternate which one we return here so that we don't have to re-allocate
+		// memory every time to build a new 'toTriggerPartials'.
+		toTriggerPartials = new ArrayList<PatternMatchWrapper>();
+		return tmp;
 	}
 	
 	/**
@@ -295,7 +306,7 @@ public class Chart
 	 * 
 	 * @param trigger		the sub-match for continuing a partial match.
 	 */
-	public List<IPatternMatch> getRightPartialsTriggeredBy(IPatternMatch trigger)
+	public List<PatternMatchWrapper> getRightPartialsTriggeredBy(IPatternMatch trigger)
 	{
 		int key = chartKey(trigger.startPos(), trigger.pattern().resultSymbol());
 		return partialsTriggeredByStartPos.get(key);
@@ -307,7 +318,7 @@ public class Chart
 	 * 
 	 * @param trigger		the sub-match for continuing a partial match.
 	 */
-	public List<IPatternMatch> getLeftPartialsTriggeredBy(IPatternMatch trigger)
+	public List<PatternMatchWrapper> getLeftPartialsTriggeredBy(IPatternMatch trigger)
 	{
 		int key = chartKey(trigger.endPos(), trigger.pattern().resultSymbol());
 		return partialsTriggeredByEndPos.get(key);

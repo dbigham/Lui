@@ -23,6 +23,11 @@ public class ParserState
 	private List<IPatternMatch> toTrigger2;
 	private final List<IPatternMatch> results;
 	private final int endPos;
+	// See: AvoidingUnnecessaryPartialExtension.md
+	private int iterationCounter;
+	// Useful for whitebox unit tests to ensure we're not trying to extend
+	// partials that we shouldn't be.
+	public int numTimesWeCheckedAPartialForPossibleExtension;
 	
 	public ParserState(List<IPatternMatch> tokens, Chart chart, Grammar grammar)
 	{
@@ -33,6 +38,7 @@ public class ParserState
 		this.toTrigger2 = new ArrayList<IPatternMatch>();
 		this.results = new ArrayList<IPatternMatch>();
 		this.endPos = tokens.size() - 1;
+		this.iterationCounter = 0;
 	}
 	
 	/**
@@ -81,7 +87,8 @@ public class ParserState
 			chart.add(
 				token,
 				// We don't trigger partials at this point because none exist.
-				false
+				false,
+				null
 			);
 		}
 		
@@ -92,10 +99,11 @@ public class ParserState
 	 * Called when a pattern has been matched successfully.
 	 * 
 	 * @param match		the matched pattern.
+	 * @param state		parser state.
 	 */
-	public void matchCompleted(IPatternMatch match)
+	public void matchCompleted(IPatternMatch match, ParserState state)
 	{
-		chart.add(match, true);
+		chart.add(match, true, state);
 		
 		toTrigger2.add(match.resultToSymbolPattern());
 		
@@ -127,5 +135,22 @@ public class ParserState
 		toTrigger = toTrigger2;
 		toTrigger2 = tmp;
 		toTrigger2.clear();
+	}
+	
+	/**
+	 * See: AvoidingUnnecessaryPartialExtension.md
+	 */
+	public int iterationCounter()
+	{
+		return iterationCounter;
+	}
+	
+	/**
+	 * See: AvoidingUnnecessaryPartialExtension.md
+	 */
+	public void incrementIterationCounter()
+	{
+		++iterationCounter;
+		System.out.println("Increment iteration counter -> " + iterationCounter);
 	}
 }
