@@ -1,8 +1,12 @@
-package org.danielbigham;
+package org.danielbigham.pattern;
 
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+
+import org.danielbigham.Chart;
+import org.danielbigham.ParserState;
+import org.danielbigham.patternmatch.IPatternMatch;
 
 /**
  * A pattern that is either a LiteralPattern or a SymbolPattern, which

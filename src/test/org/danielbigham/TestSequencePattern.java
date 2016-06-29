@@ -3,7 +3,7 @@ package test.org.danielbigham;
 import static org.junit.Assert.assertEquals;
 
 import org.danielbigham.Grammar;
-import org.danielbigham.SequencePattern;
+import org.danielbigham.pattern.SequencePattern;
 import org.junit.Test;
 
 public class TestSequencePattern

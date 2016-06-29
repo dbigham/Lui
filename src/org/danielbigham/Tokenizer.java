@@ -3,6 +3,9 @@ package org.danielbigham;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.danielbigham.pattern.LiteralPattern;
+import org.danielbigham.patternmatch.IPatternMatch;
+
 
 public class Tokenizer
 {

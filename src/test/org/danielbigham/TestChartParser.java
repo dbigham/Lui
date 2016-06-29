@@ -7,10 +7,10 @@ import java.util.List;
 
 import org.danielbigham.ChartParser;
 import org.danielbigham.Grammar;
-import org.danielbigham.IPattern;
-import org.danielbigham.IPatternMatch;
 import org.danielbigham.ParserState;
-import org.danielbigham.SequencePattern;
+import org.danielbigham.pattern.IPattern;
+import org.danielbigham.pattern.SequencePattern;
+import org.danielbigham.patternmatch.IPatternMatch;
 import org.junit.Test;
 
 public class TestChartParser

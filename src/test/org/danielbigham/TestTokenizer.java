@@ -5,9 +5,9 @@ import static org.junit.Assert.assertEquals;
 import java.util.List;
 
 import org.danielbigham.Grammar;
-import org.danielbigham.IPatternMatch;
-import org.danielbigham.Pattern;
 import org.danielbigham.Tokenizer;
+import org.danielbigham.pattern.Pattern;
+import org.danielbigham.patternmatch.IPatternMatch;
 import org.junit.Test;
 
 public class TestTokenizer

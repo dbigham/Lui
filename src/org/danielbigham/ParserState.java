@@ -3,6 +3,8 @@ package org.danielbigham;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.danielbigham.patternmatch.IPatternMatch;
+
 /**
  * Chart parser's state.
  * 

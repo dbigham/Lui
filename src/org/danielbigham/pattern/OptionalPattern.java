@@ -1,6 +1,8 @@
-package org.danielbigham;
+package org.danielbigham.pattern;
 
 import java.util.ArrayList;
+
+import org.danielbigham.patternmatch.IPatternMatch;
 
 public class OptionalPattern extends Pattern implements IPattern
 {

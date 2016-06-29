@@ -7,6 +7,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.danielbigham.pattern.LiteralPattern;
+import org.danielbigham.patternmatch.IPatternMatch;
+
 public class Chart
 {
 	// The key is for this map is computed from:

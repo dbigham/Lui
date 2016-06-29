@@ -1,6 +1,10 @@
-package org.danielbigham;
+package org.danielbigham.pattern;
 
 import java.util.List;
+
+import org.danielbigham.Grammar;
+import org.danielbigham.patternmatch.IPatternMatch;
+import org.danielbigham.patternmatch.SequencePatternMatch;
 
 
 /**
@@ -29,14 +33,14 @@ public class SequencePattern extends Pattern implements IPattern
 		for(IPattern subPattern : patterns)
 		{
 			if (patternIndex > 0) { str.append(" "); }
-			if (patternIndex == triggerIndex)
+			if (patternIndex == getTriggerIndex())
 			{
 				// Double carets denote the sub-pattern
 				// that is playing the role of trigger.
 				str.append("<");
 			}
 			str.append(subPattern.toString());
-			if (patternIndex == triggerIndex)
+			if (patternIndex == getTriggerIndex())
 			{
 				str.append(">");
 			}

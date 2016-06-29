@@ -1,7 +1,10 @@
-package org.danielbigham;
+package org.danielbigham.patternmatch;
 
 import java.util.List;
 import java.util.Set;
+
+import org.danielbigham.ParserState;
+import org.danielbigham.pattern.IPattern;
 
 public interface IPatternMatch
 {

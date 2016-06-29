@@ -7,8 +7,8 @@ import java.util.List;
 import java.util.Map;
 
 import org.danielbigham.Grammar;
-import org.danielbigham.IPattern;
-import org.danielbigham.SequencePattern;
+import org.danielbigham.pattern.IPattern;
+import org.danielbigham.pattern.SequencePattern;
 import org.junit.Test;
 
 public class TestGrammar

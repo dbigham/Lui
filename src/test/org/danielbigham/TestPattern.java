@@ -5,8 +5,8 @@ import static org.junit.Assert.assertEquals;
 import java.util.List;
 
 import org.danielbigham.Grammar;
-import org.danielbigham.IPattern;
-import org.danielbigham.Pattern;
+import org.danielbigham.pattern.IPattern;
+import org.danielbigham.pattern.Pattern;
 import org.junit.Test;
 
 public class TestPattern

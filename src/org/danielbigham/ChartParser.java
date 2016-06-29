@@ -2,6 +2,8 @@ package org.danielbigham;
 
 import java.util.List;
 
+import org.danielbigham.patternmatch.IPatternMatch;
+
 
 public class ChartParser
 {

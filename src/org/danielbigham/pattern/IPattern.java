@@ -1,7 +1,9 @@
-package org.danielbigham;
+package org.danielbigham.pattern;
 
 import java.util.List;
 import java.util.Map;
+
+import org.danielbigham.patternmatch.IPatternMatch;
 
 public interface IPattern
 {

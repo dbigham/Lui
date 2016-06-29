@@ -1,4 +1,7 @@
-package org.danielbigham;
+package org.danielbigham.pattern;
+
+import org.danielbigham.Grammar;
+import org.danielbigham.patternmatch.IPatternMatch;
 
 public class SymbolPattern extends BasicPattern implements IPatternMatch
 {

@@ -1,8 +1,14 @@
-package org.danielbigham;
+package org.danielbigham.patternmatch;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+
+import org.danielbigham.Chart;
+import org.danielbigham.ParserState;
+import org.danielbigham.pattern.BasicPattern;
+import org.danielbigham.pattern.IPattern;
+import org.danielbigham.pattern.SequencePattern;
 
 /**
  * A pattern that consists of one or more sub-patterns, where each
@@ -24,14 +30,14 @@ public class SequencePatternMatch extends PatternMatch
 			pattern,
 			startPos,
 			endPos,
-			pattern.triggerIndex,
-			pattern.triggerIndex,
-			(pattern.triggerIndex >= pattern.length() - 1) ? -1 : 1,
+			pattern.getTriggerIndex(),
+			pattern.getTriggerIndex(),
+			(pattern.getTriggerIndex() >= pattern.length() - 1) ? -1 : 1,
 			new int[pattern.patterns().size() + 1]
 		);
 		
-		subPatternStartPositions[pattern.triggerIndex] = startPos;
-		subPatternStartPositions[pattern.triggerIndex + 1] = endPos + 1;
+		subPatternStartPositions[pattern.getTriggerIndex()] = startPos;
+		subPatternStartPositions[pattern.getTriggerIndex() + 1] = endPos + 1;
 	}
 	
 	private SequencePatternMatch(

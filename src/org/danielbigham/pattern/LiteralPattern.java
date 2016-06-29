@@ -1,4 +1,6 @@
-package org.danielbigham;
+package org.danielbigham.pattern;
+
+import org.danielbigham.Grammar;
 
 /**
  * Represents a literal string that may be found in an input.

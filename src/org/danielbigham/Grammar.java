@@ -5,6 +5,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.danielbigham.pattern.BasicPattern;
+import org.danielbigham.pattern.IPattern;
+import org.danielbigham.patternmatch.IPatternMatch;
+
 public class Grammar
 {
 	private Map<Integer, List<IPattern>> triggers;

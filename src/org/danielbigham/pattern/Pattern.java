@@ -1,10 +1,12 @@
-package org.danielbigham;
+package org.danielbigham.pattern;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
+
+import org.danielbigham.Grammar;
 
 public abstract class Pattern
 {
@@ -31,7 +33,7 @@ public abstract class Pattern
 	// The index into 'patterns' of the sub-pattern that acts as the 'trigger pattern'.
 	// ie. The word or symbol sub-pattern that, when seen, acts as the bottom-up
 	// trigger for this pattern.
-	protected int triggerIndex;
+	private int triggerIndex;
 	
 	public int length()
 	{
@@ -181,5 +183,13 @@ public abstract class Pattern
 		}
 		
 		return subPatternsAreAllLiteralsCached;
+	}
+	
+	/**
+	 * The index of the sub-pattern that is acting as the trigger for this pattern.
+	 */
+	public int getTriggerIndex()
+	{
+		return triggerIndex;
 	}
 }

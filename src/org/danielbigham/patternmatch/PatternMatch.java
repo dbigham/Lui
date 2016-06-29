@@ -1,8 +1,12 @@
-package org.danielbigham;
+package org.danielbigham.patternmatch;
 
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+
+import org.danielbigham.ParserState;
+import org.danielbigham.pattern.IPattern;
+import org.danielbigham.pattern.SymbolPattern;
 
 /**
  * Represents an active attempt to match a particular pattern
