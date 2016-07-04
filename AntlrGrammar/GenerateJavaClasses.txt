@@ -1,0 +1,7 @@
+set LUI=C:\Users\danielb\Documents\My Dropbox\Lui2
+SET CLASSPATH=.;%LUI%\Jars\antlr-4.5.3-complete.jar;%CLASSPATH%
+cd %LUI%\AntlrGrammar
+
+java org.antlr.v4.Tool -package com.danielbigham.lui.antlr -lib "%LUI%\AntlrGrammar" -o "%LUI%\src\com\danielbigham\lui\antlr" Grammar.g4
+
+java org.antlr.v4.Tool -package com.danielbigham.lui.antlr -lib "%LUI%\AntlrGrammar" -o "%LUI%\src\com\danielbigham\lui\antlr" WolframLanguage.g4

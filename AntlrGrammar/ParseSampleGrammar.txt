@@ -1,0 +1,2 @@
+set LUI=C:\Users\danielb\Documents\My Dropbox\Lui2
+java com.danielbigham.lui.loading.GrammarFiles "%LUI%\AntlrGrammar\Sample1"
