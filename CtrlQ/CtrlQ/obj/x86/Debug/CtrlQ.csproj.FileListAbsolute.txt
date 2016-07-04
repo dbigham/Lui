@@ -1,0 +1,7 @@
+C:\Users\danielb\Documents\My Dropbox\Lui2\CtrlQ\CtrlQ\bin\Debug\CtrlQ.exe
+C:\Users\danielb\Documents\My Dropbox\Lui2\CtrlQ\CtrlQ\bin\Debug\CtrlQ.pdb
+C:\Users\danielb\Documents\My Dropbox\Lui2\CtrlQ\CtrlQ\obj\x86\Debug\CtrlQ.Form1.resources
+C:\Users\danielb\Documents\My Dropbox\Lui2\CtrlQ\CtrlQ\obj\x86\Debug\CtrlQ.Properties.Resources.resources
+C:\Users\danielb\Documents\My Dropbox\Lui2\CtrlQ\CtrlQ\obj\x86\Debug\CtrlQ.csproj.GenerateResource.Cache
+C:\Users\danielb\Documents\My Dropbox\Lui2\CtrlQ\CtrlQ\obj\x86\Debug\CtrlQ.exe
+C:\Users\danielb\Documents\My Dropbox\Lui2\CtrlQ\CtrlQ\obj\x86\Debug\CtrlQ.pdb
