@@ -44,22 +44,24 @@ public class Grammar
 		
 		for(IPattern pattern : patterns)
 		{
-			int indexOfRarestToken = pattern.getIndexOfRarestSubPattern(tokenCounts);
+			List<Integer> triggerIndices = pattern.getTriggeringSubPatternIndices(tokenCounts);
+			pattern.setTriggerIndices(triggerIndices);
 			
-			pattern.setTriggerIndex(indexOfRarestToken);
-			
-			BasicPattern patternThatTriggers =
-					(BasicPattern) pattern.patterns().get(indexOfRarestToken);
-			
-			int tokenId = patternThatTriggers.getTokenId();
-			
-			List<IPattern> triggeredPatterns = triggers.get(tokenId);
-			if (triggeredPatterns == null)
+			for (Integer subPatternIndex : triggerIndices)
 			{
-				triggeredPatterns = new ArrayList<IPattern>();
-				triggers.put(tokenId, triggeredPatterns);
+				BasicPattern patternThatTriggers =
+						(BasicPattern) pattern.patterns().get(subPatternIndex);
+				
+				int tokenId = patternThatTriggers.getTokenId();
+				
+				List<IPattern> triggeredPatterns = triggers.get(tokenId);
+				if (triggeredPatterns == null)
+				{
+					triggeredPatterns = new ArrayList<IPattern>();
+					triggers.put(tokenId, triggeredPatterns);
+				}
+				triggeredPatterns.add(pattern);
 			}
-			triggeredPatterns.add(pattern);
 		}
 	}
 	
@@ -153,7 +155,7 @@ public class Grammar
 			List<IPatternMatch> patternMatches = new ArrayList<IPatternMatch>(triggeredPatterns.size());
 			for(IPattern pattern : triggeredPatterns)
 			{
-				patternMatches.add(pattern.toPatternMatch(startPos, endPos));
+				patternMatches.add(pattern.toPatternMatch(tokenId, startPos, endPos));
 			}
 			return patternMatches;
 		}

@@ -1,4 +1,4 @@
-package test.org.danielbigham.lui;
+package test.com.danielbigham.lui;
 
 import static org.junit.Assert.*;
 
@@ -19,12 +19,12 @@ public class TestGrammarFiles
 		assertEquals(1, rules.size());
 	}
 	
-	@Test
-	public void test2()
-	{
-		List<GrammarRule> rules = parseGrammar("webpage:\n\tspacex reddit\n\tslashdot\n\tthe verge");
-		assertEquals(3, rules.size());
-	}
+//	@Test
+//	public void test2()
+//	{
+//		List<GrammarRule> rules = parseGrammar("webpage:\n\tspacex reddit\n\tslashdot\n\tthe verge");
+//		assertEquals(3, rules.size());
+//	}
 	
 	/**
 	 * Parses the given grammar rules.

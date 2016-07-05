@@ -1,6 +1,8 @@
 package com.danielbigham.lui.pattern;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 
 import com.danielbigham.lui.Grammar;
@@ -31,17 +33,22 @@ public class SequencePattern extends Pattern implements IPattern
 		StringBuilder str = new StringBuilder();
 		str.append("{");
 		int patternIndex = 0;
+		int triggerIndex = -1;
+		if (getTriggerIndices() != null)
+		{
+			triggerIndex = getTriggerIndices().get(0);
+		}
 		for(IPattern subPattern : patterns)
 		{
 			if (patternIndex > 0) { str.append(" "); }
-			if (patternIndex == getTriggerIndex())
+			if (patternIndex == triggerIndex)
 			{
 				// Double carets denote the sub-pattern
 				// that is playing the role of trigger.
 				str.append("<");
 			}
 			str.append(subPattern.toString());
-			if (patternIndex == getTriggerIndex())
+			if (patternIndex == triggerIndex)
 			{
 				str.append(">");
 			}
@@ -52,8 +59,20 @@ public class SequencePattern extends Pattern implements IPattern
 	}
 
 	@Override
-	public IPatternMatch toPatternMatch(int startPos, int endPos)
+	public IPatternMatch toPatternMatch(int tokenId, int startPos, int endPos)
 	{
 		return new SequencePatternMatch(this, startPos, endPos);
+	}
+	
+	@Override
+	public List<Integer> getTriggeringSubPatternIndices(Map<Integer, Integer> tokenCounts)
+	{
+		// For sequence patterns, we use the rarest sub-pattern as the trigger.
+		int rarest = getIndexOfRarestSubPattern(tokenCounts);
+		
+		List<Integer> res = new ArrayList<Integer>(1);
+		res.add(rarest);
+		
+		return res;
 	}
 }

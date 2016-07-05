@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-
 import com.danielbigham.lui.Chart;
 import com.danielbigham.lui.ParserState;
 import com.danielbigham.lui.patternmatch.IPatternMatch;
@@ -73,7 +72,7 @@ public abstract class BasicPattern implements IPattern, IPatternMatch
 	}
 
 	@Override
-	public IPatternMatch toPatternMatch(int startPos, int endPos)
+	public IPatternMatch toPatternMatch(int tokenId, int startPos, int endPos)
 	{
 		return this;
 	}
@@ -146,18 +145,6 @@ public abstract class BasicPattern implements IPattern, IPatternMatch
 	{
 		throw new UnsupportedOperationException();
 	}
-
-	@Override
-	public int getIndexOfRarestSubPattern(Map<Integer, Integer> tokenCounts)
-	{
-		throw new UnsupportedOperationException();
-	}
-
-	@Override
-	public void setTriggerIndex(int triggerIndex)
-	{
-		throw new UnsupportedOperationException();
-	}
 	
 	public int[] subPatternStartPositions()
 	{
@@ -165,6 +152,18 @@ public abstract class BasicPattern implements IPattern, IPatternMatch
 	}
 	
 	public IPatternMatch resultToSymbolPattern()
+	{
+		throw new UnsupportedOperationException();
+	}
+	
+	@Override
+	public List<Integer> getTriggeringSubPatternIndices(Map<Integer, Integer> tokenCounts)
+	{
+		throw new UnsupportedOperationException();
+	}
+	
+	@Override
+	public void setTriggerIndices(List<Integer> triggerIndices)
 	{
 		throw new UnsupportedOperationException();
 	}

@@ -1,6 +1,8 @@
 package com.danielbigham.lui.pattern;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 import com.danielbigham.lui.patternmatch.IPatternMatch;
 
@@ -15,7 +17,14 @@ public class OptionalPattern extends Pattern implements IPattern
 	}
 
 	@Override
-	public IPatternMatch toPatternMatch(int startPos, int endPos)
+	public IPatternMatch toPatternMatch(int tokenId, int startPos, int endPos)
+	{
+		// TODO
+		throw new UnsupportedOperationException();
+	}
+	
+	@Override
+	public List<Integer> getTriggeringSubPatternIndices(Map<Integer, Integer> tokenCounts)
 	{
 		// TODO
 		throw new UnsupportedOperationException();

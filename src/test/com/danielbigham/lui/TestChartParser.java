@@ -1,4 +1,4 @@
-package test.org.danielbigham.lui;
+package test.com.danielbigham.lui;
 
 import static org.junit.Assert.assertEquals;
 
@@ -11,12 +11,13 @@ import com.danielbigham.lui.ChartParser;
 import com.danielbigham.lui.Grammar;
 import com.danielbigham.lui.ParserState;
 import com.danielbigham.lui.pattern.IPattern;
+import com.danielbigham.lui.pattern.OrPattern;
 import com.danielbigham.lui.pattern.SequencePattern;
 import com.danielbigham.lui.patternmatch.IPatternMatch;
 
 public class TestChartParser
 {
-	private static final int RESULT_SYMBOL = 1;
+	private static final int RESULT_SYMBOL = -1;
 	
 	// Test matching a simple grammar rule, only literals.
 	// The trigger will be 'testing', since it is the most rare literal,
@@ -166,5 +167,37 @@ public class TestChartParser
 		
 		// See: AvoidingUnnecessaryPartialExtension.md
 		assertEquals(1, state.numTimesWeCheckedAPartialForPossibleExtension);
+	}
+	
+	// OrPattern. Input matches first sub-pattern.
+	@Test
+	public void orPatternTest1()
+	{
+		Grammar grammar = new Grammar();
+		List<IPattern> patterns = new ArrayList<IPattern>();
+		patterns.add(OrPattern.create(grammar, "apple|orange|banana", RESULT_SYMBOL));
+		grammar.setPatterns(patterns);
+		
+		ParserState state = ChartParser.parse(grammar, "apple");
+		
+		List<IPatternMatch> matches = state.chart().getMatchesForSpan(RESULT_SYMBOL, 0, 0);
+		assertEquals(1, matches.size());
+		assertEquals("[0, 1]", TestUtils.intArrayToStr(matches.get(0).subPatternStartPositions()));
+	}
+	
+	// OrPattern. Input matches second sub-pattern.
+	@Test
+	public void orPatternTest2()
+	{
+		Grammar grammar = new Grammar();
+		List<IPattern> patterns = new ArrayList<IPattern>();
+		patterns.add(OrPattern.create(grammar, "apple|orange|banana", RESULT_SYMBOL));
+		grammar.setPatterns(patterns);
+		
+		ParserState state = ChartParser.parse(grammar, "orange");
+		
+		List<IPatternMatch> matches = state.chart().getMatchesForSpan(RESULT_SYMBOL, 0, 0);
+		assertEquals(1, matches.size());
+		assertEquals("[0, 1]", TestUtils.intArrayToStr(matches.get(0).subPatternStartPositions()));
 	}
 }

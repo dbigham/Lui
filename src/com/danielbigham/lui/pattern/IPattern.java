@@ -33,28 +33,28 @@ public interface IPattern
 	public IPattern subPattern(int index);
 	
 	/**
-	 * Return the index of the sub-pattern that is least common within
-	 * the grammar. (used when choosing which token should be used to
-	 * trigger the pattern in a bottom-up fashion)
+	 * Returns the token ID(s) that should be cause for triggering
+	 * this pattern to try matching.
 	 * 
-	 * @param tokenCounts		the counts of tokens in the grammar.
+	 * @param tokenCounts		the counts of tokens in the grammar. (useful for SequencePattern so that it can choose its rarest non-optional sub-pattern as its trigger)
 	 */
-	public int getIndexOfRarestSubPattern(Map<Integer, Integer> tokenCounts);
+	public List<Integer> getTriggeringSubPatternIndices(Map<Integer, Integer> tokenCounts);
 	
 	/**
-	 * Set this pattern's trigger.
+	 * Set this pattern's triggers.
 	 * 
-	 * @param triggerIndex		an index into 'patterns'.
+	 * @param triggerIndices		indices into 'patterns'.
 	 */
-	public void setTriggerIndex(int triggerIndex);
+	public void setTriggerIndices(List<Integer> triggerIndices);
 	
 	/**
 	 * Given a pattern, construct a pattern match object.
 	 * 
+	 * @param tokenId			the token ID of the triggering token.
 	 * @param startPos			the starting position of the triggering subparse.
 	 * @param endPos			then ending position of the triggering subparse.
 	 */
-	public IPatternMatch toPatternMatch(int startPos, int endPos);
+	public IPatternMatch toPatternMatch(int tokenId, int startPos, int endPos);
 	
 	/**
 	 * Returns true if every sub-pattern is a literal. This is useful

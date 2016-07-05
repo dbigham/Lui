@@ -1,5 +1,8 @@
 package com.danielbigham.lui.pattern;
 
+import java.util.List;
+import java.util.Map;
+
 import com.danielbigham.lui.Grammar;
 
 /**

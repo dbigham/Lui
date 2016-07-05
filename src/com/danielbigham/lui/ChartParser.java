@@ -58,17 +58,6 @@ public class ChartParser
 							continue;
 						}
 						
-						if (match.pattern().resultSymbol() == ChartParser.START_SYMBOL)
-						{
-							if (// If this is a START pattern and we aren't
-								// attempting to match it from the beginning of
-								// the string, then don't bother.
-								match.startPos() > 0)
-							{
-								continue;
-							}
-						}
-						
 						if (// If we don't have enough tokens to match all of
 							// the sub-patterns, then don't bother trying to match it.
 							match.pattern().patterns().size() > tokens.size() ||

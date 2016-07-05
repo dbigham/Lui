@@ -19,21 +19,21 @@ public abstract class Pattern
 		// Best to do at grammar construction time, I think, rather than at runtime.
 		this.subPatternsAreAllLiterals();
 		this.resultSymbol = resultSymbol;
-		// Default to -1 until the time when the trigger index
+		// Default to null until the time when the trigger index
 		// is actually set. That way if we create a pattern and
 		// do a toString() on it, it won't falsely look like the
-		// triggerIndex has been set to 0.
-		this.triggerIndex = -1;
+		// triggerIndices have been set.
+		this.triggerIndices = null;
 	}
 	
 	// The integer that corresponds to the grammar symbol that
 	// is produced by this grammar pattern.
 	protected int resultSymbol;
 	
-	// The index into 'patterns' of the sub-pattern that acts as the 'trigger pattern'.
-	// ie. The word or symbol sub-pattern that, when seen, acts as the bottom-up
+	// The indices into 'patterns' of the sub-patterns that acts as the triggers.
+	// ie. The word or symbol sub-patterns that, when seen, acts as the bottom-up
 	// trigger for this pattern.
-	private int triggerIndex;
+	private List<Integer> triggerIndices;
 	
 	public int length()
 	{
@@ -120,31 +120,36 @@ public abstract class Pattern
 		return indexOfRarestToken;
 	}
 	
-	/**
-	 * Set this pattern's trigger.
-	 * 
-	 * @param triggerIndex		an index into 'patterns'.
-	 */
-	public void setTriggerIndex(int triggerIndex)
+	public void setTriggerIndices(List<Integer> triggerIndices)
 	{
-		this.triggerIndex = triggerIndex;
+		this.triggerIndices = triggerIndices;
 	}
 	
 	/**
 	 * Tokenize a string into a sequence of tokens.
 	 * 
-	 * @param grammar							the grammar. (defines mappings from words -> integers)
-	 * @param str								the input string.
+	 * @param grammar			the grammar. (defines mappings from words -> integers)
+	 * @param str				the input string.
 	 */
 	public static List<IPattern> parse(Grammar grammar, String str)
 	{
-		String[] rawTokens = str.trim().split("\\s+");
+		String split = "\\s+";
+		if (str.contains("|"))
+		{
+			// For now, if the pattern contains any vertical bars, then assume
+			// this is a simple OR rule.
+			split = "\\|";
+		}
+		
+		String[] rawTokens = str.trim().split(split);
 		
 		List<IPattern> tokens = new ArrayList<IPattern>(rawTokens.length);
 		int pos = 0;
 		for (String token : rawTokens)
 		{
 			IPattern pattern;
+			
+			token = token.trim();
 			
 			if (token.startsWith("$"))
 			{
@@ -186,10 +191,10 @@ public abstract class Pattern
 	}
 	
 	/**
-	 * The index of the sub-pattern that is acting as the trigger for this pattern.
+	 * The indices of the sub-patterns that are acting as the triggers for this pattern.
 	 */
-	public int getTriggerIndex()
+	public List<Integer> getTriggerIndices()
 	{
-		return triggerIndex;
+		return triggerIndices;
 	}
 }

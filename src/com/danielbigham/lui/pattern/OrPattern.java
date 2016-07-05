@@ -1,8 +1,12 @@
 package com.danielbigham.lui.pattern;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
+import com.danielbigham.lui.Grammar;
 import com.danielbigham.lui.patternmatch.IPatternMatch;
+import com.danielbigham.lui.patternmatch.OrPatternMatch;
 
 public class OrPattern extends Pattern implements IPattern
 {
@@ -11,10 +15,56 @@ public class OrPattern extends Pattern implements IPattern
 		super(patterns, resultSymbol);
 	}
 	
+	public static OrPattern create(Grammar grammar, String str, int resultSymbol)
+	{
+		return new OrPattern(Pattern.parse(grammar, str), resultSymbol);
+	}
+	
 	@Override
-	public IPatternMatch toPatternMatch(int startPos, int endPos)
+	public IPatternMatch toPatternMatch(int tokenId, int startPos, int endPos)
 	{
 		// TODO
-		throw new UnsupportedOperationException();
+		// Inefficient to iterate here to find the sub-pattern index. Should
+		// we store that in our trigger table?
+		int subPatternIndex = -1;
+		for (int i = 0; i < patterns.size(); ++i)
+		{
+			if (((BasicPattern)patterns.get(i)).getTokenId() == tokenId)
+			{
+				subPatternIndex = i;
+				break;
+			}
+		}
+		if (subPatternIndex == -1)
+		{
+			throw new IllegalArgumentException("OrPattern: Couldn't find subpattern with token ID " + tokenId);
+		}
+		return new OrPatternMatch(this, startPos, endPos, subPatternIndex);
+	}
+	
+	@Override
+	public List<Integer> getTriggeringSubPatternIndices(Map<Integer, Integer> tokenCounts)
+	{
+		List<Integer> res = new ArrayList<Integer>();
+		// Could be optimized to return something that indicates Range[1, n]
+		// rather than a literal list.
+		for (int i = 0 ; i < patterns.size(); ++i)
+		{
+			res.add(i);
+		}
+		return res;
+	}
+	
+	public String toString()
+	{
+		StringBuilder str = new StringBuilder();
+		int patternIndex = 0;
+		for(IPattern subPattern : patterns)
+		{
+			if (patternIndex > 0) { str.append("|"); }
+			str.append(subPattern.toString());
+			++patternIndex;
+		}
+		return str.toString();
 	}
 }

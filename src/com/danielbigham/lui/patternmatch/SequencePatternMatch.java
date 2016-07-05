@@ -31,14 +31,14 @@ public class SequencePatternMatch extends PatternMatch
 			pattern,
 			startPos,
 			endPos,
-			pattern.getTriggerIndex(),
-			pattern.getTriggerIndex(),
-			(pattern.getTriggerIndex() >= pattern.length() - 1) ? -1 : 1,
+			pattern.getTriggerIndices().get(0),
+			pattern.getTriggerIndices().get(0),
+			(pattern.getTriggerIndices().get(0) >= pattern.length() - 1) ? -1 : 1,
 			new int[pattern.patterns().size() + 1]
 		);
 		
-		subPatternStartPositions[pattern.getTriggerIndex()] = startPos;
-		subPatternStartPositions[pattern.getTriggerIndex() + 1] = endPos + 1;
+		subPatternStartPositions[pattern.getTriggerIndices().get(0)] = startPos;
+		subPatternStartPositions[pattern.getTriggerIndices().get(0) + 1] = endPos + 1;
 	}
 	
 	private SequencePatternMatch(

@@ -1,4 +1,4 @@
-package test.org.danielbigham.lui;
+package test.com.danielbigham.lui;
 
 import static org.junit.Assert.assertEquals;
 

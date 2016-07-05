@@ -1,4 +1,4 @@
-package test.org.danielbigham.lui;
+package test.com.danielbigham.lui;
 
 public class TestUtils
 {

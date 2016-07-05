@@ -65,7 +65,7 @@ public interface IPatternMatch
 	/**
 	 * The input positions of the matched sub-patterns. The integer in
 	 * position 'i' is the start position of sub-pattern 'i'. The extra
-	 * integer at the end is 1+endPos of the lst sub-pattern.
+	 * integer at the end is 1+endPos of the last sub-pattern.
 	 */
 	public int[] subPatternStartPositions();
 	
