@@ -5,6 +5,7 @@ import org.antlr.v4.runtime.tree.ErrorNode;
 import org.antlr.v4.runtime.tree.TerminalNode;
 
 import com.danielbigham.lui.antlr.GrammarListener;
+import com.danielbigham.lui.antlr.GrammarParser.BasicRulePart2Context;
 import com.danielbigham.lui.antlr.GrammarParser.BasicRulePartContext;
 import com.danielbigham.lui.antlr.GrammarParser.EDivideContext;
 import com.danielbigham.lui.antlr.GrammarParser.EHeadedExprContext;
@@ -21,9 +22,10 @@ import com.danielbigham.lui.antlr.GrammarParser.GrammarRuleContext;
 import com.danielbigham.lui.antlr.GrammarParser.GrammarRulesContext;
 import com.danielbigham.lui.antlr.GrammarParser.IntegerContext;
 import com.danielbigham.lui.antlr.GrammarParser.LhsContext;
-import com.danielbigham.lui.antlr.GrammarParser.OrContext;
+import com.danielbigham.lui.antlr.GrammarParser.OrRulePartContext;
 import com.danielbigham.lui.antlr.GrammarParser.RealContext;
 import com.danielbigham.lui.antlr.GrammarParser.RulePartContext;
+import com.danielbigham.lui.antlr.GrammarParser.SeqRulePartContext;
 import com.danielbigham.lui.antlr.GrammarParser.SimpleRuleContext;
 import com.danielbigham.lui.antlr.GrammarParser.StringContext;
 import com.danielbigham.lui.antlr.GrammarParser.SymbolContext;
@@ -107,34 +109,6 @@ public class GrammarRulesListener implements GrammarListener
 
 	@Override
 	public void exitLhs(LhsContext ctx)
-	{
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void enterRulePart(RulePartContext ctx)
-	{
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void exitRulePart(RulePartContext ctx)
-	{
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void enterOr(OrContext ctx)
-	{
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void exitOr(OrContext ctx)
 	{
 		// TODO Auto-generated method stub
 		
@@ -356,6 +330,42 @@ public class GrammarRulesListener implements GrammarListener
 
 	@Override
 	public void exitReal(RealContext ctx) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void enterOrRulePart(OrRulePartContext ctx) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void exitOrRulePart(OrRulePartContext ctx) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void enterSeqRulePart(SeqRulePartContext ctx) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void exitSeqRulePart(SeqRulePartContext ctx) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void enterBasicRulePart2(BasicRulePart2Context ctx) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void exitBasicRulePart2(BasicRulePart2Context ctx) {
 		// TODO Auto-generated method stub
 		
 	}

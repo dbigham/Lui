@@ -2,6 +2,7 @@ package com.danielbigham.lui.loading;
 
 import java.util.List;
 
+import com.danielbigham.lui.Grammar;
 import com.danielbigham.lui.antlr.GrammarParser.GrammarRulesContext;
 import com.danielbigham.lui.grammarrule.GrammarRule;
 
@@ -16,11 +17,17 @@ import com.danielbigham.lui.grammarrule.GrammarRule;
 public class RuleHandler implements IRuleHandler
 {
 	private List<GrammarRule> rules;
+	private Grammar grammar;
+	
+	public RuleHandler(Grammar grammar)
+	{
+		this.grammar = grammar;
+	}
 	
 	@Override
 	public void handle(GrammarRulesContext rules)
 	{
-		this.rules = AntlrHelpers.convert(rules);
+		this.rules = AntlrHelpers.convert(rules, grammar);
 	}
 
 	public List<GrammarRule> getRules()

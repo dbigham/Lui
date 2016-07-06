@@ -15,15 +15,16 @@ simpleRule:		rulePart+
 	|			rulePart+ NEWLINE_DOUBLE_INDENT expr
 	;
 
-lhs: symbolName=ID ;
+lhs: ID | symbol ;
 
-rulePart: or | basicRulePart ;
-
-or: basicRulePart ('|' basicRulePart)+ ;
+rulePart:		rulePart ('|' rulePart)+				# OrRulePart
+	|			'(' rulePart+ ')'						# SeqRulePart
+	|			basicRulePart							# BasicRulePart2
+	;
 
 basicRulePart:
     ID |
     symbol
     ;
     
-symbol: '$' ID ;
+symbol: ('$'|'~') ID ;

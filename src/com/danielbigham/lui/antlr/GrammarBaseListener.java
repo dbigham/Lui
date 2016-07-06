@@ -1,4 +1,4 @@
-// Generated from Grammar.g4 by ANTLR 4.5.3
+// Generated from C:\Users\Daniel\WolframWorkspaces\Base2\Lui\AntlrGrammar\Grammar.g4 by ANTLR 4.5.3
 package com.danielbigham.lui.antlr;
 
 import org.antlr.v4.runtime.ParserRuleContext;
@@ -64,25 +64,37 @@ public class GrammarBaseListener implements GrammarListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterRulePart(GrammarParser.RulePartContext ctx) { }
+	@Override public void enterOrRulePart(GrammarParser.OrRulePartContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitRulePart(GrammarParser.RulePartContext ctx) { }
+	@Override public void exitOrRulePart(GrammarParser.OrRulePartContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterOr(GrammarParser.OrContext ctx) { }
+	@Override public void enterBasicRulePart2(GrammarParser.BasicRulePart2Context ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitOr(GrammarParser.OrContext ctx) { }
+	@Override public void exitBasicRulePart2(GrammarParser.BasicRulePart2Context ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterSeqRulePart(GrammarParser.SeqRulePartContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitSeqRulePart(GrammarParser.SeqRulePartContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -112,61 +124,25 @@ public class GrammarBaseListener implements GrammarListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterEReal(GrammarParser.ERealContext ctx) { }
+	@Override public void enterETimes(GrammarParser.ETimesContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitEReal(GrammarParser.ERealContext ctx) { }
+	@Override public void exitETimes(GrammarParser.ETimesContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterESymbol(GrammarParser.ESymbolContext ctx) { }
+	@Override public void enterEPlus(GrammarParser.EPlusContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitESymbol(GrammarParser.ESymbolContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterEHeadedExpr(GrammarParser.EHeadedExprContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitEHeadedExpr(GrammarParser.EHeadedExprContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterERule(GrammarParser.ERuleContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitERule(GrammarParser.ERuleContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterEList(GrammarParser.EListContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitEList(GrammarParser.EListContext ctx) { }
+	@Override public void exitEPlus(GrammarParser.EPlusContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -208,13 +184,25 @@ public class GrammarBaseListener implements GrammarListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterEPlus(GrammarParser.EPlusContext ctx) { }
+	@Override public void enterESymbol(GrammarParser.ESymbolContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitEPlus(GrammarParser.EPlusContext ctx) { }
+	@Override public void exitESymbol(GrammarParser.ESymbolContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterERule(GrammarParser.ERuleContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitERule(GrammarParser.ERuleContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -232,13 +220,37 @@ public class GrammarBaseListener implements GrammarListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterETimes(GrammarParser.ETimesContext ctx) { }
+	@Override public void enterEList(GrammarParser.EListContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitETimes(GrammarParser.ETimesContext ctx) { }
+	@Override public void exitEList(GrammarParser.EListContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterEHeadedExpr(GrammarParser.EHeadedExprContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitEHeadedExpr(GrammarParser.EHeadedExprContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterEReal(GrammarParser.ERealContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitEReal(GrammarParser.ERealContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

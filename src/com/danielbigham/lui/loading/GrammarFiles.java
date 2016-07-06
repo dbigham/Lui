@@ -5,6 +5,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 
+import com.danielbigham.lui.Grammar;
 import com.danielbigham.lui.antlr.GrammarParser.GrammarRulesContext;
 import com.danielbigham.lui.grammarrule.GrammarRule;
 
@@ -19,9 +20,11 @@ import com.danielbigham.lui.grammarrule.GrammarRule;
 public class GrammarFiles implements IFileLoader
 {
 	private Thread fileWatcherThread;
+	private Grammar grammar;
 	
-	public GrammarFiles(Path baseDir) throws IOException
+	public GrammarFiles(Path baseDir, Grammar grammar) throws IOException
 	{
+		this.grammar = grammar;
 		fileWatcherThread = new FileLoaderAndReloader(baseDir, this);
 		fileWatcherThread.run();
 	}
@@ -46,7 +49,7 @@ public class GrammarFiles implements IFileLoader
 				@Override
 				public void handle(GrammarRulesContext rules)
 				{
-					List<GrammarRule> luiRules = AntlrHelpers.convert(rules);
+					List<GrammarRule> luiRules = AntlrHelpers.convert(rules, grammar);
 					
 					// TODO
 				}
@@ -69,7 +72,7 @@ public class GrammarFiles implements IFileLoader
 				@Override
 				public void handle(GrammarRulesContext rules)
 				{
-					List<GrammarRule> luiRules = AntlrHelpers.convert(rules);
+					List<GrammarRule> luiRules = AntlrHelpers.convert(rules, grammar);
 					
 					// TODO
 				}
@@ -119,6 +122,7 @@ public class GrammarFiles implements IFileLoader
     public static void main(String[] args) throws IOException, InterruptedException
     {
         Path dir = Paths.get(args[0]);
-        new FileLoaderAndReloader(dir, new GrammarFiles(dir)).run();
+        Grammar grammar = new Grammar();
+        new FileLoaderAndReloader(dir, new GrammarFiles(dir, grammar)).run();
     }
 }

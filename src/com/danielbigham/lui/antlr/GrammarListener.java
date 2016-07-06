@@ -1,4 +1,4 @@
-// Generated from Grammar.g4 by ANTLR 4.5.3
+// Generated from C:\Users\Daniel\WolframWorkspaces\Base2\Lui\AntlrGrammar\Grammar.g4 by ANTLR 4.5.3
 package com.danielbigham.lui.antlr;
 import org.antlr.v4.runtime.tree.ParseTreeListener;
 
@@ -48,25 +48,41 @@ public interface GrammarListener extends ParseTreeListener {
 	 */
 	void exitLhs(GrammarParser.LhsContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link GrammarParser#rulePart}.
+	 * Enter a parse tree produced by the {@code OrRulePart}
+	 * labeled alternative in {@link GrammarParser#rulePart}.
 	 * @param ctx the parse tree
 	 */
-	void enterRulePart(GrammarParser.RulePartContext ctx);
+	void enterOrRulePart(GrammarParser.OrRulePartContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link GrammarParser#rulePart}.
+	 * Exit a parse tree produced by the {@code OrRulePart}
+	 * labeled alternative in {@link GrammarParser#rulePart}.
 	 * @param ctx the parse tree
 	 */
-	void exitRulePart(GrammarParser.RulePartContext ctx);
+	void exitOrRulePart(GrammarParser.OrRulePartContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link GrammarParser#or}.
+	 * Enter a parse tree produced by the {@code BasicRulePart2}
+	 * labeled alternative in {@link GrammarParser#rulePart}.
 	 * @param ctx the parse tree
 	 */
-	void enterOr(GrammarParser.OrContext ctx);
+	void enterBasicRulePart2(GrammarParser.BasicRulePart2Context ctx);
 	/**
-	 * Exit a parse tree produced by {@link GrammarParser#or}.
+	 * Exit a parse tree produced by the {@code BasicRulePart2}
+	 * labeled alternative in {@link GrammarParser#rulePart}.
 	 * @param ctx the parse tree
 	 */
-	void exitOr(GrammarParser.OrContext ctx);
+	void exitBasicRulePart2(GrammarParser.BasicRulePart2Context ctx);
+	/**
+	 * Enter a parse tree produced by the {@code SeqRulePart}
+	 * labeled alternative in {@link GrammarParser#rulePart}.
+	 * @param ctx the parse tree
+	 */
+	void enterSeqRulePart(GrammarParser.SeqRulePartContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code SeqRulePart}
+	 * labeled alternative in {@link GrammarParser#rulePart}.
+	 * @param ctx the parse tree
+	 */
+	void exitSeqRulePart(GrammarParser.SeqRulePartContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link GrammarParser#basicRulePart}.
 	 * @param ctx the parse tree
@@ -88,65 +104,29 @@ public interface GrammarListener extends ParseTreeListener {
 	 */
 	void exitSymbol(GrammarParser.SymbolContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code EReal}
+	 * Enter a parse tree produced by the {@code ETimes}
 	 * labeled alternative in {@link GrammarParser#expr}.
 	 * @param ctx the parse tree
 	 */
-	void enterEReal(GrammarParser.ERealContext ctx);
+	void enterETimes(GrammarParser.ETimesContext ctx);
 	/**
-	 * Exit a parse tree produced by the {@code EReal}
+	 * Exit a parse tree produced by the {@code ETimes}
 	 * labeled alternative in {@link GrammarParser#expr}.
 	 * @param ctx the parse tree
 	 */
-	void exitEReal(GrammarParser.ERealContext ctx);
+	void exitETimes(GrammarParser.ETimesContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code ESymbol}
+	 * Enter a parse tree produced by the {@code EPlus}
 	 * labeled alternative in {@link GrammarParser#expr}.
 	 * @param ctx the parse tree
 	 */
-	void enterESymbol(GrammarParser.ESymbolContext ctx);
+	void enterEPlus(GrammarParser.EPlusContext ctx);
 	/**
-	 * Exit a parse tree produced by the {@code ESymbol}
+	 * Exit a parse tree produced by the {@code EPlus}
 	 * labeled alternative in {@link GrammarParser#expr}.
 	 * @param ctx the parse tree
 	 */
-	void exitESymbol(GrammarParser.ESymbolContext ctx);
-	/**
-	 * Enter a parse tree produced by the {@code EHeadedExpr}
-	 * labeled alternative in {@link GrammarParser#expr}.
-	 * @param ctx the parse tree
-	 */
-	void enterEHeadedExpr(GrammarParser.EHeadedExprContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code EHeadedExpr}
-	 * labeled alternative in {@link GrammarParser#expr}.
-	 * @param ctx the parse tree
-	 */
-	void exitEHeadedExpr(GrammarParser.EHeadedExprContext ctx);
-	/**
-	 * Enter a parse tree produced by the {@code ERule}
-	 * labeled alternative in {@link GrammarParser#expr}.
-	 * @param ctx the parse tree
-	 */
-	void enterERule(GrammarParser.ERuleContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code ERule}
-	 * labeled alternative in {@link GrammarParser#expr}.
-	 * @param ctx the parse tree
-	 */
-	void exitERule(GrammarParser.ERuleContext ctx);
-	/**
-	 * Enter a parse tree produced by the {@code EList}
-	 * labeled alternative in {@link GrammarParser#expr}.
-	 * @param ctx the parse tree
-	 */
-	void enterEList(GrammarParser.EListContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code EList}
-	 * labeled alternative in {@link GrammarParser#expr}.
-	 * @param ctx the parse tree
-	 */
-	void exitEList(GrammarParser.EListContext ctx);
+	void exitEPlus(GrammarParser.EPlusContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code EInteger}
 	 * labeled alternative in {@link GrammarParser#expr}.
@@ -184,17 +164,29 @@ public interface GrammarListener extends ParseTreeListener {
 	 */
 	void exitEPower(GrammarParser.EPowerContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code EPlus}
+	 * Enter a parse tree produced by the {@code ESymbol}
 	 * labeled alternative in {@link GrammarParser#expr}.
 	 * @param ctx the parse tree
 	 */
-	void enterEPlus(GrammarParser.EPlusContext ctx);
+	void enterESymbol(GrammarParser.ESymbolContext ctx);
 	/**
-	 * Exit a parse tree produced by the {@code EPlus}
+	 * Exit a parse tree produced by the {@code ESymbol}
 	 * labeled alternative in {@link GrammarParser#expr}.
 	 * @param ctx the parse tree
 	 */
-	void exitEPlus(GrammarParser.EPlusContext ctx);
+	void exitESymbol(GrammarParser.ESymbolContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code ERule}
+	 * labeled alternative in {@link GrammarParser#expr}.
+	 * @param ctx the parse tree
+	 */
+	void enterERule(GrammarParser.ERuleContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code ERule}
+	 * labeled alternative in {@link GrammarParser#expr}.
+	 * @param ctx the parse tree
+	 */
+	void exitERule(GrammarParser.ERuleContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code EString}
 	 * labeled alternative in {@link GrammarParser#expr}.
@@ -208,17 +200,41 @@ public interface GrammarListener extends ParseTreeListener {
 	 */
 	void exitEString(GrammarParser.EStringContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code ETimes}
+	 * Enter a parse tree produced by the {@code EList}
 	 * labeled alternative in {@link GrammarParser#expr}.
 	 * @param ctx the parse tree
 	 */
-	void enterETimes(GrammarParser.ETimesContext ctx);
+	void enterEList(GrammarParser.EListContext ctx);
 	/**
-	 * Exit a parse tree produced by the {@code ETimes}
+	 * Exit a parse tree produced by the {@code EList}
 	 * labeled alternative in {@link GrammarParser#expr}.
 	 * @param ctx the parse tree
 	 */
-	void exitETimes(GrammarParser.ETimesContext ctx);
+	void exitEList(GrammarParser.EListContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code EHeadedExpr}
+	 * labeled alternative in {@link GrammarParser#expr}.
+	 * @param ctx the parse tree
+	 */
+	void enterEHeadedExpr(GrammarParser.EHeadedExprContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code EHeadedExpr}
+	 * labeled alternative in {@link GrammarParser#expr}.
+	 * @param ctx the parse tree
+	 */
+	void exitEHeadedExpr(GrammarParser.EHeadedExprContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code EReal}
+	 * labeled alternative in {@link GrammarParser#expr}.
+	 * @param ctx the parse tree
+	 */
+	void enterEReal(GrammarParser.ERealContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code EReal}
+	 * labeled alternative in {@link GrammarParser#expr}.
+	 * @param ctx the parse tree
+	 */
+	void exitEReal(GrammarParser.ERealContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link GrammarParser#wlSymbol}.
 	 * @param ctx the parse tree

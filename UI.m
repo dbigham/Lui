@@ -153,7 +153,7 @@ displayIfNotNull[val_] :=
 *)
 FocusLuiUI[] :=
     Block[{nb},
-        nb = Select[Notebooks[], FileNameTake[Quiet[NotebookFileName[#], NotebookFileName::nosv]] === "Lui.nb" &];
+        nb = Select[Notebooks[], FileNameTake[Quiet[NotebookFileName[#], NotebookFileName::nosv]] === "LuiUI.nb" &];
         If [nb =!= {},
         	nb = First[nb];
 			FrontEnd`MoveCursorToInputField[
@@ -161,7 +161,7 @@ FocusLuiUI[] :=
 			    $luiInputFieldBoxId
 			]
         	,
-        	nb = NotebookOpen[FileNameJoin[{LuiDir[], "Notebooks", "Lui.nb"}]];
+        	nb = NotebookOpen[FileNameJoin[{LuiDir[], "Notebooks", "LuiUI.nb"}]];
             SelectionMove[First[Cells[nb]], All, Cell];
             FrontEndTokenExecute[nb, "EvaluateCells"];
         ];
