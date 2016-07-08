@@ -1,9 +1,5 @@
 BeginPackage["Lui`Util`"]
 
-NewHeldVar::usage = "NewHeldVar  "
-
-SetHeldVar::usage = "SetHeldVar  "
-
 ToStringHeld::usage = "ToStringHeld  "
 
 LuiDir::usage = "LuiDir  "
