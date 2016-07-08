@@ -1,6 +1,6 @@
 BeginPackage["Lui`Lui`"]
 
-Needs["CalculateParse`GeneralLibrary`"]; (* CreateReloadFunctionForDirectory, etc. *)
+Needs["WUtils`WUtils`"]; (* CreateReloadFunctionForDirectory, etc. *)
 
 ReloadLui::usage = "ReloadLui  "; 
 
@@ -9,7 +9,7 @@ Begin["`Private`"]
 With[{package = "Lui`"},
 With[{dir = DirectoryName[DirectoryName[FindFile[package]]]},
 	Lui`Private`$ReloadFunction = ReloadLui;
-	CalculateParse`GeneralLibrary`TabsOrSpaces["Lui`"] = "Tabs";
+	WUtils`WUtils`TabsOrSpaces["Lui`"] = "Tabs";
 	If [!ValueQ[$reloadLui],
 		$reloadLui =
 			CreateReloadFunctionForDirectory[
@@ -17,16 +17,16 @@ With[{dir = DirectoryName[DirectoryName[FindFile[package]]]},
 			];
 	];
 	Lui`$UnitTestDir = FileNameJoin[{DirectoryName[DirectoryName[FindFile[package]]], "Tests"}];
-	CalculateParse`Prototype`VirtualAssistant`Utility`NotebookTypeToDirectory["Lui`"] = FileNameJoin[{dir, "Notebooks"}];
+	WUtils`WUtils`NotebookTypeToDirectory["Lui`"] = FileNameJoin[{dir, "Notebooks"}];
 ];
 ];
 
 (* Reloads .m files in this directory if they've changed. *)
 ReloadLui[] := $reloadLui[]
-If [ListQ[Global`$VaReloadFunctions],
-	Global`$VaReloadFunctions =
+If [ListQ[Global`$ReloadFunctions],
+	Global`$ReloadFunctions =
 		DeleteDuplicates[
-			Append[Global`$VaReloadFunctions, ReloadLui]
+			Append[Global`$ReloadFunctions, ReloadLui]
 		]
 	];
 
