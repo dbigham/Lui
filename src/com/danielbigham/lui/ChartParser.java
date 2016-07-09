@@ -10,7 +10,7 @@ public class ChartParser
 {
 	public final static int START_SYMBOL = -1;
 	
-	public final static boolean debugFlag = true;
+	public final static boolean debugFlag = false;
 	
 	public static ParserState parse(Grammar grammar, String str)
 	{

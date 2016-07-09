@@ -28,12 +28,14 @@ public abstract class BasicPattern implements IPattern, IPatternMatch
 	protected int tokenId;
 	protected int startPos;
 	protected int endPos;
+	protected String type;
 	protected String binding;
 	
-	BasicPattern(int startPos, int endPos)
+	BasicPattern(int startPos, int endPos, String type)
 	{
 		this.startPos = startPos;
 		this.endPos = endPos;
+		this.type = type;
 	}
 	
 	/**
@@ -245,5 +247,44 @@ public abstract class BasicPattern implements IPattern, IPatternMatch
 		{
 			return str;
 		}
+	}
+	
+	@Override
+	public void toWL(StringBuilder wl, ParserState state)
+	{
+		// Do we need to return basic tokens that are at
+		// the bottom of the parse forest?
+//		wl.append("{");
+//		wl.append(tokenId).append(",");
+//		wl.append(startPos).append(",");
+//		wl.append(endPos).append(",");
+//		wl.append("Null").append(",");
+//		wl.append("},");
+		return;
+	}
+	
+	@Override
+	public String getAction()
+	{
+		// What to do here?
+		return "Null";
+	}
+	
+	@Override
+	public List<IPattern> getMatchedSubPatterns()
+	{
+		// Do we need this?
+		throw new UnsupportedOperationException();
+	}
+	
+	public String getType()
+	{
+		return type;
+	}	
+	
+	@Override
+	public void setType(String type)
+	{
+		this.type = type;
 	}
 }

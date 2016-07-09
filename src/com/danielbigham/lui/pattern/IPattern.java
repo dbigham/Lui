@@ -122,4 +122,19 @@ public interface IPattern
 	 * Get this pattern's bound symbol, or null if none.
 	 */
 	public String getBinding();
+
+	/**
+	 * The grammar action.
+	 */
+	public String getAction();
+	
+	/**
+	 * The token's type. (would be more efficient to make this an integer, right?)
+	 */
+	public String getType();
+	
+	/**
+	 * The token's type.
+	 */
+	public void setType(String type);
 }

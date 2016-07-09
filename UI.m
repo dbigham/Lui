@@ -219,7 +219,8 @@ LuiJavaInit[] :=
 		] /@
 			{
 				"com.danielbigham.lui.Lui",
-				"com.danielbigham.lui.Grammar"
+				"com.danielbigham.lui.Grammar",
+				"com.danielbigham.lui.ChartParser"
 			};
 		If [JavaObjectQ[$luiJavaObject],
 			$luiJavaObject@stop[];

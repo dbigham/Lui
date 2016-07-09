@@ -22,7 +22,7 @@ public class SymbolPattern extends BasicPattern implements IPatternMatch
 	 */
 	public SymbolPattern(Grammar grammar, String symbol, int startPos, int endPos, boolean createTokenIds)
 	{
-		super(startPos, endPos);
+		super(startPos, endPos, "S");
 		
 		this.symbol = symbol;
 		if (createTokenIds)
@@ -44,7 +44,7 @@ public class SymbolPattern extends BasicPattern implements IPatternMatch
 	 */
 	public SymbolPattern(int symbol, int startPos, int endPos)
 	{
-		super(startPos, endPos);
+		super(startPos, endPos, "S");
 		this.tokenId = symbol;
 	}
 	
@@ -58,7 +58,7 @@ public class SymbolPattern extends BasicPattern implements IPatternMatch
 	 */
 	public SymbolPattern(String symbol, int symbolInt, int startPos, int endPos)
 	{
-		super(startPos, endPos);
+		super(startPos, endPos, "S");
 		this.symbol = symbol;
 		this.tokenId = symbolInt;
 	}

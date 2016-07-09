@@ -24,9 +24,10 @@ public class LiteralPattern extends BasicPattern
 	 */
 	public LiteralPattern(Grammar grammar, String literal, int pos, boolean createTokenIds)
 	{
-		super(pos, pos);
+		super(pos, pos, "L");
 		
 		this.literal = literal;
+		
 		if (createTokenIds)
 		{
 			this.tokenId = grammar.getTokenIdAndDefineIfNecessary(literal);

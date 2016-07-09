@@ -23,6 +23,11 @@ public class Out
 		}
 	}
 	
+	public static void print(Object obj)
+	{
+		print(obj.toString());
+	}
+	
 	public static void line()
 	{
 		Out.print("--------------------------------------------------------------------------------");

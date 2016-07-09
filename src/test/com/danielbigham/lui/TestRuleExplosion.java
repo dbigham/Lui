@@ -48,13 +48,16 @@ public class TestRuleExplosion
 	}
 	
 	// OR sub-pattern
+	// We also ensure here that bindings on exploded sub-patterns get
+	// transfered onto the dynamically created sub-pattern that replaced
+	// them.
 	@Test
 	public void test3()
 	{
 		assertEquals(
 			"<$1:4>: <spacex:0>|<spx:1>\n" +
-			"<$webpage:3>: {<<$1:4>> <reddit:2>}",
-			explodeRulesAndCreateString("webpage: spacex|spx reddit")
+			"<$webpage:3>: {<a=<$1:4>> b=<reddit:2>}",
+			explodeRulesAndCreateString("webpage: a=spacex|spx b=reddit")
 		);
 	}
 

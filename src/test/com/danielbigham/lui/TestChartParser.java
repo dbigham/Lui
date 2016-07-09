@@ -241,7 +241,7 @@ public class TestChartParser
 				"spacex web page"
 			)
 		);
-	}	
+	}
 	
 	/**
 	 * Returns the number of times the given input parses to a spanning START result for the

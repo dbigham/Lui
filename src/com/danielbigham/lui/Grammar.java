@@ -121,10 +121,26 @@ public class Grammar
 		setTriggers(finalPatterns);
 		
 		List<IPattern> res = finalPatterns;
-		finalPatterns = null;
+		// We won't clear this for now since it's so handy
+		// for testing.
+		//finalPatterns = null;
 		finalPatternsToResultSymbol = null;
 		
 		return res;
+	}
+	
+	/**
+	 * Return the exploded rules as an array of strings. Handy for testing
+	 * from WL.
+	 */
+	public String[] getRulesAsStrings()
+	{
+		String[] arr = new String[finalPatterns.size()];
+		for (int i = 0; i < arr.length; ++i)
+		{
+			arr[i] = finalPatterns.get(i).toString2(this);
+		}
+		return arr;
 	}
 	
 	/**

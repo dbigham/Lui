@@ -11,6 +11,7 @@ import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 
 import com.danielbigham.lui.Grammar;
+import com.danielbigham.lui.antlr.DescriptiveErrorListener;
 import com.danielbigham.lui.antlr.GrammarLexer;
 import com.danielbigham.lui.antlr.GrammarParser;
 import com.danielbigham.lui.antlr.GrammarParser.BasicRulePart2Context;
@@ -271,8 +272,15 @@ public class AntlrHelpers
 	 */
 	private static void parseGrammar(GrammarLexer lexer, IRuleHandler ruleHandler)
 	{
+		//lexer.removeErrorListeners();
+		lexer.addErrorListener(DescriptiveErrorListener.INSTANCE);
+		
 		CommonTokenStream tokens = new CommonTokenStream(lexer);
 		GrammarParser parser = new GrammarParser(tokens);
+		
+		//parser.removeErrorListeners();
+		parser.addErrorListener(DescriptiveErrorListener.INSTANCE);
+		
 		GrammarParser.GrammarRulesContext tree = parser.grammarRules();	
 		if (ruleHandler != null)
 		{

@@ -231,4 +231,18 @@ public class SequencePatternMatch extends PatternMatch
 	{
 		return subPatternStartPositions;
 	}
+	
+	@Override
+	public List<IPattern> getMatchedSubPatterns()
+	{
+		// Until we have optionals, we return everything here.
+		if (matchComplete)
+		{
+			return pattern.patterns();
+		}
+		else
+		{
+			throw new UnsupportedOperationException();
+		}
+	}
 }

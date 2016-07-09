@@ -96,4 +96,20 @@ public interface IPatternMatch
 	 * @param grammar		the grammar.
 	 */
 	public String toString(Grammar grammar);
+
+	/**
+	 * Convert the pattern match to a Wolfram Language expression.
+	 * Recurses to also convert all sub-matches.
+	 * 
+	 * @param wl		a StringBuilder.
+	 */
+	public void toWL(StringBuilder wl, ParserState state);
+	
+	/**
+	 * Returns all of the sub-patterns that actually matched. For
+	 * OR patterns, this will only be one of the sub-patterns, while
+	 * for sequence patterns, this will be all of them. (unless some
+	 * were optional)
+	 */
+	public List<IPattern> getMatchedSubPatterns();
 }

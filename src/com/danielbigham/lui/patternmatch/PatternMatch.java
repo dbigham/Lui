@@ -4,9 +4,11 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-
+import com.danielbigham.io.Out;
+import com.danielbigham.lui.Chart;
 import com.danielbigham.lui.Grammar;
 import com.danielbigham.lui.ParserState;
+import com.danielbigham.lui.pattern.BasicPattern;
 import com.danielbigham.lui.pattern.IPattern;
 import com.danielbigham.lui.pattern.SymbolPattern;
 
@@ -104,5 +106,83 @@ public abstract class PatternMatch implements IPatternMatch
 	{
 		String resultSymbol = grammar.getSymbolOrLiteral(pattern.resultSymbol());
 		return resultSymbol + ": " + this.toString();
+	}
+	
+	
+	public void toWL(StringBuilder wl, ParserState state)
+	{
+		//Out.print(startPos + "-" + endPos + ": " + pattern.toString2(state.grammar()));
+		
+		wl.append("{{");
+		wl.append(pattern.resultSymbol()).append(",");
+		wl.append(startPos).append(",");
+		wl.append(endPos).append("},\"");
+		wl.append(pattern.getType()).append("\",");
+		wl.append("HoldComplete[");
+		String action = pattern.getAction();
+		wl.append(action == null ? "Null" : action).append("],");
+
+		// Children
+		int[] subMatchPos = subPatternStartPositions();
+		int i = 0;
+		int subMatchStartPos;
+		int subMatchEndPos;
+		Chart chart = state.chart();
+		wl.append("{");
+		for (IPattern subPattern : getMatchedSubPatterns())
+		{
+			subMatchStartPos = subMatchPos[i];
+			subMatchEndPos = subMatchPos[i+1] - 1;
+			
+			wl.append("{{");
+			wl.append(subPattern.resultSymbol()).append(",");
+			wl.append(subMatchStartPos).append(",");
+			wl.append(subMatchEndPos).append("},\"");
+			wl.append(subPattern.getType()).append("\",");
+			String binding = subPattern.getBinding();
+			if (binding == null)
+			{
+				wl.append("Null");
+			}
+			else
+			{
+				wl.append("HoldComplete[").append(binding).append("]");
+			}
+			wl.append("}");
+			
+			if (i < subMatchPos.length - 2)
+			{
+				wl.append(",");
+			}
+			
+			++i;
+		}
+		wl.append("}");
+		
+		wl.append("},");
+		
+		// Recurse on children
+		i = 0;
+		for (IPattern subPattern : getMatchedSubPatterns())
+		{
+			subMatchStartPos = subMatchPos[i];
+			subMatchEndPos = subMatchPos[i+1] - 1;
+			
+			List<IPatternMatch> subPatternMatches =
+					chart.getMatchesForSpan(subPattern.resultSymbol(), subMatchStartPos, subMatchEndPos);
+			
+			//Out.print("    Sub-pattern: " + startPos + "-" + endPos + ":" + subPattern + ":");
+			//Out.print("        Chart matches: " +  subPatternMatches);
+			
+			if (subPatternMatches != null)
+			{
+				for (IPatternMatch subMatch : subPatternMatches)
+				{
+					subMatch.toWL(wl, state);
+				}
+			}
+			
+			++i;
+		}
 	}
 }

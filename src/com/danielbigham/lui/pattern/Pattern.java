@@ -12,6 +12,7 @@ import com.danielbigham.lui.grammarrule.GrammarRule;
 public abstract class Pattern implements IPattern
 {
 	protected List<IPattern> patterns;
+	protected String type = "E";
 	protected String action;
 	protected String binding;
 	
@@ -257,7 +258,10 @@ public abstract class Pattern implements IPattern
 			}
 			else
 			{
-				newSubPatterns.add(subPattern.explode(grammar));
+				IPattern explodedSubPattern = subPattern.explode(grammar);
+				explodedSubPattern.setBinding(subPattern.getBinding());
+				explodedSubPattern.setType("D");
+				newSubPatterns.add(explodedSubPattern);
 			}
 		}
 		
@@ -297,6 +301,11 @@ public abstract class Pattern implements IPattern
 		// - Sub-rule never seen before: Will generate a new symbol.
 		// - Sub-rule seen before: Will re-use the same symbol we generated previously for this pattern.
 		int symbol = grammar.addFinalPattern(newPattern);
+		
+		if (symbol != resultSymbol)
+		{
+			newPattern.setType("D");
+		}
 		
 		newPattern.setSymbol(symbol);
 		
@@ -416,5 +425,20 @@ public abstract class Pattern implements IPattern
 		{
 			return str;
 		}
+	}
+	
+	public String getAction()
+	{
+		return action;
+	}
+	
+	public String getType()
+	{
+		return type;
+	}
+	
+	public void setType(String type)
+	{
+		this.type = type;
 	}
 }

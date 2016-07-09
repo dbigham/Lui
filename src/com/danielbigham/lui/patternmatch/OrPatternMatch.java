@@ -1,5 +1,6 @@
 package com.danielbigham.lui.patternmatch;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -74,5 +75,20 @@ public class OrPatternMatch extends PatternMatch
 		res[0] = startPos;
 		res[1] = endPos + 1;
 		return res;
+	}
+
+	@Override
+	public List<IPattern> getMatchedSubPatterns()
+	{
+		if (matchComplete)
+		{
+			List<IPattern> list = new ArrayList<IPattern>(1);
+			list.add(pattern.patterns().get(subPatternIndex));
+			return list;
+		}
+		else
+		{
+			throw new UnsupportedOperationException();
+		}
 	}
 }

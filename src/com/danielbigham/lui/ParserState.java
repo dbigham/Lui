@@ -162,4 +162,43 @@ public class ParserState
 	{
 		return endPos;
 	}
+	
+	/**
+	 * Returns the pattern matches that spanned the entire input
+	 * and have grammar symbol START.
+	 */
+	public List<IPatternMatch> getSpanningStartResults()
+	{
+		return chart().getMatchesForSpan(ChartParser.START_SYMBOL, 0, endPos);
+	}
+	
+	/**
+	 * Converts the parser state to a Wolfram Language expression (string)
+	 * which can then be returned to WL and turned into an expression via
+	 * ToExpression.
+	 */
+	public String toWL()
+	{
+		StringBuilder wl = new StringBuilder(1000);
+		wl.append("<|");
+		wl.append("\"EndPos\" -> ").append(endPos).append(",\n");
+		wl.append("\"Forest\" -> {");
+		
+		List<IPatternMatch> results = getSpanningStartResults();
+		
+		if (results != null)
+		{
+			for (IPatternMatch topLevelItem : results)
+			{
+				topLevelItem.toWL(wl, this);
+			}
+		}
+		
+		// So that we don't have to check every time we add a comma.
+		wl.append("Null}");
+		
+		wl.append("\n|>");
+		
+		return wl.toString();
+	}
 }
