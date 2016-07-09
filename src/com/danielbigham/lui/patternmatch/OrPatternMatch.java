@@ -55,7 +55,6 @@ public class OrPatternMatch extends PatternMatch
 			}
 			++patternIndex;
 		}
-		str.append("}");
 		return str.toString();
 	}
 	

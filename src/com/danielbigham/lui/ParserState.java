@@ -153,4 +153,12 @@ public class ParserState
 		++iterationCounter;
 		if (ChartParser.debugFlag) { System.out.println("Increment iteration counter -> " + iterationCounter); }
 	}
+	
+	/**
+	 * The token index of the last token.
+	 */
+	public int getEndPos()
+	{
+		return endPos;
+	}
 }

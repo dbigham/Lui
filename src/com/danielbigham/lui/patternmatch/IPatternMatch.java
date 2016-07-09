@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Set;
 
 
+import com.danielbigham.lui.Grammar;
 import com.danielbigham.lui.ParserState;
 import com.danielbigham.lui.pattern.IPattern;
 
@@ -87,4 +88,12 @@ public interface IPatternMatch
 	 * result symbol.
 	 */
 	public IPatternMatch resultToSymbolPattern();
+
+	/**
+	 * If we have the grammar available then we can include the result
+	 * symbol in the toString output.
+	 * 
+	 * @param grammar		the grammar.
+	 */
+	public String toString(Grammar grammar);
 }

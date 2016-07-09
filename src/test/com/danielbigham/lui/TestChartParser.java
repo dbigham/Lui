@@ -17,7 +17,7 @@ import com.danielbigham.lui.patternmatch.IPatternMatch;
 
 public class TestChartParser
 {
-	private static final int RESULT_SYMBOL = -1;
+	private static final boolean debugFlag = true;
 	
 	// Test matching a simple grammar rule, only literals.
 	// The trigger will be 'testing', since it is the most rare literal,
@@ -27,12 +27,12 @@ public class TestChartParser
 	{
 		Grammar grammar = new Grammar();
 		List<IPattern> patterns = new ArrayList<IPattern>();
-		patterns.add(SequencePattern.create(grammar, "just just testing", RESULT_SYMBOL));
+		patterns.add(SequencePattern.create(grammar, "just just testing", ChartParser.START_SYMBOL));
 		grammar.setPatterns(patterns);
 		
 		ParserState state = ChartParser.parse(grammar, "just just testing");
 		
-		List<IPatternMatch> matches = state.chart().getMatchesForSpan(RESULT_SYMBOL, 0, 2);
+		List<IPatternMatch> matches = state.chart().getMatchesForSpan(ChartParser.START_SYMBOL, 0, 2);
 		assertEquals(1, matches.size());
 		assertEquals("[0, 1, 2, 3]", TestUtils.intArrayToStr(matches.get(0).subPatternStartPositions()));
 	}
@@ -45,12 +45,12 @@ public class TestChartParser
 	{
 		Grammar grammar = new Grammar();
 		List<IPattern> patterns = new ArrayList<IPattern>();
-		patterns.add(SequencePattern.create(grammar, "just testing testing", RESULT_SYMBOL));
+		patterns.add(SequencePattern.create(grammar, "just testing testing", ChartParser.START_SYMBOL));
 		grammar.setPatterns(patterns);
 		
 		ParserState state = ChartParser.parse(grammar, "just testing testing");
 		
-		List<IPatternMatch> matches = state.chart().getMatchesForSpan(RESULT_SYMBOL, 0, 2);
+		List<IPatternMatch> matches = state.chart().getMatchesForSpan(ChartParser.START_SYMBOL, 0, 2);
 		assertEquals(1, matches.size());
 		assertEquals("[0, 1, 2, 3]", TestUtils.intArrayToStr(matches.get(0).subPatternStartPositions()));
 	}
@@ -62,12 +62,12 @@ public class TestChartParser
 	{
 		Grammar grammar = new Grammar();
 		List<IPattern> patterns = new ArrayList<IPattern>();
-		patterns.add(SequencePattern.create(grammar, "just testing just", RESULT_SYMBOL));
+		patterns.add(SequencePattern.create(grammar, "just testing just", ChartParser.START_SYMBOL));
 		grammar.setPatterns(patterns);
 		
 		ParserState state = ChartParser.parse(grammar, "just testing just");
 		
-		List<IPatternMatch> matches = state.chart().getMatchesForSpan(RESULT_SYMBOL, 0, 2);
+		List<IPatternMatch> matches = state.chart().getMatchesForSpan(ChartParser.START_SYMBOL, 0, 2);
 		assertEquals(1, matches.size());
 		assertEquals("[0, 1, 2, 3]", TestUtils.intArrayToStr(matches.get(0).subPatternStartPositions()));
 	}
@@ -175,12 +175,12 @@ public class TestChartParser
 	{
 		Grammar grammar = new Grammar();
 		List<IPattern> patterns = new ArrayList<IPattern>();
-		patterns.add(OrPattern.create(grammar, "apple|orange|banana", RESULT_SYMBOL));
+		patterns.add(OrPattern.create(grammar, "apple|orange|banana", ChartParser.START_SYMBOL));
 		grammar.setPatterns(patterns);
 		
 		ParserState state = ChartParser.parse(grammar, "apple");
 		
-		List<IPatternMatch> matches = state.chart().getMatchesForSpan(RESULT_SYMBOL, 0, 0);
+		List<IPatternMatch> matches = state.chart().getMatchesForSpan(ChartParser.START_SYMBOL, 0, 0);
 		assertEquals(1, matches.size());
 		assertEquals("[0, 1]", TestUtils.intArrayToStr(matches.get(0).subPatternStartPositions()));
 	}
@@ -191,13 +191,70 @@ public class TestChartParser
 	{
 		Grammar grammar = new Grammar();
 		List<IPattern> patterns = new ArrayList<IPattern>();
-		patterns.add(OrPattern.create(grammar, "apple|orange|banana", RESULT_SYMBOL));
+		patterns.add(OrPattern.create(grammar, "apple|orange|banana", ChartParser.START_SYMBOL));
 		grammar.setPatterns(patterns);
 		
 		ParserState state = ChartParser.parse(grammar, "orange");
 		
-		List<IPatternMatch> matches = state.chart().getMatchesForSpan(RESULT_SYMBOL, 0, 0);
+		List<IPatternMatch> matches = state.chart().getMatchesForSpan(ChartParser.START_SYMBOL, 0, 0);
 		assertEquals(1, matches.size());
 		assertEquals("[0, 1]", TestUtils.intArrayToStr(matches.get(0).subPatternStartPositions()));
+	}
+	
+	// Test that uses the ANTLR parsing.
+	@Test
+	public void test9()
+	{
+		assertEquals(
+			1,
+			parses(
+				"start: $webpage\n" +
+				"webpage: slashdot",
+				"slashdot"
+			)
+		);
+	}
+	
+	// Nested OR
+	@Test
+	public void test10()
+	{
+		assertEquals(
+			1,
+			parses(
+				"start: $webpage\n" +
+				"webpage: spacex|spx reddit",
+				"spacex reddit"
+			)
+		);
+	}
+	
+	// Double nesting
+	@Test
+	public void test11()
+	{
+		assertEquals(
+			1,
+			parses(
+				"start: $webpage\n" +
+				"webpage: spacex|spx webpage|(web page)",
+				"spacex web page"
+			)
+		);
+	}	
+	
+	/**
+	 * Returns the number of times the given input parses to a spanning START result for the
+	 * given grammar.
+	 * 
+	 * @param grammar		the grammar.
+	 * @param input			the input.
+	 */
+	public static int parses(String grammar, String input)
+	{
+		Grammar grammarObj = new Grammar(grammar, debugFlag);
+		ParserState state = ChartParser.parse(grammarObj, input);
+		List<IPatternMatch> matches = state.chart().getMatchesForSpan(ChartParser.START_SYMBOL, 0, state.getEndPos());
+		return matches == null ? 0 : matches.size();
 	}
 }

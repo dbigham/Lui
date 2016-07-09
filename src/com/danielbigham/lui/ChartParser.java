@@ -8,7 +8,8 @@ import com.danielbigham.lui.patternmatch.PatternMatchWrapper;
 public class ChartParser
 {
 	public final static int START_SYMBOL = -1;
-	public final static boolean debugFlag = false;
+	
+	public final static boolean debugFlag = true;
 	
 	public static ParserState parse(Grammar grammar, String str)
 	{

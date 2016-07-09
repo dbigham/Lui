@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Set;
 
 
+import com.danielbigham.lui.Grammar;
 import com.danielbigham.lui.ParserState;
 import com.danielbigham.lui.pattern.IPattern;
 import com.danielbigham.lui.pattern.SymbolPattern;
@@ -76,6 +77,11 @@ public abstract class PatternMatch implements IPatternMatch
 		{
 			// Continue extending the matches as far as possible.
 			newMatch.extendMatchAsFarAsPossible(state);
+			
+			if (newMatch.isMatchComplete())
+			{
+				state.matchCompleted(newMatch, state);
+			}
 		}
 	}
 	
@@ -92,5 +98,11 @@ public abstract class PatternMatch implements IPatternMatch
 	public IPatternMatch resultToSymbolPattern()
 	{
 		return new SymbolPattern(pattern.resultSymbol(), startPos, endPos);
+	}
+	
+	public String toString(Grammar grammar)
+	{
+		String resultSymbol = grammar.getSymbolOrLiteral(pattern.resultSymbol());
+		return resultSymbol + ": " + this.toString();
 	}
 }

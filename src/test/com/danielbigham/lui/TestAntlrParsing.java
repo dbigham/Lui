@@ -81,6 +81,15 @@ public class TestAntlrParsing
 		assertEquals("<$webpage:3>:\n    {<the:5> <verge:6>}\n        null", rules.get(2).toString());
 	}
 	
+	@Test
+	public void test8()
+	{
+		List<GrammarRule> rules = parseGrammar("start: $webpage\nwebpage: slashdot");
+		assertEquals(2, rules.size());
+		assertEquals("<$start:-1>:\n    {<$webpage:0>}\n        null", rules.get(0).toString());
+		assertEquals("<$webpage:0>:\n    {<slashdot:1>}\n        null", rules.get(1).toString());
+	}
+	
 	/**
 	 * Parses the given grammar rules.
 	 * 

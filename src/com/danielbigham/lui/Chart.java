@@ -96,6 +96,11 @@ public class Chart
 		// but full parses are so rare that the test would probably slow things
 		// down on average.
 		
+		if (state != null)
+		{
+			if (ChartParser.debugFlag) { System.out.println("New result: " + match.toString(state.grammar())); }
+		}
+		
 		{
 			// Update matchesExistForSpan
 			int chartKey = chartKey(match);

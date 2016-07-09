@@ -11,6 +11,11 @@ import com.danielbigham.lui.grammarrule.GrammarRule;
 import com.danielbigham.lui.loading.AntlrHelpers;
 import com.danielbigham.lui.pattern.IPattern;
 
+/**
+ * See also: Rule Explosion.md
+ * 
+ * @author Daniel
+ */
 public class TestRuleExplosion
 {
 	private static final boolean debugFlag = true;
@@ -19,8 +24,8 @@ public class TestRuleExplosion
 	public void test1()
 	{
 		assertEquals(
-				"<$webpage:2>: {<<spacex:0>> <reddit:1>}",
-				explodeRulesAndCreateString("webpage: spacex reddit")
+			"<$webpage:2>: {<<spacex:0>> <reddit:1>}",
+			explodeRulesAndCreateString("webpage: spacex reddit")
 		);
 	}
 	
@@ -29,15 +34,15 @@ public class TestRuleExplosion
 	public void test2()
 	{
 		assertEquals(
-				"<$webpage:2>: {<<spacex:0>> <reddit:1>}\n" +
-				// When exploding the rules, a symbol integer
-				// gets allocated for "$1" as the LHS of the first
-				// rule, resulting in 'woodstock' getting ID 3.
-				"<$city:5>: {<<woodstock:3>> <ontario:4>}",
-				explodeRulesAndCreateString(
-					"webpage: spacex reddit\n" + 
-					"city: woodstock ontario"
-				)
+			"<$webpage:2>: {<<spacex:0>> <reddit:1>}\n" +
+			// When exploding the rules, a symbol integer
+			// gets allocated for "$1" as the LHS of the first
+			// rule, resulting in 'woodstock' getting ID 3.
+			"<$city:5>: {<<woodstock:3>> <ontario:4>}",
+			explodeRulesAndCreateString(
+				"webpage: spacex reddit\n" + 
+				"city: woodstock ontario"
+			)
 		);
 	}
 	
@@ -46,9 +51,9 @@ public class TestRuleExplosion
 	public void test3()
 	{
 		assertEquals(
-				"<$1:4>: <spacex:0>|<spx:1>\n" +
-				"<$webpage:3>: {<<$1:4>> <reddit:2>}",
-				explodeRulesAndCreateString("webpage: spacex|spx reddit")
+			"<$1:4>: <spacex:0>|<spx:1>\n" +
+			"<$webpage:3>: {<<$1:4>> <reddit:2>}",
+			explodeRulesAndCreateString("webpage: spacex|spx reddit")
 		);
 	}
 
@@ -60,8 +65,45 @@ public class TestRuleExplosion
 	public void test4()
 	{
 		assertEquals(
-				"<$webpage:1>: {<<spacex:0>>}",
-				explodeRulesAndCreateString("webpage: spacex")
+			"<$webpage:1>: {<<spacex:0>>}",
+			explodeRulesAndCreateString("webpage: spacex")
+		);
+	}
+	
+	// Two OR sub-patterns
+	@Test
+	public void test5()
+	{
+		assertEquals(
+			"<$1:5>: <spacex:0>|<spx:1>\n" +
+			"<$2:6>: <webpage:2>|<website:3>\n" +
+			"<$webpage:4>: {<<$1:5>> <$2:6>}",
+			explodeRulesAndCreateString("webpage: spacex|spx webpage|website")
+		);
+	}
+	
+	// OR containing sequence (doubly nested sub-patterns)
+	@Test
+	public void test6()
+	{
+		assertEquals(
+			"<$1:5>: {<<web:2>> <page:3>}\n" +
+			"<$2:6>: <webpage:1>|<$1:5>\n" +
+			"<$webpage:4>: {<<spacex:0>> <$2:6>}",
+			explodeRulesAndCreateString("webpage: spacex webpage|(web page)")
+		);
+	}
+	
+	// Grouped rules + double nesting
+	@Test
+	public void test7()
+	{
+		assertEquals(
+			"<$1:6>: {<<web:2>> <page:3>}\n" +
+			"<$2:7>: <webpage:1>|<$1:6>\n" +
+			"<$webpage:4>: {<<spacex:0>> <$2:7>}\n" +
+			"<$webpage:4>: {<<slashdot:5>>}",
+			explodeRulesAndCreateString("webpage:\n\tspacex webpage|(web page)\n\tslashdot")
 		);
 	}
 	
@@ -116,12 +158,10 @@ public class TestRuleExplosion
 	/**
 	 * Parses the given grammar rules.
 	 * 
-	 * @param grammarRules
-	 *            the grammar rules.
-	 * @return the parsed grammar rules.
+	 * @param grammarRules		the grammar rules.
+	 * @return					the parsed grammar rules.
 	 */
-	private static List<GrammarRule> parseGrammar(Grammar grammar,
-			String grammarRules)
+	private static List<GrammarRule> parseGrammar(Grammar grammar, String grammarRules)
 	{
 		return AntlrHelpers.parseGrammar(grammar, grammarRules);
 	}

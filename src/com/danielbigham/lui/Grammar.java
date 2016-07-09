@@ -5,7 +5,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.danielbigham.io.Out;
 import com.danielbigham.lui.grammarrule.GrammarRule;
+import com.danielbigham.lui.loading.AntlrHelpers;
 import com.danielbigham.lui.pattern.BasicPattern;
 import com.danielbigham.lui.pattern.IPattern;
 import com.danielbigham.lui.pattern.Pattern;
@@ -41,15 +43,50 @@ public class Grammar
 	// wrt generating dynamic rules during grammar explosion.
 	// See also: Rule Explosion.md
 	private Map<IPattern, Integer> finalPatternsToResultSymbol;
+
+	private int tokenCounter;
+
+	private boolean debugFlag;
 	
 	public Grammar()
 	{
 		triggers = new HashMap<Integer, List<IPattern>>();
 		tokenIds = new HashMap<String, Integer>();
 		tokenIdToSymbolOrLiteral = new HashMap<Integer, String>();
+		tokenCounter = 0;
 		dynamicRuleCounter = 0;
+		
+		tokenIds.put("$start", ChartParser.START_SYMBOL);
+		tokenIdToSymbolOrLiteral.put(ChartParser.START_SYMBOL, "$start");
 	}
 	
+	/**
+	 * Construct a grammar from grammar rules.
+	 * 
+	 * @param grammarRules		the grammar rules.
+	 */
+	public Grammar(String grammarRules)
+	{
+		this(grammarRules, false);
+		
+	}
+	
+	public Grammar(String grammarRules, boolean debugFlag)
+	{
+		this();
+		List<GrammarRule> rules = AntlrHelpers.parseGrammar(this, grammarRules);
+		this.debugFlag = debugFlag;
+		if (debugFlag)
+		{
+			for (GrammarRule rule : rules)
+			{
+				System.out.println(rule);
+			}
+			Out.line();
+		}
+		setGrammarRules(rules);
+	}
+
 	/**
 	 * Set the grammar's patterns.
 	 * 
@@ -66,6 +103,15 @@ public class Grammar
 		for (GrammarRule rule : rules)
 		{
 			rule.explode(this);
+		}
+		
+		if (debugFlag)
+		{
+			for (IPattern pattern : finalPatterns)
+			{
+				System.out.println(pattern.toString2(this));
+			}
+			Out.line();
 		}
 		
 		setTriggers(finalPatterns);
@@ -237,7 +283,8 @@ public class Grammar
 		Integer id = tokenIds.get(str);
 		if (id == null)
 		{
-			id = tokenIds.size();
+			id = tokenCounter;
+			++tokenCounter;
 			tokenIds.put(str, id);
 			tokenIdToSymbolOrLiteral.put(id, str);
 		}
