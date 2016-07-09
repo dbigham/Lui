@@ -77,7 +77,7 @@ public class TestAntlrParsing
 		List<GrammarRule> rules = parseGrammar("webpage:\n\tspacex|spx reddit\n\tslashdot\n\tthe verge");
 		assertEquals(3, rules.size());
 		assertEquals("<$webpage:3>:\n    {<spacex:0>|<spx:1> <reddit:2>}\n        null", rules.get(0).toString());
-		assertEquals("<$webpage:3>:\n    <slashdot:4>\n        null", rules.get(1).toString());
+		assertEquals("<$webpage:3>:\n    {<slashdot:4>}\n        null", rules.get(1).toString());
 		assertEquals("<$webpage:3>:\n    {<the:5> <verge:6>}\n        null", rules.get(2).toString());
 	}
 	

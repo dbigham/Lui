@@ -52,13 +52,15 @@ public class TestRuleExplosion
 		);
 	}
 
-	// Pattern is just a literal
+	// Pattern is just a literal. Whitebox test to ensure that we don't
+	// choke on the fact that a pattern that is just a LHS can't support
+	// a result symbol, and therefore, currently, must be wrapped in
+	// a SequencePattern. (denoted by curly braces here)
 	@Test
 	public void test4()
 	{
 		assertEquals(
-				"<$1:4>: <spacex:0>|<spx:1>\n" +
-				"<$webpage:3>: {<<$1:4>> <reddit:2>}",
+				"<$webpage:1>: {<<spacex:0>>}",
 				explodeRulesAndCreateString("webpage: spacex")
 		);
 	}

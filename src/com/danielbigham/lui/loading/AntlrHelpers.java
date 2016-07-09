@@ -115,7 +115,17 @@ public class AntlrHelpers
 	{
 		List<IPattern> subPatterns = convert(ruleParts, grammar);
 		IPattern pattern;
-		if (subPatterns.size() == 1)
+		
+		// We'd LIKE to not "needlessly" wrap BasicPattern in SequencePattern
+		// here, except that this isn't "needless", because BasicPattern
+		// doesn't support having a result symbol, and currently we shoe-horn
+		// IPattern into allowing a result symbol within the parser. So for
+		// now, we will wrap basic patterns with SequencePattern. What this
+		// means is that something like:
+		// webpage: slashdot
+		// ... becomes: webpage: SequencePattern[slashdot]
+		
+		if (subPatterns.size() == 1 && !(subPatterns.get(0) instanceof BasicPattern))
 		{
 			// Don't needlessly wrap something with SequencePattern
 			// if it's just a single thing.
@@ -138,23 +148,12 @@ public class AntlrHelpers
 				action
 			);
 		
-		// TODO: We can't setSymbol if this is a basic pattern
-		// because BasicPattern doesn't support having a result
-		// symbol... and yet a rule like:
-		// webpage: slashdot
-		// ... seems to use a LiteralPattern as its pattern.
-		// What does this imply? That it should wrap that in
-		// a simple SequencePattern? That BasicPattern *should*
-		// allow a result symbol?
-		if (!(pattern instanceof BasicPattern))
-		{
-			// Since we're currently also storing and using
-			// the result symbol within the pattern itself,
-			// we need to take care to replace the NO_LHS that
-			// we originally gave the pattern with the LHS
-			// that we now have for it.
-			pattern.setSymbol(rule.getResultSymbolInt());
-		}
+		// Since we're currently also storing and using
+		// the result symbol within the pattern itself,
+		// we need to take care to replace the NO_LHS that
+		// we originally gave the pattern with the LHS
+		// that we now have for it.
+		pattern.setSymbol(rule.getResultSymbolInt());
 		
 		return rule;
 
