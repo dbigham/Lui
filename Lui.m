@@ -1,10 +1,16 @@
 BeginPackage["Lui`Lui`"]
 
+Needs["JLink`"]
+
 Needs["WUtils`WUtils`"]; (* CreateReloadFunctionForDirectory, etc. *)
 
-ReloadLui::usage = "ReloadLui  "; 
+ReloadLui::usage = "ReloadLui  "
+
+$LuiJavaPath::usage = "$LuiJavaPath  "; 
 
 Begin["`Private`"]
+
+$LuiJavaPath = FileNameJoin[{FileNameDrop[FindFile["Lui`Lui`"], -1], "bin"}];
 
 With[{package = "Lui`"},
 With[{dir = DirectoryName[DirectoryName[FindFile[package]]]},

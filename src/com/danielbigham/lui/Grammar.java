@@ -45,6 +45,8 @@ public class Grammar
 	private Map<IPattern, Integer> finalPatternsToResultSymbol;
 
 	private int tokenCounter;
+	
+	private int ruleCount;
 
 	private boolean debugFlag;
 	
@@ -96,6 +98,8 @@ public class Grammar
 	 */
 	public List<IPattern> setGrammarRules(List<GrammarRule> rules)
 	{
+		ruleCount = rules.size();
+		
 		finalPatterns = new ArrayList<IPattern>();
 		finalPatternsToResultSymbol = new HashMap<IPattern, Integer>();
 		
@@ -326,5 +330,13 @@ public class Grammar
 		{
 			return null;
 		}
+	}
+
+	/**
+	 * The number of rules in the grammar. (prior to rule explosion)
+	 */
+	public int getRuleCount()
+	{
+		return ruleCount;
 	}
 }

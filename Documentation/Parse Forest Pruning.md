@@ -15,9 +15,9 @@
 - Thus, we need a recursive method to explore the parse forest, building up an expression
   to send back to Mathematica.
 - At the end of the day, we want a list of items that look like this:
-  {symbol, start, end, action, bindings, children}
+  {{symbol, start, end}, action, children}
 - 'children' is a list of items like this:
-  {symbol, start, end}
+  {{symbol, start, end}, binding}
 - Once this data gets back to WL, we want to put all of those top-level items in
   a lookup like this:
   lookupParseNodes[{symbol, start, end}]
@@ -39,3 +39,9 @@
   we will do a Merge on the parent's bindings with the children's bindings, and then evaluate
   the parent's action. We end up with one or more evaluated expressions, which we pass back
   to the parent of this parent.
+
+## Creating Grammars From WL
+
+- At this point, we also need to be able to create a grammar from WL so that we have something
+  to initiate a parse from. (CreateGrammar) This will return back a Grammar[...] object
+  which will contain the Java Grammar object.

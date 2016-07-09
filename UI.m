@@ -32,10 +32,6 @@ Begin["`Private`"]
 Lui[] :=
 	DynamicModule[{input = "", interpHeldVar = NewHeldVar[], actionResHeldVar = NewHeldVar[]},
 		
-		If [!TrueQ[$luiJavaInitDone],
-			LuiJavaInit[];
-		];
-		
 		$luiInputFieldBoxId = ToString[Unique["LuiInputFieldBoxID"]];
 		
 		SetHeldVar[interpHeldVar, Null];
@@ -201,17 +197,30 @@ FocusLuiUI[] :=
 	
 	\maintainer danielb
 *)
-LuiJavaInit::javc = "The Lui Java class couldn't be loaded.";
+LuiJavaInit::javc = "The Lui Java class `1` couldn't be loaded.";
 LuiJavaInit[] :=
 	Block[{javaDir},
+		InstallJava[];
 		javaDir = FileNameJoin[{LuiDir[], "bin"}];
-		If [!MemberQ[JavaClassPath[], javaDir],
-			AddToClassPath[javaDir];
-		];
-		If [!MatchQ[LoadJavaClass["com.danielbigham.lui.Lui"], _JavaClass],
-			Message[LuiJavaInit::javc];
-			Return[$Failed];
-		];
+		Function[{classPathEntry},
+			If [!MemberQ[JavaClassPath[], classPathEntry],
+				AddToClassPath[classPathEntry];
+			];
+		] /@
+			{
+				javaDir,
+				FileNameJoin[{LuiDir[], "Jars"}]
+			};
+		Function[{class},
+			If [!MatchQ[LoadJavaClass[class], _JavaClass],
+				Message[LuiJavaInit::javc, class];
+				Return[$Failed];
+			];
+		] /@
+			{
+				"com.danielbigham.lui.Lui",
+				"com.danielbigham.lui.Grammar"
+			};
 		If [JavaObjectQ[$luiJavaObject],
 			$luiJavaObject@stop[];
 			ReleaseJavaObject[$luiJavaObject];
@@ -594,6 +603,10 @@ installHotkey[] :=
 If [!TrueQ[$hotkeyInstalled],
 	$hotkeyInstalled = True;
 	installHotkey[];
+];
+
+If [!TrueQ[$luiJavaInitDone],
+	LuiJavaInit[];
 ];
 
 End[]
