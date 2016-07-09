@@ -1,11 +1,12 @@
 package test.com.danielbigham.lui;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 import java.util.List;
 
 import org.junit.Test;
 
+import com.danielbigham.io.Out;
 import com.danielbigham.lui.Grammar;
 import com.danielbigham.lui.grammarrule.GrammarRule;
 import com.danielbigham.lui.loading.AntlrHelpers;
@@ -135,7 +136,7 @@ public class TestRuleExplosion
 		
 		if (debugFlag)
 		{
-			System.out.println(str.toString());
+			Out.print(str.toString());
 		}
 
 		return str.toString();

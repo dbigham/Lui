@@ -82,7 +82,7 @@ public class Grammar
 		{
 			for (GrammarRule rule : rules)
 			{
-				System.out.println(rule);
+				Out.print(rule.toString());
 			}
 			Out.line();
 		}
@@ -113,7 +113,7 @@ public class Grammar
 		{
 			for (IPattern pattern : finalPatterns)
 			{
-				System.out.println(pattern.toString2(this));
+				Out.print(pattern.toString2(this));
 			}
 			Out.line();
 		}

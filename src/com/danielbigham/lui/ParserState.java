@@ -3,6 +3,7 @@ package com.danielbigham.lui;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.danielbigham.io.Out;
 import com.danielbigham.lui.patternmatch.IPatternMatch;
 
 /**
@@ -151,7 +152,7 @@ public class ParserState
 	public void incrementIterationCounter()
 	{
 		++iterationCounter;
-		if (ChartParser.debugFlag) { System.out.println("Increment iteration counter -> " + iterationCounter); }
+		if (ChartParser.debugFlag) { Out.print("Increment iteration counter -> " + iterationCounter); }
 	}
 	
 	/**

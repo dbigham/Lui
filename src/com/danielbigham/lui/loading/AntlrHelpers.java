@@ -67,7 +67,7 @@ public class AntlrHelpers
 	{
 		if (rule != null && rule.lhs() != null)
 		{
-			//if (ChartParser.debugFlag) { System.out.println("Parsing Rule; " + rule.lhs().getText()); }
+			//if (ChartParser.debugFlag) { Out.print("Parsing Rule; " + rule.lhs().getText()); }
 			
 			String lhs = rule.lhs().getText();
 			String action = rule.expr() == null ? null : rule.expr().getText();

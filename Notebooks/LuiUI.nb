@@ -10,10 +10,10 @@
 NotebookFileLineBreakTest
 NotebookFileLineBreakTest
 NotebookDataPosition[       158,          7]
-NotebookDataLength[      2765,         80]
-NotebookOptionsPosition[      2454,         64]
-NotebookOutlinePosition[      2798,         79]
-CellTagsIndexPosition[      2755,         76]
+NotebookDataLength[      3077,         85]
+NotebookOptionsPosition[      2766,         69]
+NotebookOutlinePosition[      3110,         84]
+CellTagsIndexPosition[      3067,         81]
 WindowFrame->Normal*)
 
 (* Beginning of Notebook Content *)
@@ -29,10 +29,10 @@ Cell[BoxData[
 
 Cell[BoxData[
  DynamicModuleBox[{Lui`UI`Private`input$$ = "", 
-  Lui`UI`Private`interpHeldVar$$ = 
-  HoldComplete[$CellContext`luiHeldVar36767358658719], 
-  Lui`UI`Private`actionResHeldVar$$ = 
-  HoldComplete[$CellContext`luiHeldVar36767358658720]}, 
+  Lui`UI`Private`interpHeldVar$$ = HoldComplete[
+  WUtils`WUtils`Private`NewVar`Unique36770555636], 
+  Lui`UI`Private`actionResHeldVar$$ = HoldComplete[
+  WUtils`WUtils`Private`NewVar`Unique36770555637]}, 
   DynamicBox[ToBoxes[
     ReplaceAll[Lui`UI`Private`interpHeldVar$$, HoldComplete[
        Pattern[Lui`UI`Private`interp$, 
@@ -44,14 +44,19 @@ Cell[BoxData[
            InputField[
             Dynamic[Lui`UI`Private`input$$], String, 
             ImageSize -> {400, Automatic}, FrameMargins -> Medium, BoxID -> 
-            "LuiInputFieldBoxID8721"], {
+            "LuiInputFieldBoxID8"], {
            "ReturnKeyDown" :> 
             Lui`UI`Private`HandleInput[
              Lui`UI`Private`input$$, Lui`UI`Private`interpHeldVar$$, 
               Lui`UI`Private`actionResHeldVar$$]}], 
-          Lui`UI`Private`displayIfNotNull[Lui`UI`Private`interp$], 
-          Lui`UI`Private`displayIfNotNull[Lui`UI`Private`actionResult$]}]]], 
-    StandardForm],
+          Lui`UI`Private`displayIfNotNull[
+          Lui`UI`Private`interp$, Lui`UI`Private`formatInterpretation], 
+          With[{Lui`UI`Private`actionResult2$ = Lui`UI`Private`actionResult$}, 
+           If[
+           HoldComplete[Lui`UI`Private`actionResult2$] =!= 
+            Lui`UI`Private`interp$, 
+            Lui`UI`Private`displayIfNotNull[Lui`UI`Private`actionResult$], 
+            Apply[Sequence, {}]]]}]]], StandardForm],
    ImageSizeCache->{402., {11.5, 18.5}}],
   DynamicModuleValues:>{}]], "Output",
  CellChangeTimes->{{3.6765848330545716`*^9, 3.6765848443136973`*^9}, 
@@ -59,7 +64,7 @@ Cell[BoxData[
    3.676587353057561*^9}, 3.676587759243385*^9, 3.6765888452292128`*^9, {
    3.676589836617897*^9, 3.6765898838186164`*^9}, 3.6765899564878826`*^9, {
    3.676589998994133*^9, 3.676590002544488*^9}, 3.676668395746364*^9, {
-   3.6767502610106983`*^9, 3.676750264739381*^9}}]
+   3.6767502610106983`*^9, 3.676750264739381*^9}, 3.6770699626360984`*^9}]
 }, Open  ]]
 },
 WindowSize->{878, 330},
@@ -80,7 +85,7 @@ CellTagsIndex->{}
 Notebook[{
 Cell[CellGroupData[{
 Cell[580, 22, 242, 5, 31, "Input"],
-Cell[825, 29, 1613, 32, 47, "Output"]
+Cell[825, 29, 1925, 37, 47, "Output"]
 }, Open  ]]
 }
 ]

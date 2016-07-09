@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.net.InetSocketAddress;
 
+import com.danielbigham.io.Out;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import com.sun.net.httpserver.HttpServer;
@@ -83,7 +84,7 @@ public class LuiHttpServer
 		}
 		else
 		{
-			System.out.println("ERROR: Couldn't find KernelLink via JLink");
+			Out.print("ERROR: Couldn't find KernelLink via JLink");
 		}
 	}    
 }

@@ -82,7 +82,7 @@ public class TestChartParser
 		patterns.add(SequencePattern.create(grammar, "just testing", grammar.getTokenId("$symbol")));
 		grammar.setPatterns(patterns);
 		
-		//System.out.println(patterns.toString());
+		//Out.print(patterns.toString());
 		
 		ParserState state = ChartParser.parse(grammar, "just testing again");
 		
@@ -110,7 +110,7 @@ public class TestChartParser
 		patterns.add(SequencePattern.create(grammar, "just testing", grammar.getTokenId("$symbol")));
 		grammar.setPatterns(patterns);
 		
-		//System.out.println(patterns.toString());
+		//Out.print(patterns.toString());
 		
 		ParserState state = ChartParser.parse(grammar, "just testing again again");
 		
@@ -146,7 +146,7 @@ public class TestChartParser
 		patterns.add(SequencePattern.create(grammar, "testing", grammar.getTokenId("$symbol")));
 		grammar.setPatterns(patterns);
 		
-		//System.out.println(patterns.toString());
+		//Out.print(patterns.toString());
 		
 		ParserState state = ChartParser.parse(grammar, "just testing testing");
 		

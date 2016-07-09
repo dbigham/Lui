@@ -5,6 +5,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 
+import com.danielbigham.io.Out;
 import com.danielbigham.lui.Grammar;
 import com.danielbigham.lui.antlr.GrammarParser.GrammarRulesContext;
 import com.danielbigham.lui.grammarrule.GrammarRule;
@@ -42,7 +43,7 @@ public class GrammarFiles implements IFileLoader
 	{
 		if (isGrammarFile(path))
 		{
-			System.out.println("Load file: " + path);
+			Out.print("Load file: " + path);
 			
 			class RuleHandler implements IRuleHandler
 			{
@@ -64,8 +65,8 @@ public class GrammarFiles implements IFileLoader
 	{
 		if (isGrammarFile(path))
 		{
-			System.out.println("--------------------------------------------------------------------------------");
-			System.out.println("File modified: " + path);
+			Out.print("--------------------------------------------------------------------------------");
+			Out.print("File modified: " + path);
 			
 			class RuleHandler implements IRuleHandler
 			{
@@ -87,7 +88,7 @@ public class GrammarFiles implements IFileLoader
 	{
 		if (isGrammarFile(path))
 		{
-			System.out.println("File created: " + path);
+			Out.print("File created: " + path);
 		}
 	}
 
@@ -96,7 +97,7 @@ public class GrammarFiles implements IFileLoader
 	{
 		if (isGrammarFile(path))
 		{
-			System.out.println("File removed: " + path);
+			Out.print("File removed: " + path);
 		}
 	}
     

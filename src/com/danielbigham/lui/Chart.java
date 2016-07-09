@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-
+import com.danielbigham.io.Out;
 import com.danielbigham.lui.pattern.LiteralPattern;
 import com.danielbigham.lui.patternmatch.IPatternMatch;
 import com.danielbigham.lui.patternmatch.PatternMatchWrapper;
@@ -98,7 +98,7 @@ public class Chart
 		
 		if (state != null)
 		{
-			if (ChartParser.debugFlag) { System.out.println("New result: " + match.toString(state.grammar())); }
+			if (ChartParser.debugFlag) { Out.print("New result: " + match.toString(state.grammar())); }
 		}
 		
 		{
@@ -118,7 +118,7 @@ public class Chart
 					!(match instanceof LiteralPattern) &&
 					!(match.startPos() == 0 && match.endPos() == inputEndPos))
 				{
-					if (ChartParser.debugFlag) { System.out.println("New result might trigger partials: " + match.toString()); }
+					if (ChartParser.debugFlag) { Out.print("New result might trigger partials: " + match.toString()); }
 					// Important to increment this BEFORE creating the PatternMatchWrapper
 					// below, otherwise the previous partial we created (if any) will believe
 					// that it shouldn't be extended by this token.
@@ -254,8 +254,8 @@ public class Chart
 		
 		if (ChartParser.debugFlag)
 		{
-			System.out.println(match.toString() + " -> Partials\n  Start pos: " + startPos + "\n  Symbol: " + symbol);
-			System.out.println("  Iteration counter: " + iterationCounter);
+			Out.print(match.toString() + " -> Partials\n  Start pos: " + startPos + "\n  Symbol: " + symbol);
+			Out.print("  Iteration counter: " + iterationCounter);
 		}
 	}
 	
@@ -279,7 +279,7 @@ public class Chart
 		}
 		partials.add(new PatternMatchWrapper(match, iterationCounter));
 		
-		System.out.println(match.toString() + " -> Partials\n  End: " + endPos + "\n  Symbol: " + symbol);
+		Out.print(match.toString() + " -> Partials\n  End: " + endPos + "\n  Symbol: " + symbol);
 	}
 	
 	/**
