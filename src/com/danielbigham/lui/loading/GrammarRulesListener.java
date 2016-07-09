@@ -24,7 +24,6 @@ import com.danielbigham.lui.antlr.GrammarParser.IntegerContext;
 import com.danielbigham.lui.antlr.GrammarParser.LhsContext;
 import com.danielbigham.lui.antlr.GrammarParser.OrRulePartContext;
 import com.danielbigham.lui.antlr.GrammarParser.RealContext;
-import com.danielbigham.lui.antlr.GrammarParser.RulePartContext;
 import com.danielbigham.lui.antlr.GrammarParser.SeqRulePartContext;
 import com.danielbigham.lui.antlr.GrammarParser.SimpleRuleContext;
 import com.danielbigham.lui.antlr.GrammarParser.StringContext;

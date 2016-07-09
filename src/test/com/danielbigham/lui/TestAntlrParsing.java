@@ -6,10 +6,8 @@ import java.util.List;
 
 import org.junit.Test;
 
-import com.danielbigham.lui.Grammar;
 import com.danielbigham.lui.grammarrule.GrammarRule;
 import com.danielbigham.lui.loading.AntlrHelpers;
-import com.danielbigham.lui.loading.RuleHandler;
 
 public class TestAntlrParsing
 {
@@ -86,9 +84,6 @@ public class TestAntlrParsing
 	 */
 	private static List<GrammarRule> parseGrammar(String grammarRules)
 	{
-		Grammar grammar = new Grammar();
-		RuleHandler ruleHandler = new RuleHandler(grammar);
-		AntlrHelpers.parseGrammar(grammarRules, ruleHandler);
-		return ruleHandler.getRules();
+		return AntlrHelpers.parseGrammar(grammarRules);
 	}
 }

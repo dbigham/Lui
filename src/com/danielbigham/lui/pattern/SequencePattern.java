@@ -20,7 +20,13 @@ public class SequencePattern extends Pattern implements IPattern
 {
 	public SequencePattern(List<IPattern> patterns, int resultSymbol)
 	{
-		super(patterns, resultSymbol);
+		super(patterns, resultSymbol, PatternType.SEQUENCE);
+	}
+	
+	@Override
+	public IPattern create(List<IPattern> subPatterns, int resultSymbol)
+	{
+		return new SequencePattern(subPatterns, resultSymbol);
 	}
 	
 	public static SequencePattern create(Grammar grammar, String str, int resultSymbol)

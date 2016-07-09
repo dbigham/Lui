@@ -7,14 +7,23 @@ import java.util.List;
 import java.util.Map;
 
 import com.danielbigham.lui.Grammar;
+import com.danielbigham.lui.grammarrule.GrammarRule;
 
-public abstract class Pattern
+public abstract class Pattern implements IPattern
 {
 	protected List<IPattern> patterns;
+	protected String action;
 	
-	public Pattern(List<IPattern> patterns, int resultSymbol)
+	// Constant used to mark sub-patterns that don't actually
+	// produce a grammar symbol.
+	public static final int NO_LHS = -999;
+
+	public final PatternType patternType;
+		
+	public Pattern(List<IPattern> patterns, int resultSymbol, PatternType patternType)
 	{
 		this.patterns = patterns;
+		this.patternType = patternType;
 		// Call the below so that it pre-computes its result.
 		// Best to do at grammar construction time, I think, rather than at runtime.
 		this.subPatternsAreAllLiterals();
@@ -196,5 +205,172 @@ public abstract class Pattern
 	public List<Integer> getTriggerIndices()
 	{
 		return triggerIndices;
+	}
+	
+	/**
+	 * Do the work of exploding all of the pattern's sub-patterns.
+	 * 
+	 * Returns null if we determine that all sub-patterns are basic,
+	 * in which case we don't need to explode anything.
+	 * 
+	 * See also: Rule Explosion.md
+	 * 
+	 * @param grammar		the grammar.
+	 * @param pattern		the pattern to explode.
+	 * 
+	 * @return				all of the pattern's sub-patterns after explosion.
+	 */
+	public static List<IPattern> explodeHelper(Grammar grammar, IPattern pattern)
+	{
+		boolean allSubPatternsBasic = true;
+		for (IPattern subPattern : pattern.patterns())
+		{
+			if (!(subPattern instanceof BasicPattern))
+			{
+				allSubPatternsBasic = false;
+				break;
+			}
+		}
+		
+		if (allSubPatternsBasic)
+		{
+			// Nothing to do. Return 'null' as a signal that the original
+			// pattern is fine.
+			return null;
+		}
+		
+		List<IPattern> subPatterns = pattern.patterns();
+		
+		List<IPattern> newSubPatterns = new ArrayList<IPattern>();
+		
+		for (IPattern subPattern : subPatterns)
+		{
+			if (subPattern instanceof BasicPattern)
+			{
+				// We don't need to explode basic patterns; they are already atoms.
+				newSubPatterns.add(subPattern);
+			}
+			else
+			{
+				newSubPatterns.add(subPattern.explode(grammar));
+			}
+		}
+		
+		return newSubPatterns;
+	}
+	
+	public void setSymbol(int newSymbol)
+	{
+		this.resultSymbol = newSymbol;
+	}
+	
+	public IPattern explode(Grammar grammar)
+	{
+		List<IPattern> explodedSubPatterns = explodeHelper(grammar, this);
+		
+		IPattern newPattern;
+		
+		if (explodedSubPatterns == null)
+		{
+			// None of the sub-patterns needed exploding.
+			if (this.resultSymbol != Pattern.NO_LHS)
+			{
+				// This is a top-level rule that didn't need any exploding, so
+				// just stop here and add the pattern unmodified.
+				grammar.addFinalPattern(this);
+				return this;
+			}
+			
+			explodedSubPatterns = patterns();
+		}
+		
+		newPattern = this.create(explodedSubPatterns, this.resultSymbol);
+		
+		// Add the pattern to the final list of patterns for this grammar.
+		// This will generate a dynamic symbol if necessary. There are three cases:
+		// - Top level rule: Will just echo back this pattern's result symbo..
+		// - Sub-rule never seen before: Will generate a new symbol.
+		// - Sub-rule seen before: Will re-use the same symbol we generated previously for this pattern.
+		int symbol = grammar.addFinalPattern(newPattern);
+		
+		newPattern.setSymbol(symbol);
+		
+		if (this.resultSymbol != Pattern.NO_LHS)
+		{
+			return new SymbolPattern(symbol, -1, -1);
+		}
+		else
+		{
+			// We return the actual pattern in this case, since it's
+			// a top level pattern and the caller (GrammarRule.sxplode)
+			// wants it so that we can call setAction on it.
+			return newPattern;
+		}
+	}
+	
+	/* (non-Javadoc)
+	 * @see java.lang.Object#hashCode()
+	 */
+	@Override
+	public int hashCode()
+	{
+		final int prime = 31;
+		int result = 1;
+		result = prime * result
+				+ ((patternType == null) ? 0 : patternType.hashCode());
+		result = prime * result
+				+ ((patterns == null) ? 0 : patterns.hashCode());
+		result = prime * result + resultSymbol;
+		return result;
+	}
+
+	/* (non-Javadoc)
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
+	@Override
+	public boolean equals(Object obj)
+	{
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Pattern other = (Pattern) obj;
+		if (patternType != other.patternType)
+			return false;
+		if (patterns == null)
+		{
+			if (other.patterns != null)
+				return false;
+		} else if (!patterns.equals(other.patterns))
+			return false;
+		if (resultSymbol != other.resultSymbol)
+			return false;
+		return true;
+	}
+	
+	@Override
+	public void setAction(String action)
+	{
+		this.action = action;
+	}
+
+	/**
+	 * Used by unit tests.
+	 * 
+	 * @param patterns	list of patterns.
+	 * @param grammar	the grammar. 
+	 */
+	public static List<GrammarRule> toGrammarRules(List<IPattern> patterns, Grammar grammar)
+	{
+		List<GrammarRule> rules = new ArrayList<GrammarRule>(patterns.size());
+		
+		for (IPattern pattern : patterns)
+		{
+			rules.add(new GrammarRule(grammar, "DUMMY_SYMBOL", pattern, "DUMMY_ACTION"));
+		}
+		
+		return rules;
 	}
 }

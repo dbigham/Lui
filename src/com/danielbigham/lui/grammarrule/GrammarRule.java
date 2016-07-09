@@ -76,4 +76,20 @@ public class GrammarRule
 		
 		return str.toString();
 	}
+
+	/**
+	 * Explode nested patterns so that every pattern only has basic
+	 * patterns as its sub-patterns. Introduce new grammar symbols as
+	 * necessary. Calls grammar.addFinalPattern to accrue the final set
+	 * of patterns.
+	 * 
+	 * See also: Rule Explosion.md
+	 * 
+	 * @param grammar		the grammar.
+	 */
+	public void explode(Grammar grammar)
+	{
+		IPattern explodedPattern = pattern.explode(grammar);
+		explodedPattern.setAction(action);
+	}
 }

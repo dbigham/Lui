@@ -10,10 +10,16 @@ public class OptionalPattern extends Pattern implements IPattern
 {
 	public OptionalPattern(IPattern pattern, int resultSymbol)
 	{		
-		super(null, resultSymbol);
+		super(null, resultSymbol, PatternType.OPTIONAL);
 		
 		this.patterns = new ArrayList<IPattern>(1);
 		this.patterns.add(pattern);
+	}
+	
+	@Override
+	public IPattern create(List<IPattern> subPatterns, int resultSymbol)
+	{
+		return new OptionalPattern(subPatterns.get(0), resultSymbol);
 	}
 
 	@Override

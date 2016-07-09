@@ -12,7 +12,13 @@ public class OrPattern extends Pattern implements IPattern
 {
 	public OrPattern(List<IPattern> patterns, int resultSymbol)
 	{		
-		super(patterns, resultSymbol);
+		super(patterns, resultSymbol, PatternType.OR);
+	}
+	
+	@Override
+	public IPattern create(List<IPattern> subPatterns, int resultSymbol)
+	{
+		return new OrPattern(subPatterns, resultSymbol);
 	}
 	
 	public static OrPattern create(Grammar grammar, String str, int resultSymbol)

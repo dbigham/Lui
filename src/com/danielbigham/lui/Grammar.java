@@ -5,30 +5,128 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-
+import com.danielbigham.lui.grammarrule.GrammarRule;
 import com.danielbigham.lui.pattern.BasicPattern;
 import com.danielbigham.lui.pattern.IPattern;
+import com.danielbigham.lui.pattern.Pattern;
 import com.danielbigham.lui.patternmatch.IPatternMatch;
 
+/**
+ * The grammar, consisting of grammar rules that have been wired up to
+ * 'triggers'. ie. One of their non-optional sub-patterns has been chosen
+ * as that pattern's trigger. (see the 'triggers' map)
+ * 
+ * @author Daniel
+ */
 public class Grammar
 {
 	private Map<Integer, List<IPattern>> triggers;
+	
+	// Keep track of the mapping from literals (ex. "the") and
+	// grammar symbols (ex. "$city") to numeric equivalents.
+	// We use the numeric equivalents during parsing since integer
+	// operations are more efficient than string operations.
 	private Map<String, Integer> tokenIds;
+	
+	private int dynamicRuleCounter;
+	
+	// The following two are used during setPattern's many calls to pattern.explode, then then
+	// cleared.
+	
+	// The final list of patterns after grammar explosion.
+	private List<IPattern> finalPatterns;
+	
+	// Mapping from pattern+symbol -> grammar symbol integer
+	// wrt generating dynamic rules during grammar explosion.
+	// See also: Rule Explosion.md
+	private Map<IPattern, Integer> finalPatternsToResultSymbol;
 	
 	public Grammar()
 	{
 		triggers = new HashMap<Integer, List<IPattern>>();
 		tokenIds = new HashMap<String, Integer>();
+		dynamicRuleCounter = 0;
 	}
 	
 	/**
 	 * Set the grammar's patterns.
 	 * 
+	 * @param rules		the grammar rules.
+	 */
+	public void setGrammarRules(List<GrammarRule> rules)
+	{
+		finalPatterns = new ArrayList<IPattern>();
+		finalPatternsToResultSymbol = new HashMap<IPattern, Integer>();
+		
+		// See also: Rule Explosion.md
+		for (GrammarRule rule : rules)
+		{
+			rule.explode(this);
+		}
+		
+		setTriggers(finalPatterns);
+		
+		finalPatterns.clear();
+		finalPatternsToResultSymbol.clear();
+	}
+	
+	/**
+	 * Like setGrammarRules, but only really useful for unit tests.
+	 * 
 	 * @param patterns		the patterns.
 	 */
 	public void setPatterns(List<IPattern> patterns)
 	{
-		setTriggers(patterns);
+		setGrammarRules(Pattern.toGrammarRules(patterns, this));
+	}
+	
+	/**
+	 * Accrue patterns produced by the pattern.explode process performed
+	 * in the 'setPatterns' method.
+	 * 
+	 * See also: Rule Explosion.md
+	 * 
+	 * @param pattern		the pattern.
+	 * @return				the grammar symbol produced by this pattern, possibly dynamically generated. 
+	 */
+	public int addFinalPattern(IPattern pattern)
+	{
+		Integer symbolTokenId;
+		
+		if (pattern.resultSymbol() == Pattern.NO_LHS)
+		{
+			// This is a sub-pattern, so we need to generate a
+			// result symbol for it, unless we've already seen an
+			// equivalent pattern.
+			
+			symbolTokenId = finalPatternsToResultSymbol.get(pattern);
+			
+			if (symbolTokenId == null)
+			{
+				// We need to assign a new dynamic grammar symbol to
+				// this.
+				++dynamicRuleCounter;
+				String newSymbol = "$" + dynamicRuleCounter;
+				symbolTokenId = getTokenId(newSymbol);
+				finalPatterns.add(pattern);
+			}
+			else
+			{
+				// Otherwise, we don't update 'finalPatterns', because
+				// we've already seen an equivalent pattern.
+			}
+			
+			finalPatternsToResultSymbol.put(pattern, symbolTokenId);
+		}
+		else
+		{
+			// This is a top level rule, no need to generate
+			// a new result symbol for it.
+			symbolTokenId = pattern.resultSymbol();
+			finalPatterns.add(pattern);
+		}
+		
+		return symbolTokenId;
 	}
 	
 	/**

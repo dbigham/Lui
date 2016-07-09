@@ -5,6 +5,7 @@ import java.util.Map;
 import java.util.Set;
 
 import com.danielbigham.lui.Chart;
+import com.danielbigham.lui.Grammar;
 import com.danielbigham.lui.ParserState;
 import com.danielbigham.lui.patternmatch.IPatternMatch;
 
@@ -12,6 +13,13 @@ import com.danielbigham.lui.patternmatch.IPatternMatch;
  * A pattern that is either a LiteralPattern or a SymbolPattern, which
  * get associated with numeric token IDs, and can be used as things that
  * trigger higher-level patterns.
+ * 
+ * NOTE: There are lots of methods here that are not applicable since
+ *       we implement IPattern but we don't patterns. This may imply that
+ *       a better design would be to have INonBasicPattern, and have things
+ *       like SequencePattern and OrPattern implement INonBasicPattern,
+ *       and have NonBasicPattern if they could share some of that
+ *       implementation. Not sure.
  * 
  * @author Daniel
  */
@@ -165,6 +173,34 @@ public abstract class BasicPattern implements IPattern, IPatternMatch
 	@Override
 	public void setTriggerIndices(List<Integer> triggerIndices)
 	{
+		throw new UnsupportedOperationException();
+	}
+	
+	@Override
+	public IPattern explode(Grammar grammar)
+	{
+		// We don't need to explode basic patterns; they are already atoms.
+		throw new UnsupportedOperationException();
+	}
+	
+	@Override
+	public void setSymbol(int newSymbol)
+	{
+		// We shouldn't need to override the symbol of basic patterns.
+		throw new UnsupportedOperationException();
+	}
+	
+	@Override
+	public IPattern create(List<IPattern> subPatterns, int resultSymbol)
+	{
+		// Only used by non-basic patterns.
+		throw new UnsupportedOperationException();
+	}
+	
+	@Override
+	public void setAction(String action)
+	{
+		// Only used by non-basic patterns.
 		throw new UnsupportedOperationException();
 	}
 }

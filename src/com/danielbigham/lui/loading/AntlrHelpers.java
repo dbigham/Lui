@@ -26,6 +26,7 @@ import com.danielbigham.lui.grammarrule.GrammarRule;
 import com.danielbigham.lui.pattern.IPattern;
 import com.danielbigham.lui.pattern.LiteralPattern;
 import com.danielbigham.lui.pattern.OrPattern;
+import com.danielbigham.lui.pattern.Pattern;
 import com.danielbigham.lui.pattern.SequencePattern;
 import com.danielbigham.lui.pattern.SymbolPattern;
 
@@ -123,7 +124,7 @@ public class AntlrHelpers
 			pattern =
 				new SequencePattern(
 					subPatterns,
-					-1
+					Pattern.NO_LHS
 				);
 		}
 		
@@ -164,7 +165,7 @@ public class AntlrHelpers
 			return
 				new OrPattern(
 					convert(((OrRulePartContext) rulePart).rulePart(), grammar),
-					-1
+					Pattern.NO_LHS
 				);
 		}
 		else if (rulePart instanceof SeqRulePartContext)
@@ -184,7 +185,7 @@ public class AntlrHelpers
 				return
 					new SequencePattern(
 						convert(((SeqRulePartContext) rulePart).rulePart(), grammar),
-						-1
+						Pattern.NO_LHS
 					);
 			}
 		}
@@ -263,5 +264,19 @@ public class AntlrHelpers
 	{
 		GrammarLexer lexer = new GrammarLexer(new ANTLRInputStream(grammarRules));
 		parseGrammar(lexer, ruleHandler);
+	}
+	
+	/**
+	 * Parses the given grammar rules.
+	 * 
+	 * @param grammarRules		the grammar rules.
+	 * @return					the parsed grammar rules.
+	 */
+	public static List<GrammarRule> parseGrammar(String grammarRules)
+	{
+		Grammar grammar = new Grammar();
+		RuleHandler ruleHandler = new RuleHandler(grammar);
+		AntlrHelpers.parseGrammar(grammarRules, ruleHandler);
+		return ruleHandler.getRules();
 	}
 }
