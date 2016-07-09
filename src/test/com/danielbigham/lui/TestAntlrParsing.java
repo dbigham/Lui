@@ -90,6 +90,16 @@ public class TestAntlrParsing
 		assertEquals("<$webpage:0>:\n    {<slashdot:1>}\n        null", rules.get(1).toString());
 	}
 	
+	// Bindings
+	@Test
+	public void test9()
+	{
+		List<GrammarRule> rules = parseGrammar("expr: a=$integer b=$integer -> a + b");
+		assertEquals(1, rules.size());
+		assertEquals("<$start:-1>:\n    {<$webpage:0>}\n        null", rules.get(0).toString());
+		assertEquals("<$expr:0>:\n    {<slashdot:1>}\n        null", rules.get(1).toString());
+	}	
+	
 	/**
 	 * Parses the given grammar rules.
 	 * 

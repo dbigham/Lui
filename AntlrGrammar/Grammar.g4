@@ -17,8 +17,12 @@ simpleRule:		rulePart+
 
 lhs: ID | symbol ;
 
-rulePart:		rulePart ('|' rulePart)+				# OrRulePart
-	|			'(' rulePart+ ')'						# SeqRulePart
+rulePart:		ID EQUALS rulePartRhs
+	|			rulePartRhs
+	;
+
+rulePartRhs:	rulePartRhs ('|' rulePartRhs)+			# OrRulePart
+	|			'(' rulePartRhs+ ')'					# SeqRulePart
 	|			basicRulePart							# BasicRulePart2
 	;
 

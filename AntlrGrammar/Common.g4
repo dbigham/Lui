@@ -2,6 +2,8 @@ lexer grammar Common;
 
 COLON : ':' ;
 
+EQUALS : '=' ;
+
 ID : LETTER (LETTER|'0'..'9')* ;
 
 fragment
