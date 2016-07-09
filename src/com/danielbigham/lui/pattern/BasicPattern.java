@@ -28,6 +28,7 @@ public abstract class BasicPattern implements IPattern, IPatternMatch
 	protected int tokenId;
 	protected int startPos;
 	protected int endPos;
+	protected String binding;
 	
 	BasicPattern(int startPos, int endPos)
 	{
@@ -212,6 +213,37 @@ public abstract class BasicPattern implements IPattern, IPatternMatch
 	
 	public String toString(Grammar grammar)
 	{
-		return toString();
+		String str = toString();
+		if (binding != null)
+		{
+			str = binding + "=" + str;
+		}
+		return str;
+	}
+	
+	public void setBinding(String binding)
+	{
+		this.binding = binding;
+	}
+	
+	public String getBinding()
+	{
+		return this.binding;
+	}
+	
+	/**
+	 * toString implementation common to all pattern types.
+	 * Called from derived classes' toString metohds.
+	 */
+	protected String toStringHelper(String str)
+	{
+		if (binding != null)
+		{
+			return binding + "=" + str;
+		}
+		else
+		{
+			return str;
+		}
 	}
 }

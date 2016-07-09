@@ -7,6 +7,7 @@ import org.antlr.v4.runtime.tree.TerminalNode;
 import com.danielbigham.lui.antlr.GrammarListener;
 import com.danielbigham.lui.antlr.GrammarParser.BasicRulePart2Context;
 import com.danielbigham.lui.antlr.GrammarParser.BasicRulePartContext;
+import com.danielbigham.lui.antlr.GrammarParser.BindingContext;
 import com.danielbigham.lui.antlr.GrammarParser.EDivideContext;
 import com.danielbigham.lui.antlr.GrammarParser.EHeadedExprContext;
 import com.danielbigham.lui.antlr.GrammarParser.EIntegerContext;
@@ -365,6 +366,20 @@ public class GrammarRulesListener implements GrammarListener
 
 	@Override
 	public void exitBasicRulePart2(BasicRulePart2Context ctx) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void enterBinding(BindingContext ctx)
+	{
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void exitBinding(BindingContext ctx)
+	{
 		// TODO Auto-generated method stub
 		
 	}

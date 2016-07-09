@@ -13,6 +13,7 @@ public abstract class Pattern implements IPattern
 {
 	protected List<IPattern> patterns;
 	protected String action;
+	protected String binding;
 	
 	// Constant used to mark sub-patterns that don't actually
 	// produce a grammar symbol.
@@ -320,6 +321,7 @@ public abstract class Pattern implements IPattern
 	{
 		final int prime = 31;
 		int result = 1;
+		result = prime * result + ((binding == null) ? 0 : binding.hashCode());
 		result = prime * result
 				+ ((patternType == null) ? 0 : patternType.hashCode());
 		result = prime * result
@@ -341,6 +343,12 @@ public abstract class Pattern implements IPattern
 		if (getClass() != obj.getClass())
 			return false;
 		Pattern other = (Pattern) obj;
+		if (binding == null)
+		{
+			if (other.binding != null)
+				return false;
+		} else if (!binding.equals(other.binding))
+			return false;
 		if (patternType != other.patternType)
 			return false;
 		if (patterns == null)
@@ -353,7 +361,7 @@ public abstract class Pattern implements IPattern
 			return false;
 		return true;
 	}
-	
+
 	@Override
 	public void setAction(String action)
 	{
@@ -382,5 +390,31 @@ public abstract class Pattern implements IPattern
 	{
 		StringBuilder str = new StringBuilder(20);
 		return str.append("<").append(grammar.getSymbolOrLiteral(resultSymbol)).append(":").append(resultSymbol).append(">: ").append(toString()).toString();
+	}
+	
+	public void setBinding(String binding)
+	{
+		this.binding = binding;
+	}
+	
+	public String getBinding()
+	{
+		return this.binding;
+	}
+	
+	/**
+	 * toString implementation common to all pattern types.
+	 * Called from derived classes' toString metohds.
+	 */
+	protected String toStringHelper(String str)
+	{
+		if (binding != null)
+		{
+			return binding + "=" + str;
+		}
+		else
+		{
+			return str;
+		}
 	}
 }

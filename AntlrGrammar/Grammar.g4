@@ -17,13 +17,14 @@ simpleRule:		rulePart+
 
 lhs: ID | symbol ;
 
-rulePart:		ID EQUALS rulePartRhs
-	|			rulePartRhs
-	;
-
-rulePartRhs:	rulePartRhs ('|' rulePartRhs)+			# OrRulePart
-	|			'(' rulePartRhs+ ')'					# SeqRulePart
-	|			basicRulePart							# BasicRulePart2
+rulePart:		rulePart ('|' rulePart)+			# OrRulePart
+	|			'(' rulePart+ ')'					# SeqRulePart
+	|			basicRulePart						# BasicRulePart2
+				// Unfortunately this allows multiple/nested bindings,
+				// but I'm not sure how to prevent that. If I break this
+				// up into multiple rules, I get 'mutual left recursion'
+				// which apparently isn't allowed.
+	|			ID EQUALS rulePart					# Binding
 	;
 
 basicRulePart:

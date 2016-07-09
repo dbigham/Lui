@@ -112,4 +112,14 @@ public interface IPattern
 	 * @param grammar	the grammar.
 	 */
 	public String toString2(Grammar grammar);
+
+	/**
+	 * Set this pattern's bound symbol.
+	 */
+	public void setBinding(String binding);
+	
+	/**
+	 * Get this pattern's bound symbol, or null if none.
+	 */
+	public String getBinding();
 }

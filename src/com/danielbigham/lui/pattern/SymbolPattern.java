@@ -73,12 +73,12 @@ public class SymbolPattern extends BasicPattern implements IPatternMatch
 		if (symbol != null)
 		{
 			StringBuilder str = new StringBuilder(symbol.length() + 7);
-			return str.append("<").append(symbol).append(":").append(tokenId).append(">").toString();
+			return toStringHelper(str.append("<").append(symbol).append(":").append(tokenId).append(">").toString());
 		}
 		else
 		{
 			StringBuilder str = new StringBuilder(11);
-			return str.append("<?:").append(tokenId).append(">").toString();
+			return toStringHelper(str.append("<?:").append(tokenId).append(">").toString());
 		}
 	}
 	

@@ -23,3 +23,7 @@ INDENT : ('    ' | '\t') ;
 
 // The special arrow char didn't seem to work when I tried it
 ARROW : '->' | '\u2192' ;
+
+// Handle characters which failed to match any other token
+// http://stackoverflow.com/questions/22415208/get-rid-of-token-recognition-error
+//ERRORCHARACTER : . ;

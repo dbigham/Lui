@@ -10,12 +10,12 @@ import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 
-import com.danielbigham.lui.ChartParser;
 import com.danielbigham.lui.Grammar;
 import com.danielbigham.lui.antlr.GrammarLexer;
 import com.danielbigham.lui.antlr.GrammarParser;
 import com.danielbigham.lui.antlr.GrammarParser.BasicRulePart2Context;
 import com.danielbigham.lui.antlr.GrammarParser.BasicRulePartContext;
+import com.danielbigham.lui.antlr.GrammarParser.BindingContext;
 import com.danielbigham.lui.antlr.GrammarParser.GrammarRuleContext;
 import com.danielbigham.lui.antlr.GrammarParser.GrammarRulesContext;
 import com.danielbigham.lui.antlr.GrammarParser.OrRulePartContext;
@@ -209,6 +209,12 @@ public class AntlrHelpers
 						Pattern.NO_LHS
 					);
 			}
+		}
+		else if (rulePart instanceof BindingContext)
+		{
+			IPattern pattern = convert(((BindingContext) rulePart).rulePart(), grammar);
+			pattern.setBinding(((BindingContext) rulePart).ID().getText());
+			return pattern;
 		}
 		else
 		{

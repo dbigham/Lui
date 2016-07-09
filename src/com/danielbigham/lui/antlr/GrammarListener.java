@@ -84,6 +84,18 @@ public interface GrammarListener extends ParseTreeListener {
 	 */
 	void exitSeqRulePart(GrammarParser.SeqRulePartContext ctx);
 	/**
+	 * Enter a parse tree produced by the {@code Binding}
+	 * labeled alternative in {@link GrammarParser#rulePart}.
+	 * @param ctx the parse tree
+	 */
+	void enterBinding(GrammarParser.BindingContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code Binding}
+	 * labeled alternative in {@link GrammarParser#rulePart}.
+	 * @param ctx the parse tree
+	 */
+	void exitBinding(GrammarParser.BindingContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link GrammarParser#basicRulePart}.
 	 * @param ctx the parse tree
 	 */

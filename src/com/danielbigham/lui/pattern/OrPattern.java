@@ -71,6 +71,6 @@ public class OrPattern extends Pattern implements IPattern
 			str.append(subPattern.toString());
 			++patternIndex;
 		}
-		return str.toString();
+		return toStringHelper(str.toString());
 	}
 }

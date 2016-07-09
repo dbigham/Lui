@@ -61,7 +61,7 @@ public class SequencePattern extends Pattern implements IPattern
 			++patternIndex;
 		}
 		str.append("}");
-		return str.toString();
+		return toStringHelper(str.toString());
 	}
 
 	@Override

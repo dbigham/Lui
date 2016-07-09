@@ -96,8 +96,7 @@ public class TestAntlrParsing
 	{
 		List<GrammarRule> rules = parseGrammar("expr: a=$integer b=$integer -> a + b");
 		assertEquals(1, rules.size());
-		assertEquals("<$start:-1>:\n    {<$webpage:0>}\n        null", rules.get(0).toString());
-		assertEquals("<$expr:0>:\n    {<slashdot:1>}\n        null", rules.get(1).toString());
+		assertEquals("<$expr:1>:\n    {a=<$integer:0> b=<$integer:0>}\n        a+b", rules.get(0).toString());
 	}	
 	
 	/**
