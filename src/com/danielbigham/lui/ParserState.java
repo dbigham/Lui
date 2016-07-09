@@ -151,6 +151,6 @@ public class ParserState
 	public void incrementIterationCounter()
 	{
 		++iterationCounter;
-		System.out.println("Increment iteration counter -> " + iterationCounter);
+		if (ChartParser.debugFlag) { System.out.println("Increment iteration counter -> " + iterationCounter); }
 	}
 }

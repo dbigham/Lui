@@ -8,6 +8,7 @@ import com.danielbigham.lui.patternmatch.PatternMatchWrapper;
 public class ChartParser
 {
 	public final static int START_SYMBOL = -1;
+	public final static boolean debugFlag = false;
 	
 	public static ParserState parse(Grammar grammar, String str)
 	{
@@ -49,7 +50,7 @@ public class ChartParser
 				{
 					for (IPatternMatch match : triggeredPatterns)
 					{
-						System.out.println("Triggered: " + match.toString());
+						if (ChartParser.debugFlag) { System.out.println("Triggered: " + match.toString()); }
 						
 						if (match.isMatchComplete())
 						{
@@ -105,13 +106,16 @@ public class ChartParser
 					{
 						if (valueOfIterationCounterWhenTriggeringMatchCreated > wrapper.valueOfIterationCounterWhenCreated)
 						{
-							System.out.println("Continue partial right: " + wrapper.match.toString());
+							if (ChartParser.debugFlag) { System.out.println("Continue partial right: " + wrapper.match.toString()); }
 							++state.numTimesWeCheckedAPartialForPossibleExtension;
 							wrapper.match.extendMatchAsFarAsPossibleUsing(state, 1, trigger.match);
 						}
 						else
 						{
-							System.out.println("Skip partial:\n  Value of iteration counter when triggering token created: " + valueOfIterationCounterWhenTriggeringMatchCreated + "\n  Value of iteration counter when partial formed: " + wrapper.valueOfIterationCounterWhenCreated);
+							if (ChartParser.debugFlag)
+							{
+								System.out.println("Skip partial:\n  Value of iteration counter when triggering token created: " + valueOfIterationCounterWhenTriggeringMatchCreated + "\n  Value of iteration counter when partial formed: " + wrapper.valueOfIterationCounterWhenCreated);
+							}
 						}
 					}
 				}
@@ -124,13 +128,16 @@ public class ChartParser
 					{
 						if (valueOfIterationCounterWhenTriggeringMatchCreated > wrapper.valueOfIterationCounterWhenCreated)
 						{
-							System.out.println("Continue partial left: " + wrapper.match.toString());
+							if (ChartParser.debugFlag) { System.out.println("Continue partial left: " + wrapper.match.toString()); }
 							++state.numTimesWeCheckedAPartialForPossibleExtension;
 							wrapper.match.extendMatchAsFarAsPossibleUsing(state, -1, trigger.match);
 						}
 						else
 						{
-							System.out.println("Skip partial:\n  Value of iteration counter when triggering token created: " + valueOfIterationCounterWhenTriggeringMatchCreated + "\n  Value of iteration counter when partial formed: " + wrapper.valueOfIterationCounterWhenCreated);
+							if (ChartParser.debugFlag)
+							{
+								System.out.println("Skip partial:\n  Value of iteration counter when triggering token created: " + valueOfIterationCounterWhenTriggeringMatchCreated + "\n  Value of iteration counter when partial formed: " + wrapper.valueOfIterationCounterWhenCreated);
+							}
 						}
 					}
 				}

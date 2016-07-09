@@ -105,4 +105,11 @@ public interface IPattern
 	 * @param action	the grammar action. WL expression as string.
 	 */
 	public void setAction(String action);
+
+	/**
+	 * Like toString() but also include the LHS if present.
+	 * 
+	 * @param grammar	the grammar.
+	 */
+	public String toString2(Grammar grammar);
 }

@@ -18,6 +18,11 @@ public class TestAntlrParsing
 		List<GrammarRule> rules = parseGrammar("webpage: spacex reddit");
 		assertEquals(1, rules.size());
 		assertEquals("<$webpage:2>:\n    {<spacex:0> <reddit:1>}\n        null", rules.get(0).toString());
+		
+		// Also ensure that the rule parser assigned the result symbol integer
+		// to the pattern itself, since that's actually where it ends up getting
+		// used right now. (as opposed to in the wrapping grammar rule object)
+		assertEquals(2, rules.get(0).getPattern().resultSymbol());
 	}
 	
 	// Simple action (string)

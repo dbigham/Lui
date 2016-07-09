@@ -10,6 +10,7 @@ import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 
+import com.danielbigham.lui.ChartParser;
 import com.danielbigham.lui.Grammar;
 import com.danielbigham.lui.antlr.GrammarLexer;
 import com.danielbigham.lui.antlr.GrammarParser;
@@ -23,6 +24,7 @@ import com.danielbigham.lui.antlr.GrammarParser.SeqRulePartContext;
 import com.danielbigham.lui.antlr.GrammarParser.SimpleRuleContext;
 import com.danielbigham.lui.antlr.GrammarParser.SymbolContext;
 import com.danielbigham.lui.grammarrule.GrammarRule;
+import com.danielbigham.lui.pattern.BasicPattern;
 import com.danielbigham.lui.pattern.IPattern;
 import com.danielbigham.lui.pattern.LiteralPattern;
 import com.danielbigham.lui.pattern.OrPattern;
@@ -65,8 +67,8 @@ public class AntlrHelpers
 	{
 		if (rule != null && rule.lhs() != null)
 		{
-			System.out.println("RULE: " + rule.lhs().getText());
-			System.out.println("  Simple rules: " + rule.simpleRule().size());
+			if (ChartParser.debugFlag) { System.out.println("RULE: " + rule.lhs().getText()); }
+			if (ChartParser.debugFlag) { System.out.println("  Simple rules: " + rule.simpleRule().size()); }
 			
 			String lhs = rule.lhs().getText();
 			String action = rule.expr() == null ? null : rule.expr().getText();
@@ -128,13 +130,34 @@ public class AntlrHelpers
 				);
 		}
 		
-		return
+		GrammarRule rule =
 			new GrammarRule(
 				grammar,
 				lhs,
 				pattern,
 				action
 			);
+		
+		// TODO: We can't setSymbol if this is a basic pattern
+		// because BasicPattern doesn't support having a result
+		// symbol... and yet a rule like:
+		// webpage: slashdot
+		// ... seems to use a LiteralPattern as its pattern.
+		// What does this imply? That it should wrap that in
+		// a simple SequencePattern? That BasicPattern *should*
+		// allow a result symbol?
+		if (!(pattern instanceof BasicPattern))
+		{
+			// Since we're currently also storing and using
+			// the result symbol within the pattern itself,
+			// we need to take care to replace the NO_LHS that
+			// we originally gave the pattern with the LHS
+			// that we now have for it.
+			pattern.setSymbol(rule.getResultSymbolInt());
+		}
+		
+		return rule;
+
 	}
 	
 	/**
@@ -274,7 +297,17 @@ public class AntlrHelpers
 	 */
 	public static List<GrammarRule> parseGrammar(String grammarRules)
 	{
-		Grammar grammar = new Grammar();
+		return parseGrammar(new Grammar(), grammarRules);
+	}
+	
+	/**
+	 * Parses the given grammar rules.
+	 * 
+	 * @param grammarRules		the grammar rules.
+	 * @return					the parsed grammar rules.
+	 */
+	public static List<GrammarRule> parseGrammar(Grammar grammar, String grammarRules)
+	{
 		RuleHandler ruleHandler = new RuleHandler(grammar);
 		AntlrHelpers.parseGrammar(grammarRules, ruleHandler);
 		return ruleHandler.getRules();

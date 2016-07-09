@@ -27,6 +27,7 @@ public class Grammar
 	// We use the numeric equivalents during parsing since integer
 	// operations are more efficient than string operations.
 	private Map<String, Integer> tokenIds;
+	private Map<Integer, String> tokenIdToSymbolOrLiteral;
 	
 	private int dynamicRuleCounter;
 	
@@ -45,6 +46,7 @@ public class Grammar
 	{
 		triggers = new HashMap<Integer, List<IPattern>>();
 		tokenIds = new HashMap<String, Integer>();
+		tokenIdToSymbolOrLiteral = new HashMap<Integer, String>();
 		dynamicRuleCounter = 0;
 	}
 	
@@ -52,8 +54,10 @@ public class Grammar
 	 * Set the grammar's patterns.
 	 * 
 	 * @param rules		the grammar rules.
+	 * 
+	 * @return			the final grammar rules, but only for testing purposes.
 	 */
-	public void setGrammarRules(List<GrammarRule> rules)
+	public List<IPattern> setGrammarRules(List<GrammarRule> rules)
 	{
 		finalPatterns = new ArrayList<IPattern>();
 		finalPatternsToResultSymbol = new HashMap<IPattern, Integer>();
@@ -66,8 +70,11 @@ public class Grammar
 		
 		setTriggers(finalPatterns);
 		
-		finalPatterns.clear();
-		finalPatternsToResultSymbol.clear();
+		List<IPattern> res = finalPatterns;
+		finalPatterns = null;
+		finalPatternsToResultSymbol = null;
+		
+		return res;
 	}
 	
 	/**
@@ -107,7 +114,7 @@ public class Grammar
 				// this.
 				++dynamicRuleCounter;
 				String newSymbol = "$" + dynamicRuleCounter;
-				symbolTokenId = getTokenId(newSymbol);
+				symbolTokenId = getTokenIdAndDefineIfNecessary(newSymbol);
 				finalPatterns.add(pattern);
 			}
 			else
@@ -209,6 +216,16 @@ public class Grammar
 	}
 	
 	/**
+	 * Given a token ID, what was the corresponding symbol or literal?
+	 * 
+	 * @param tokenId		token ID.
+	 */
+	public String getSymbolOrLiteral(int tokenId)
+	{
+		return tokenIdToSymbolOrLiteral.get(tokenId);
+	}
+	
+	/**
 	 * Given a literal string from an input, returns the corresponding
 	 * token ID integer. If there is no token ID for this literal string
 	 * yet, then an ID is set aside for it and returned.
@@ -222,6 +239,7 @@ public class Grammar
 		{
 			id = tokenIds.size();
 			tokenIds.put(str, id);
+			tokenIdToSymbolOrLiteral.put(id, str);
 		}
 		
 		return id;

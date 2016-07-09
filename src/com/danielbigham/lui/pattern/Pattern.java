@@ -121,7 +121,11 @@ public abstract class Pattern implements IPattern
 			++patternIndex;
 		}
 		
-		
+		// I think Java's Collections.sort is stable here, which is nice,
+		// because our unit tests can then assume that the first trigger
+		// pattern with the lowest count will be the trigger, and when
+		// we do pattern.toString, the triggering pattern does make itself
+		// evident.
 		Collections.sort(patternsWithCounts, new PatternWithCountComparator());
 		
 		int indexOfRarestToken = patternsWithCounts.get(0).patternIndex;
@@ -295,9 +299,9 @@ public abstract class Pattern implements IPattern
 		
 		newPattern.setSymbol(symbol);
 		
-		if (this.resultSymbol != Pattern.NO_LHS)
+		if (this.resultSymbol == Pattern.NO_LHS)
 		{
-			return new SymbolPattern(symbol, -1, -1);
+			return new SymbolPattern(grammar.getSymbolOrLiteral(symbol), symbol, -1, -1);
 		}
 		else
 		{
@@ -372,5 +376,11 @@ public abstract class Pattern implements IPattern
 		}
 		
 		return rules;
+	}
+	
+	public String toString2(Grammar grammar)
+	{
+		StringBuilder str = new StringBuilder(20);
+		return str.append("<").append(grammar.getSymbolOrLiteral(resultSymbol)).append(":").append(resultSymbol).append(">: ").append(toString()).toString();
 	}
 }

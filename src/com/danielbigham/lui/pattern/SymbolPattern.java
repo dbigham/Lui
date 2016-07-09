@@ -48,6 +48,21 @@ public class SymbolPattern extends BasicPattern implements IPatternMatch
 		this.tokenId = symbol;
 	}
 	
+	/**
+	 * Create a SymbolPattern.
+	 * 
+	 * @param symbol			the symbol.
+	 * @param symbolInt			the symbol ID.
+	 * @param startPos			the starting input position.
+	 * @param endPos			the ending input position.
+	 */
+	public SymbolPattern(String symbol, int symbolInt, int startPos, int endPos)
+	{
+		super(startPos, endPos);
+		this.symbol = symbol;
+		this.tokenId = symbolInt;
+	}
+
 	public String symbol()
 	{
 		return symbol;
@@ -55,8 +70,16 @@ public class SymbolPattern extends BasicPattern implements IPatternMatch
 	
 	public String toString()
 	{
-		StringBuilder str = new StringBuilder(symbol.length() + 7);
-		return str.append("<").append(symbol).append(":").append(tokenId).append(">").toString();
+		if (symbol != null)
+		{
+			StringBuilder str = new StringBuilder(symbol.length() + 7);
+			return str.append("<").append(symbol).append(":").append(tokenId).append(">").toString();
+		}
+		else
+		{
+			StringBuilder str = new StringBuilder(11);
+			return str.append("<?:").append(tokenId).append(">").toString();
+		}
 	}
 	
 	public boolean subPatternsAreAllLiterals()

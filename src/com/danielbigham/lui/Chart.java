@@ -113,7 +113,7 @@ public class Chart
 					!(match instanceof LiteralPattern) &&
 					!(match.startPos() == 0 && match.endPos() == inputEndPos))
 				{
-					System.out.println("New result might trigger partials: " + match.toString());
+					if (ChartParser.debugFlag) { System.out.println("New result might trigger partials: " + match.toString()); }
 					// Important to increment this BEFORE creating the PatternMatchWrapper
 					// below, otherwise the previous partial we created (if any) will believe
 					// that it shouldn't be extended by this token.
@@ -247,8 +247,11 @@ public class Chart
 		}
 		partials.add(new PatternMatchWrapper(match, iterationCounter));
 		
-		System.out.println(match.toString() + " -> Partials\n  Start pos: " + startPos + "\n  Symbol: " + symbol);
-		System.out.println("  Iteration counter: " + iterationCounter);
+		if (ChartParser.debugFlag)
+		{
+			System.out.println(match.toString() + " -> Partials\n  Start pos: " + startPos + "\n  Symbol: " + symbol);
+			System.out.println("  Iteration counter: " + iterationCounter);
+		}
 	}
 	
 	/**

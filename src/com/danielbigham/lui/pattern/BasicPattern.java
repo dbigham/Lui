@@ -203,4 +203,10 @@ public abstract class BasicPattern implements IPattern, IPatternMatch
 		// Only used by non-basic patterns.
 		throw new UnsupportedOperationException();
 	}
+	
+	public String toString2(Grammar grammar)
+	{
+		// Only used by non-basic patterns.
+		throw new UnsupportedOperationException();
+	}
 }
