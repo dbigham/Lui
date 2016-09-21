@@ -287,4 +287,10 @@ public abstract class BasicPattern implements IPattern, IPatternMatch
 	{
 		this.type = type;
 	}
+	
+	public void setStartEnd(int newStart, int newEnd)
+	{
+		this.startPos = newStart;
+		this.endPos = newEnd;
+	}
 }

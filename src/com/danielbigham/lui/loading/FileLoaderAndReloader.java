@@ -67,6 +67,8 @@ public class FileLoaderAndReloader extends Thread
 					}
 				}
 			);
+		
+		fileLoader.doneVisitingFiles();
 	}
 
 	/**

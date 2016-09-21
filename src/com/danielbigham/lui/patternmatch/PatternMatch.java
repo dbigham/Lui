@@ -185,4 +185,10 @@ public abstract class PatternMatch implements IPatternMatch
 			++i;
 		}
 	}
+	
+	public void setStartEnd(int newStart, int newEnd)
+	{
+		this.startPos = newStart;
+		this.endPos = newEnd;
+	}
 }

@@ -3,7 +3,7 @@
 ## Summary
 
 - Our chart parser explodes nested rules into primitive rules.
-- ie. Every SequencePattern only have LitterlPattern or SymbolPattern as children, etc.
+- ie. Every SequencePattern should only have LitterlPattern or SymbolPattern as children, etc.
 - We thus introduce dynamically generated grammar symbols like $1, $2, etc.
 
 ## Design
@@ -64,7 +64,7 @@
    
 - And how does that work if you have multiple instances of a sub-pattern that get combined?
   - Answer: That does get tricky. The easiest thing to do is to only combine
-    sub-patterns into a single pattern if their bindings match. ie. The has code of
+    sub-patterns into a single pattern if their bindings match. ie. The hash code of
     a pattern should also include its bindings array.
   - A more advanced approach would be to have not a single bindings array for a
     pattern but rather a map <parent pattern> -> <bindings array>, so that the bindings

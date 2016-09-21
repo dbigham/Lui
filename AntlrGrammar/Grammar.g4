@@ -17,7 +17,7 @@ simpleRule:		rulePart+
 
 lhs: ID | symbol ;
 
-rulePart:		rulePart ('|' rulePart)+			# OrRulePart
+rulePart:		'(' rulePart ('|' rulePart)+ ')'	# OrRulePart
 	|			'(' rulePart+ ')'					# SeqRulePart
 	|			basicRulePart						# BasicRulePart2
 				// Unfortunately this allows multiple/nested bindings,

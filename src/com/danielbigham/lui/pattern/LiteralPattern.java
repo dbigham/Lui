@@ -39,6 +39,31 @@ public class LiteralPattern extends BasicPattern
 	}
 	
 	/**
+	 * Create a LiteralPattern.
+	 * 
+	 * @param grammar				the grammar.
+	 * @param literal				the literal string.
+	 * @param startPos				the starting input position.
+	 * @param endPos				the ending input position.
+	 * @param createTokenIds		create an ID for this literal string if necessary?
+	 */
+	public LiteralPattern(Grammar grammar, String literal, int startPos, int endPos, boolean createTokenIds)
+	{
+		super(startPos, endPos, "L");
+		
+		this.literal = literal;
+		
+		if (createTokenIds)
+		{
+			this.tokenId = grammar.getTokenIdAndDefineIfNecessary(literal);
+		}
+		else
+		{
+			this.tokenId = grammar.getTokenId(literal);
+		}
+	}
+	
+	/**
 	 * The literal string that this pattern represents.
 	 */
 	public String getLiteral()

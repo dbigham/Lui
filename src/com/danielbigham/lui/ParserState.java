@@ -38,7 +38,17 @@ public class ParserState
 		this.toTrigger = new ArrayList<IPatternMatch>();
 		this.toTrigger2 = new ArrayList<IPatternMatch>();
 		this.results = new ArrayList<IPatternMatch>();
-		this.endPos = tokens.size() - 1;
+		int maxEndPos = 0;
+		for (IPatternMatch token : tokens)
+		{
+			int endPos = token.endPos();
+			if (endPos > maxEndPos)			
+			{
+				maxEndPos = endPos;
+			}
+		}
+		this.endPos = maxEndPos;
+		Out.print("Max end pos: " + maxEndPos);
 		this.iterationCounter = 0;
 	}
 	
@@ -110,7 +120,10 @@ public class ParserState
 		
 		int resultSymbol = match.pattern().resultSymbol();
 		
-		if (resultSymbol == ChartParser.START_SYMBOL && match.endPos() == endPos)
+		if (resultSymbol == ChartParser.START_SYMBOL &&
+			// Right?
+			match.startPos() == 0 &&
+			match.endPos() == endPos)
 		{
 			results.add(match);
 		}

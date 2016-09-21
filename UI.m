@@ -1,5 +1,6 @@
 BeginPackage["Lui`UI`"]
 
+Needs["JLink`"];
 Needs["Lui`Lui`"];
 Needs["Lui`Parse`"];
 Needs["Lui`Util`"];
@@ -73,7 +74,11 @@ Lui[] :=
 						],
 						displayIfNotNull[interp, formatInterpretation],
 						With[{actionResult2 = actionResult},
-							If [HoldComplete[actionResult2] =!= interp,
+							If [HoldComplete[actionResult2] =!= interp &&
+								!MatchQ[
+									actionResult,
+									_NotebookObject
+								],
 								displayIfNotNull[actionResult]
 								,
 								Sequence @@ {}
@@ -199,12 +204,21 @@ FocusLuiUI[] :=
 *)
 LuiJavaInit::javc = "The Lui Java class `1` couldn't be loaded.";
 LuiJavaInit[] :=
-	Block[{javaDir},
+	Module[{javaDir},
 		InstallJava[];
 		javaDir = FileNameJoin[{LuiDir[], "bin"}];
 		Function[{classPathEntry},
 			If [!MemberQ[JavaClassPath[], classPathEntry],
-				AddToClassPath[classPathEntry];
+				With[{res = AddToClassPath[classPathEntry]},
+					If [FailureQ[res],
+						Print["AddToClassPath failed. Aborting LUI initialization."];
+						Return[$Failed, Module];
+					];
+					If [MatchQ[res, _AddToClassPath],
+						Print["JLink not loaded. Aborting LUI initialization."];
+						Return[$Failed, Module]
+					];
+				];
 			];
 		] /@
 			{

@@ -2,30 +2,39 @@ package com.danielbigham.lui;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
-
+import com.danielbigham.io.Out;
 import com.danielbigham.lui.pattern.LiteralPattern;
 import com.danielbigham.lui.patternmatch.IPatternMatch;
 
 
 public class Tokenizer
 {
+	private Pattern pattern;
+	
+	public Tokenizer()
+	{
+		pattern = Pattern.compile("[A-Za-z]+|[0-9]+|[^\\s]");
+	}
+	
 	/**
 	 * Tokenize a string into a sequence of tokens.
 	 * 
-	 * @param grammar			the grammar. (defines mappings from words -> integers)
-	 * @param str				the input string.
+	 * @param grammar	the grammar. (defines mappings from words -> integers)
+	 * @param str		the input string.
 	 */
-	public static List<IPatternMatch> tokenize(Grammar grammar, String str)
+	public List<IPatternMatch> tokenize(Grammar grammar, String str)
 	{
-		String[] rawTokens = str.trim().split("\\s+");
+		List<IPatternMatch> tokens = new ArrayList<IPatternMatch>();
 		
-		List<IPatternMatch> tokens = new ArrayList<IPatternMatch>(rawTokens.length);
-		int pos = 0;
-		for (String token : rawTokens)
+		Matcher matcher = pattern.matcher(str);
+		while (matcher.find())
 		{
-			tokens.add(new LiteralPattern(grammar, token, pos, false));
-			++pos;
+			//Out.print("Tokenizer match: " + matcher.start() + " to " + matcher.end());
+			String substring = str.substring(matcher.start(), matcher.end());
+			tokens.add(new LiteralPattern(grammar, substring, matcher.start(), matcher.end() - 1, false));
 		}
 		
 		return tokens;

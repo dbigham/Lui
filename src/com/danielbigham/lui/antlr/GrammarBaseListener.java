@@ -1,4 +1,4 @@
-// Generated from C:\Users\Daniel\WolframWorkspaces\Base2\Lui\AntlrGrammar\Grammar.g4 by ANTLR 4.5.3
+// Generated from E:\Users\Daniel\Dropbox\Projects\Lui\AntlrGrammar\Grammar.g4 by ANTLR 4.5.3
 package com.danielbigham.lui.antlr;
 
 import org.antlr.v4.runtime.ParserRuleContext;
@@ -76,18 +76,6 @@ public class GrammarBaseListener implements GrammarListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterBasicRulePart2(GrammarParser.BasicRulePart2Context ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitBasicRulePart2(GrammarParser.BasicRulePart2Context ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
 	@Override public void enterSeqRulePart(GrammarParser.SeqRulePartContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -95,6 +83,18 @@ public class GrammarBaseListener implements GrammarListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitSeqRulePart(GrammarParser.SeqRulePartContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterBasicRulePart2(GrammarParser.BasicRulePart2Context ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitBasicRulePart2(GrammarParser.BasicRulePart2Context ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

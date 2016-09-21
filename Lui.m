@@ -6,11 +6,14 @@ Needs["WUtils`WUtils`"]; (* CreateReloadFunctionForDirectory, etc. *)
 
 ReloadLui::usage = "ReloadLui  "
 
-$LuiJavaPath::usage = "$LuiJavaPath  "; 
+$LuiJavaPath::usage = "$LuiJavaPath  "
+
+$LuiDir::usage = "$LuiDir  "; 
 
 Begin["`Private`"]
 
-$LuiJavaPath = FileNameJoin[{FileNameDrop[FindFile["Lui`Lui`"], -1], "bin"}];
+$LuiDir = FileNameDrop[FindFile["Lui`Lui`"], -1];
+$LuiJavaPath = FileNameJoin[{$LuiDir, "bin"}];
 
 With[{package = "Lui`"},
 With[{dir = DirectoryName[DirectoryName[FindFile[package]]]},

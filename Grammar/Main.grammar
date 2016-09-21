@@ -1,36 +1,23 @@
 start:
-	$webpage -> SystemOpen[webpage]
-	
-	~new ~nb name:($id|$quotedString)
+	a=$webpage -> SystemOpen[a]
+	~new ~nb name=($id|$quotedString)
 		CreateNotebook[name]
-		
-	open? ~nb name:($id|$quotedString)
+	open ~nb name=($id|$quotedString)
 		OpenNotebook[name]
-	
-	$notebook ->
-		OpenNotebook[name]
-	
-	$directory ~dir ->
-		SystemOpen[dir]
-
+	name=$notebook -> OpenNotebook[name]
+	$directory ~dir -> SystemOpen[dir]
 notebook:
 	spacex -> "SpaceX.nb"
 	lui -> "Lui.nb"
-
 directory:
 	lui -> $LuiDir
-
 webpage:
-	spacex|spx reddit -> "https://www.reddit.com/r/spacex/"
-
+	(spacex|spx) reddit -> "https://www.reddit.com/r/spacex/"
 ~new:
-	create|new
-
+	(create|new)
 ~nb:
-	notebook|nb
-	
+	(notebook|nb)
 ~dir:
-	directory|dir
-
+	(directory|dir)
 ~open:
-	open|"go to"|display
+	(open|go|display)

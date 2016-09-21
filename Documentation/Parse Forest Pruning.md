@@ -10,57 +10,57 @@
   trees, applying symbol bindings as appropriate, and pruning away parse trees that
   involve failed branches.
 
-## Design
+## Design: Part 1
 
 - Thus, we need a recursive method to explore the parse forest, building up an expression
-  to send back to Mathematica.
+  to send back to Wolfram Language.
 - At the end of the day, we want a list of items that look like this:
   {{symbol, start, end}, type, action, children}
-- The 'type' is one of {E, D, T}
-    - E: Top-level rule that returns an expression
-    - D: Dynamically-generated rule that passes on bindings
-    - T: Token
-- 'children' is a list of items like this:
-  {{symbol, start, end}, binding}
 - Once this data gets back to WL, we want to put all of those top-level items in
   a lookup like this:
   lookupParseNodes[{symbol, start, end}]
   ... and get back a list. We can use GroupBy to do this.
 - We then want to iterate over the spanning start rule matches and process
   them in a recursive manner.
-- For each child key, we want to lookup the parse nodes and recurse on each of them.
-- At the end of the recursion we find parse nodes that don't have any children.
-- There are two cases here:
-    1. Children keys that resulted from grammar rule explosion. (See: Rule Explosion.md)
-        - For these, we don't want to evaluate their action.
-        - Instead, we will return bindings, where bindings are a map from:
-          symbol -> expression
-    2. Top-level rules.
-        - For these, we want to evaluate their action and
-          return the result to the parent.
-- I will call dynamic children keys D children and non-dynamic children keys E children.
-- Regardless of whether a child key has a binding, we should process it.
-    - If an E child, we need to be sure that not all downstream nodes evaluate
-      to $Failed.
-    - If a D child, we again need to make sure that not all downstream nodes
-      evaluate to failed. Recall that a D child may eventually have E children,
-      and those E children might all evaluate to false.
-    - TODO: It might be a nice optimization at grammar build time to
-      mark sub-patterns if all of the ways they can be produced are via
-      tokens (and not via symbolic sub-parses). In that case, if we can
-      assume that tokens are never $Failed (which we should be able to do),
-      then any sub-pattern that doesn't have a binding isn't worth processing,
-      because we know it doesn't evaluate to $Failed.
-- One major difference between D and E children is that for E children, we
-  don't pass on any of their inner binding values. We throw them away.
-  But for D children, we do pass on those binding values. This is perhaps the
-  most obvious ready why it's important that the nodes are labelled with their type.
-- When we finish processing a node's children, then is a permutation step where
-  we permute the various possibilities, and that happens differently depending
-  on whether we are processing an E child or D child.
-- ** We need more detail here, and perhaps even to cut down on some of the above detail
-  so that things are more clear. I don't yet have this figured out in my head.
 
+## Design: Part 2
+
+### Nodes
+
+- Each item in the list returned to WL we call a "node". Nodes look like this:
+
+	{{symbol, start, end}, type, action, children}
+
+- However, there may be multiple nodes with the same {symbol, start, end}.
+
+- A node corresponds with an IPattern object in Java.
+
+- The 'type' is one of {E, D, T}
+    - E: Top-level rule that returns an expression
+    - D: Dynamically-generated rule that passes on bindings
+    - T: Token
+
+- The function 'handleNode' is used to recursively process a node and its children.
+
+### Children
+
+- Every node has zero or more children.
+
+- Each child corresponds with a "branch" of the parse forest, where that branch will correspond
+  with one or more nodes. A child looks like this:
+
+	{{symbol, start, end}, binding}
+
+- Given the {symbol, start, end} of a child, 'lookupParseNodes' can be used to find the
+  corresponding nodes.
+
+- The function 'handleChildren' is used to recursively handle a node's children and their
+  respective nodes.
+
+- The function 'handleChild' is used to recursively handle a child and its nodes.
+
+- The function 'handleNodes' is used to recursively handle the nodes that pertain to a
+  single child, and their children.
 
 ## Creating Grammars From WL
 

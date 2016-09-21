@@ -1,0 +1,3 @@
+Here's the .classpath entry I removed temporarily:
+
+<classpathentry kind="var" path="JLINK_JAR" sourcepath="/JLINK_SRC"/>

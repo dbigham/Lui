@@ -65,12 +65,14 @@ public class OrPattern extends Pattern implements IPattern
 	{
 		StringBuilder str = new StringBuilder();
 		int patternIndex = 0;
+		str.append("(");
 		for(IPattern subPattern : patterns)
 		{
 			if (patternIndex > 0) { str.append("|"); }
 			str.append(subPattern.toString());
 			++patternIndex;
 		}
+		str.append(")");
 		return toStringHelper(str.toString());
 	}
 }

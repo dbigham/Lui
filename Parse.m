@@ -1,6 +1,7 @@
 BeginPackage["Lui`Parse`"]
 
 Needs["JLink`"]
+Needs["Lui`Lui`"];
 Needs["WUtils`WUtils`"]
 
 LuiParse::usage = "LuiParse  "
@@ -19,7 +20,16 @@ GetParserState::usage = "GetParserState  "
 
 $TestGrammar1::usage = "$TestGrammar1  "
 
+$GrammarDir::usage = "$GrammarDir  "
+
+$GrammarFile::usage = "$GrammarFile  "
+
+Dir::usage = "Dir  "
+
 Begin["`Private`"]
+
+$GrammarDir = FileNameJoin[{$LuiDir, "Grammar"}];
+$GrammarFile = FileNameJoin[{$GrammarDir, "Main.grammar"}];
 
 $TestGrammar1 =
 "start: a=$a PLUS b=$b -> a+b
@@ -41,26 +51,52 @@ START = -1;
 *)
 LuiParse[input_String] :=
 	Block[{},
-		Switch[
-			input,
-			
-			"time",
-			HoldComplete[Date[]]
-			,
-			"spacex reddit",
-			HoldComplete[SystemOpen["https://www.reddit.com/r/spacex/"]]
-			,
-			"hello",
-			HoldComplete["Hello, world!"]
-			,
-			_,
-			HoldComplete["?"]
+		If [False,
+			Switch[
+				input,
+				
+				"time",
+				HoldComplete[Date[]]
+				,
+				"spacex reddit",
+				HoldComplete[SystemOpen["https://www.reddit.com/r/spacex/"]]
+				,
+				"hello",
+				HoldComplete["Hello, world!"]
+				,
+				_,
+				HoldComplete["?"]
+			]
+		];
+		
+		Block[{dir},
+			dir = "E:\\Users\\" <> $UserName <> "\\Dropbox\\Maluuba\\Notebooks";
+			If [!FileExistsQ[dir],
+				dir = "C:\\Users\\" <> $UserName <> "\\Dropbox\\Maluuba\\Notebooks";
+			];
+			With[{textFile = FileNameJoin[{dir, input <> ".txt"}]},
+				If [FileExistsQ[textFile],
+					SystemOpen[textFile]
+					,
+					If [ResolveIssueNotebook[input] =!= $Failed,
+						HoldComplete @ OpenNotebook[input]
+						,
+						With[{matchingFiles = FileNames[input <> "*", dir]},
+							If [Length[matchingFiles] > 0,
+								SystemOpen[matchingFiles[[1]]]
+								,
+								HoldComplete @ $Failed
+							]
+						]
+					]
+				]
+			]
 		]
 	]
 
 LuiParse[g_Grammar, input_String] :=
 	Block[{state, forest, wlString},
-		state = ChartParser`parse[g["JavaObject"], input];
+		Global`$ParserState = state = ChartParser`parse[g["JavaObject"], input];
 		wlString = state@toWL[];
 		If [StringQ[wlString],
 			forest = ToExpression[wlString];
@@ -82,11 +118,16 @@ Grammar[inner_][key_String] := inner[key]
 	\function CreateGrammar
 	
 	\calltable
-		CreateGrammar[name, grammarRules] '' creates a grammar.
+		CreateGrammar[name, grammarRules_List] '' creates a grammar.
+		CreateGrammar[name, grammarRules_String] '' creates a grammar.
 
 	Examples:
 	
-	CapturePrint[CreateGrammar["Test", "start -> hello"]] === {{"Line 1 column 6: no viable alternative at input 'start->'"}}
+	CreateGrammar["Test", "start: hello"]
+	
+	===
+	
+	<|"Name" -> "Test", "RuleCount" -> 1, "Rules" -> {"<$start:-1>: {<<hello:0>>}"}|>
 
 	Unit tests:
 
@@ -94,21 +135,32 @@ Grammar[inner_][key_String] := inner[key]
 
 	\maintainer danielb
 *)
+Clear[CreateGrammar];
 CreateGrammar::fcj = "Failed to create Grammar Java object.";
-CreateGrammar[name_, grammarRules_] :=
+CreateGrammar[name_String, grammarRules_] :=
 	Block[{javaObject},
 		javaObject = JavaNew["com.danielbigham.lui.Grammar", grammarRules];
 		If [!JavaObjectQ[javaObject],
 			Message[CreateGrammar::fcj];
 			Return[$Failed];
 		];
-		Grammar[
-			<|
-			"JavaObject" -> javaObject,
-			"Name" -> name
-			|>
-		]
+		CreateGrammar[name, javaObject]
 	];
+	
+CreateGrammar[name_String, obj_ /; JavaObjectQ[obj]] :=
+	Grammar[
+		<|
+		"JavaObject" -> obj,
+		"Name" -> name
+		|>
+	]
+
+CreateGrammar[name_String, Dir[dir_String]] :=
+	Block[{grammar},
+		grammar = JavaNew["com.danielbigham.lui.Grammar"];
+		JavaNew["com.danielbigham.lui.loading.GrammarFiles", dir, grammar];
+		CreateGrammar[name, grammar]
+	]
 
 Format[g_Grammar] :=
 	Block[{},
@@ -237,13 +289,17 @@ ProcessParseForest[state_] :=
 		(* Most -> Drop the last item which is always 'Null' *)
 		forest = Most[state["Forest"]];
 		
-		parseForestLookup = createParseForestLookup[forest];
-		
 		(* Select the parse forest nodes that span the entire input string
 		   and who's result symbol is the START symbol. *)
 		topLevelNodes = Select[forest, First[#] === {START, 0, endPos} &];
 		
-		handleTopLevelNode /@ (topLevelNodes[[All, 2;;]])
+		Lui`Parse`Private`blockParseForestLookup[
+			forest,
+			Flatten[
+				(evaluateRule /@ topLevelNodes[[All, 2;;]])[[All, 1]],
+				1
+			]
+		]
 	];
 
 (*!
@@ -350,126 +406,7 @@ GetParserState[grammar_, input_] :=
 		]
 	]
 
-(*!
-	\function handleTopLevelNode
-	
-	\calltable
-		handleTopLevelNode[parseForestNode] '' recursively handles this top level parse forest node and its child nodes to produce a parse tree.
 
-	Examples:
-	
-	handleTopLevelNode[parseForestNode] === TODO
-	
-	\related '
-	
-	\maintainer danielb
-*)
-handleTopLevelNode[parseForestNode_] :=
-	Block[{},
-		
-		Print[Lui`Parse`Private`parseForestLookup // Indent2];
-		
-		xPrint["TOP LEVEL NODE: ", parseForestNode];
-		
-		handleNode[parseForestNode, 0]
-		
-	];
-
-(*!
-	\function handleNodesOfKey
-	
-	\calltable
-		handleNodesOfKey[key] '' recursively handles the parse forest node corresponding to this {symbol,start,end} and its child nodes to produce a parse tree.
-
-	Examples:
-	
-	handleNodesOfKey[key] === TODO
-	
-	\related '
-	
-	\maintainer danielb
-*)
-handleNodesOfKey[key_, lvl_] :=
-	Block[{nodes = Lookup[parseForestLookup, Key[key], {}], res},
-		Print[levelToIndent[lvl], key];
-		res =
-		If [nodes === {},
-			(* There are no nodes for this key. This implies that
-			   we're at the bottom of the tree -- that this key
-			   corresponds with a token that we didn't send back
-			   a parse forest node for. *)
-			(* TODO: It looks like we're not currently sending
-			   tokens back as part of the parse forest, but we'll
-			   need to do that as soon as we create tokenizers
-			   that assign an expression to a token. And it might
-			   be nice to be able to bind to a literal token and
-			   get back its input substring. *)
-			Null
-			,
-			handleNode[#, lvl + 1] & /@ nodes
-		];
-		
-		(* ? *)
-		If [ListQ[res], res = Flatten[res, 1]];
-		
-		Print[levelToIndent[lvl], key, " res: ", res];
-		
-		res
-	];
-
-(*!
-	\function handleNode
-	
-	\calltable
-		handleNode[node] '' recursively handles the parse forest node and its child nodes to produce a parse tree.
-
-	Examples:
-	
-	handleNode[node] === TODO
-	
-	\related '
-	
-	\maintainer danielb
-*)
-handleNode[node_, lvl_] :=
-	Block[{res, type = node[[1]], action = node[[2]], resOfAllChildren},
-		Print[levelToIndent[lvl], type, " Node: ", node];
-		
-		resOfAllChildren =
-		Function[{child},
-			Print[levelToIndent[lvl + 1], "Child: ", child];
-			With[{childKey = child[[1]], childType = child[[2]], binding = child[[3]]},
-				With[{childRes = handleNodesOfKey[childKey, lvl + 2]},
-					If [childRes === Null,
-						(* Our children didn't have nodes sent
-						   back for them, so we don't have any
-						   expressions for them. *)
-						Sequence @@ {}
-						,
-						If [binding =!= Null,
-							binding -> childRes
-							,
-							childRes
-						]
-					]
-				]
-			]
-		] /@ node[[3]];
-		
-		Print[levelToIndent[lvl], "Res of all children: ", resOfAllChildren];
-		
-		res =
-			type /.
-				{
-					"D" :> Flatten[resOfAllChildren],
-					"E" :> evaluateAction[action, resOfAllChildren],
-					_ :> (Print["Unexpected token type: ", type]; $Failed)
-				};
-			
-		Print[levelToIndent[lvl], "Res: ", res];
-		
-		res
-	]
 
 (*!
 	\function levelToIndent
@@ -568,7 +505,9 @@ evaluateAction[heldAction_, bindings_] :=
 
 	\maintainer danielb
 *)
-permuteBindings[bindings_] :=
+Clear[permuteBindings];
+permuteBindings[{}] := {}
+permuteBindings[bindings_List] :=
 	Block[{keys, values, part, func, res, flattenedValues, indices},
 		
 		keys = bindings[[All, 1]];
@@ -614,6 +553,177 @@ permuteBindingsImpl2[bindings_] :=
 		   to 'activate' it and evaluate as desired. *)
 		part = Part;
 		
+		res
+	];
+
+(*!
+	\function evaluateChild
+	
+	\calltable
+		evaluateChild[child] '' given a subpattern match (child) from the parse forest, evaluate the parse forest underneath of it and return the evaluation result.
+		evaluateChild[key:{startPos_, endPos_, symbol_}, type_, binding_] '' ...
+
+	Examples:
+	
+	blockParseForestLookup[
+		{{{-1, 0, 0}, "E", HoldComplete[1], {{{0, 0, 0}, "L", Null}}}},
+		evaluateChild[{{0, 0, 0}, "L", Null}]
+	]
+
+	===
+
+	{{}, {}}
+
+	Unit tests:
+
+	RunUnitTests[Lui`Parse`Private`evaluateChild]
+
+	\maintainer danielb
+*)
+Clear[evaluateChild];
+evaluateChild[child_List] :=
+	Block[{},
+		evaluateChild[
+			Sequence @@ child
+		]
+	];
+
+(* Literal *)
+evaluateChild[key:{startPos_Integer, endPos_Integer, symbol_Integer}, "L", Null] := {{}, <||>}	
+evaluateChild[key:{startPos_Integer, endPos_Integer, symbol_Integer}, "L", binding_] :=
+	{{}, <|binding -> Null|>}
+
+(* Symbol *)
+evaluateChild[key:{startPos_Integer, endPos_Integer, symbol_Integer}, "S", Null] := {{}, <||>}
+evaluateChild[key:{startPos_Integer, endPos_Integer, symbol_Integer}, "S", binding_] :=
+	Block[{ruleMatches, values, evaluatedRules},
+		XPrint["evaluateChild: ", key];
+		ruleMatches = $parseForestLookup[key];
+		XPrint["ruleMatches: ", ruleMatches];
+		evaluatedRules = evaluateRule /@ ruleMatches;
+		XPrint["evaluatedRules: ", evaluatedRules];
+		{
+			{},
+			<|binding -> evaluatedRules[[All, 1]]|>
+		}
+	]
+
+(* Dynamic sub-rule *)
+evaluateChild[key:{startPos_Integer, endPos_Integer, symbol_Integer}, "D", binding_] :=
+	Block[{ruleMatches, values, evaluatedRules},
+		XPrint["evaluateChild: ", key];
+		ruleMatches = $parseForestLookup[key];
+		XPrint["ruleMatches: ", ruleMatches];
+		evaluatedRules = evaluateRule /@ ruleMatches;
+		XPrint["evaluatedRules: ", evaluatedRules];
+		{
+			{},
+			If [binding =!= Null,
+				(* Not yet tested *)
+				Join[
+					<|binding -> evaluatedRules[[All, 1]]|>,
+					Join @@ evaluatedRules[[All, 2]]
+				]
+				,
+				Join @@ evaluatedRules[[All, 2]]
+			]
+		}
+	]
+
+(*!
+	\function blockParseForestLookup
+	
+	\calltable
+		blockParseForestLookup[parseForest, expr] '' given a parse forest, create a lookup function for it and use Block to make it available to the given expr that is evaluated.
+
+	Examples:
+	
+	blockParseForestLookup[
+		{{{-1, 0, 0}, "E", HoldComplete[1], {{{0, 0, 0}, "L", Null}}}},
+		$parseForestLookup[{-1, 0, 0}]
+	]
+
+	===
+
+	{{"E", HoldComplete[1], {{{0, 0, 0}, "L", Null}}}}
+
+	Unit tests:
+
+	RunUnitTests[Lui`Parse`Private`blockParseForestLookup]
+
+	\maintainer danielb
+*)
+Attributes[blockParseForestLookup] = {HoldRest};
+blockParseForestLookup[parseForest_, expr_] :=
+	Block[{$parseForestLookup = createParseForestLookup[parseForest]},
+		expr
+	];
+
+(*!
+	\function evaluateRule
+	
+	\calltable
+		evaluateRule[ruleMatch] '' given a rule match from the parse forest, evaluate the parse forest underneath of it and return the evaluation result.
+
+	Examples:
+	
+	blockParseForestLookup[
+		{
+			{
+				{-1, 0, 2},
+				"E",
+				HoldComplete[a + b],
+				{
+					{{0, 0, 0}, "S", HoldComplete[a]},
+					{{1, 1, 1}, "L", Null},
+					{{0, 2, 2}, "S", HoldComplete[b]}
+				}
+			},
+			{{0, 0, 0}, "E", HoldComplete[1], {{{2, 0, 0}, "L", Null}}},
+			{{0, 2, 2}, "E", HoldComplete[2], {{{3, 2, 2}, "L", Null}}}
+		},
+		evaluateRule[{"E", HoldComplete[1], {{{2, 0, 0}, "L", Null}}}]
+	]
+
+	===
+
+	1
+
+	Unit tests:
+
+	RunUnitTests[Lui`Parse`Private`evaluateRule]
+
+	\maintainer danielb
+*)
+Clear[evaluateRule];
+evaluateRule[ruleMatch_List] :=
+	evaluateRule[Sequence @@ ruleMatch]
+
+evaluateRule[type_, action_, children_List] :=
+	Block[{evaluatedChildren, mergedVariables, permutedVariableValues, res},
+		XPrint["evaluateRule: ", {type, action, children}];
+		evaluatedChildren = evaluateChild /@ children;
+		XPrint["evaluatedChildren: ", evaluatedChildren];
+		mergedVariables =
+			Merge[
+				evaluatedChildren[[All, 2]],
+				Flatten[Join[#], 1] &
+			];
+		XPrint["mergedVariables: ", Normal[mergedVariables]];
+		If [type === "E",
+			res =
+			{
+				evaluateAction[action, Normal[mergedVariables]],
+				<||>
+			};
+			,
+			res =
+			{
+				evaluateAction[action, Normal[mergedVariables]],
+				mergedVariables
+			};
+		];
+		XPrint["res: ", res];
 		res
 	];
 

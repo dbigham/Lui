@@ -30,6 +30,13 @@ public class GrammarFiles implements IFileLoader
 		fileWatcherThread.run();
 	}
 	
+	public GrammarFiles(String baseDir, Grammar grammar) throws IOException
+	{
+		this.grammar = grammar;
+		fileWatcherThread = new FileLoaderAndReloader(Paths.get(baseDir), this);
+		fileWatcherThread.start();
+	}
+	
 	/**
 	 * Shut down the file watching thread.
 	 */
@@ -52,7 +59,7 @@ public class GrammarFiles implements IFileLoader
 				{
 					List<GrammarRule> luiRules = AntlrHelpers.convert(rules, grammar);
 					
-					// TODO
+					grammar.addRules(luiRules);
 				}
 			}
 			
@@ -75,7 +82,7 @@ public class GrammarFiles implements IFileLoader
 				{
 					List<GrammarRule> luiRules = AntlrHelpers.convert(rules, grammar);
 					
-					// TODO
+					//Out.print("TODO: Reload file.");
 				}
 			}
 			
@@ -126,4 +133,10 @@ public class GrammarFiles implements IFileLoader
         Grammar grammar = new Grammar();
         new FileLoaderAndReloader(dir, new GrammarFiles(dir, grammar)).run();
     }
+
+	@Override
+	public void doneVisitingFiles()
+	{
+		grammar.processRules();
+	}
 }

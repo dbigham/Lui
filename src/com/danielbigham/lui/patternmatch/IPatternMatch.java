@@ -112,4 +112,13 @@ public interface IPatternMatch
 	 * were optional)
 	 */
 	public List<IPattern> getMatchedSubPatterns();
+
+	/**
+	 * When we convert string positions to token indices, we update our
+	 * patterns.
+	 * 
+	 * @param newStart		the new start position.
+	 * @param newEnd		the new end position.
+	 */
+	public void setStartEnd(int newStart, int newEnd);
 }

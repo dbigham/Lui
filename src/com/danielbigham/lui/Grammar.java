@@ -22,6 +22,8 @@ import com.danielbigham.lui.patternmatch.IPatternMatch;
  */
 public class Grammar
 {
+	public final int UNKNOWN_TOKEN_ID = -2;
+	
 	private Map<Integer, List<IPattern>> triggers;
 	
 	// Keep track of the mapping from literals (ex. "the") and
@@ -57,6 +59,8 @@ public class Grammar
 		tokenIdToSymbolOrLiteral = new HashMap<Integer, String>();
 		tokenCounter = 0;
 		dynamicRuleCounter = 0;
+		finalPatterns = new ArrayList<IPattern>();
+		finalPatternsToResultSymbol = new HashMap<IPattern, Integer>();
 		
 		tokenIds.put("$start", ChartParser.START_SYMBOL);
 		tokenIdToSymbolOrLiteral.put(ChartParser.START_SYMBOL, "$start");
@@ -88,26 +92,32 @@ public class Grammar
 		}
 		setGrammarRules(rules);
 	}
-
+	
 	/**
-	 * Set the grammar's patterns.
+	 * Add some rules to the grammar.
 	 * 
-	 * @param rules		the grammar rules.
-	 * 
-	 * @return			the final grammar rules, but only for testing purposes.
+	 * @param rules		The rules to add.
 	 */
-	public List<IPattern> setGrammarRules(List<GrammarRule> rules)
+	public void addRules(List<GrammarRule> rules)
 	{
-		ruleCount = rules.size();
-		
-		finalPatterns = new ArrayList<IPattern>();
-		finalPatternsToResultSymbol = new HashMap<IPattern, Integer>();
+		ruleCount += rules.size();
 		
 		// See also: Rule Explosion.md
 		for (GrammarRule rule : rules)
 		{
 			rule.explode(this);
 		}
+	}
+	
+	/**
+	 * Ones rules have been added, they are processed.
+	 * 
+	 * @return The resultant patterns.
+	 */
+	public List<IPattern> processRules()
+	{
+		// Ensure all of the grammar symbols used by regex parsers are defined.
+		ChartParser.defineRegexParserSymbols(this);
 		
 		if (debugFlag)
 		{
@@ -127,6 +137,23 @@ public class Grammar
 		finalPatternsToResultSymbol = null;
 		
 		return res;
+	}
+
+	/**
+	 * Set the grammar's patterns.
+	 * 
+	 * @param rules		the grammar rules.
+	 * 
+	 * @return			the final grammar rules, but only for testing purposes.
+	 */
+	public List<IPattern> setGrammarRules(List<GrammarRule> rules)
+	{
+		finalPatterns = new ArrayList<IPattern>();
+		finalPatternsToResultSymbol = new HashMap<IPattern, Integer>();
+		
+		addRules(rules);
+		
+		return processRules();
 	}
 	
 	/**
@@ -278,7 +305,15 @@ public class Grammar
 	 */
 	public Integer getTokenId(String str)
 	{
-		return tokenIds.get(str);
+		Integer res = tokenIds.get(str);
+		if (res == null)
+		{
+			return UNKNOWN_TOKEN_ID;
+		}
+		else
+		{
+			return res;
+		}
 	}
 	
 	/**

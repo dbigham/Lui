@@ -55,9 +55,9 @@ public class TestRuleExplosion
 	public void test3()
 	{
 		assertEquals(
-			"<$1:4>: <spacex:0>|<spx:1>\n" +
+			"<$1:4>: (<spacex:0>|<spx:1>)\n" +
 			"<$webpage:3>: {<a=<$1:4>> b=<reddit:2>}",
-			explodeRulesAndCreateString("webpage: a=spacex|spx b=reddit")
+			explodeRulesAndCreateString("webpage: a=(spacex|spx) b=reddit")
 		);
 	}
 
@@ -79,10 +79,10 @@ public class TestRuleExplosion
 	public void test5()
 	{
 		assertEquals(
-			"<$1:5>: <spacex:0>|<spx:1>\n" +
-			"<$2:6>: <webpage:2>|<website:3>\n" +
+			"<$1:5>: (<spacex:0>|<spx:1>)\n" +
+			"<$2:6>: (<webpage:2>|<website:3>)\n" +
 			"<$webpage:4>: {<<$1:5>> <$2:6>}",
-			explodeRulesAndCreateString("webpage: spacex|spx webpage|website")
+			explodeRulesAndCreateString("webpage: (spacex|spx) (webpage|website)")
 		);
 	}
 	
@@ -92,9 +92,9 @@ public class TestRuleExplosion
 	{
 		assertEquals(
 			"<$1:5>: {<<web:2>> <page:3>}\n" +
-			"<$2:6>: <webpage:1>|<$1:5>\n" +
+			"<$2:6>: (<webpage:1>|<$1:5>)\n" +
 			"<$webpage:4>: {<<spacex:0>> <$2:6>}",
-			explodeRulesAndCreateString("webpage: spacex webpage|(web page)")
+			explodeRulesAndCreateString("webpage: spacex (webpage|(web page))")
 		);
 	}
 	
@@ -104,10 +104,10 @@ public class TestRuleExplosion
 	{
 		assertEquals(
 			"<$1:6>: {<<web:2>> <page:3>}\n" +
-			"<$2:7>: <webpage:1>|<$1:6>\n" +
+			"<$2:7>: (<webpage:1>|<$1:6>)\n" +
 			"<$webpage:4>: {<<spacex:0>> <$2:7>}\n" +
 			"<$webpage:4>: {<<slashdot:5>>}",
-			explodeRulesAndCreateString("webpage:\n\tspacex webpage|(web page)\n\tslashdot")
+			explodeRulesAndCreateString("webpage:\n\tspacex (webpage|(web page))\n\tslashdot")
 		);
 	}
 	

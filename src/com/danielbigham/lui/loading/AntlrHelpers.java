@@ -73,11 +73,22 @@ public class AntlrHelpers
 			String lhs = rule.lhs().getText();
 			String action = rule.expr() == null ? null : rule.expr().getText();
 			
+			if (action != null && "start".equals(lhs) && !action.isEmpty())
+			{
+				action = "HoldComplete[" + action + "]";
+			}
+			
 			// This is actually multiple rules in one.
 			if (rule.simpleRule().size() > 0)
 			{
 				for (SimpleRuleContext simpleRule : rule.simpleRule())
 				{
+					action = simpleRule.expr() == null ? null : simpleRule.expr().getText();
+					if (action != null && "start".equals(lhs) && !action.isEmpty())
+					{
+						action = "HoldComplete[" + action + "]";
+					}
+					
 					out.add(
 							convert(
 								lhs,

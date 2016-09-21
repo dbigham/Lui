@@ -8,9 +8,9 @@ import com.danielbigham.io.Out;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import com.sun.net.httpserver.HttpServer;
-import com.wolfram.jlink.KernelLink;
-import com.wolfram.jlink.MathLinkException;
-import com.wolfram.jlink.StdLink;
+//import com.wolfram.jlink.KernelLink;
+//import com.wolfram.jlink.MathLinkException;
+//import com.wolfram.jlink.StdLink;
 
 /**
  * A small HTTP server so that when the user presses Ctrl-Q, the C#
@@ -68,23 +68,23 @@ public class LuiHttpServer
      */
 	public static void wlShowLuiUI()
 	{
-		final KernelLink link = StdLink.getLink();
-		if (link != null)
-		{
-			String command = "Lui`UI`FocusLuiUI[]";
-			try
-			{
-				link.evaluate(command);
-				link.discardAnswer();
-			}
-			catch (MathLinkException e2)
-			{
-				link.print("Unexpected problem displaying the Lui UI: " + e2.toString());
-			}
-		}
-		else
-		{
-			Out.print("ERROR: Couldn't find KernelLink via JLink");
-		}
+//		final KernelLink link = StdLink.getLink();
+//		if (link != null)
+//		{
+//			String command = "Lui`UI`FocusLuiUI[]";
+//			try
+//			{
+//				link.evaluate(command);
+//				link.discardAnswer();
+//			}
+//			catch (MathLinkException e2)
+//			{
+//				link.print("Unexpected problem displaying the Lui UI: " + e2.toString());
+//			}
+//		}
+//		else
+//		{
+//			Out.print("ERROR: Couldn't find KernelLink via JLink");
+//		}
 	}    
 }

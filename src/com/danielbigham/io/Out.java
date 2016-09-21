@@ -13,6 +13,7 @@ public class Out
 	public static void print(String str)
 	{
 		KernelLink link = StdLink.getLink();
+		//String link = null;
 		if (link != null)
 		{
 			link.print(str);

@@ -19,7 +19,8 @@ NEWLINE_INDENT : '\r'? '\n' '\t' ;
 WS : [ \t] -> skip ;
 WS2 : [ \t\r\n] ;
 
-INDENT : ('    ' | '\t') ;
+// Don't appear to be using this. Commented out August 2016.
+//INDENT : ('    ' | '\t') ;
 
 // The special arrow char didn't seem to work when I tried it
 ARROW : '->' | '\u2192' ;

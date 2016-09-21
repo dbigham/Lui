@@ -398,7 +398,13 @@ public abstract class Pattern implements IPattern
 	public String toString2(Grammar grammar)
 	{
 		StringBuilder str = new StringBuilder(20);
-		return str.append("<").append(grammar.getSymbolOrLiteral(resultSymbol)).append(":").append(resultSymbol).append(">: ").append(toString()).toString();
+		str.append("<").append(grammar.getSymbolOrLiteral(resultSymbol)).append(":");
+		str.append(resultSymbol).append(">: ").append(toString());
+		if (getAction() != null)
+		{
+			str.append(" -> ").append(getAction());
+		}
+		return str.toString();
 	}
 	
 	public void setBinding(String binding)

@@ -34,18 +34,3 @@ LuiDir[] :=
 End[]
 
 EndPackage[]
-
-(*!
-    \function MyFunc
-    
-    \calltable
-        MyFunc[] '' desc
-    
-    \related '
-    
-    \maintainer danielb
-*)
-MyFunc[] :=
-    Block[{},
-        1
-    ]

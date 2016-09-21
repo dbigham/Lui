@@ -1,4 +1,4 @@
-// Generated from C:\Users\Daniel\WolframWorkspaces\Base2\Lui\AntlrGrammar\Grammar.g4 by ANTLR 4.5.3
+// Generated from E:\Users\Daniel\Dropbox\Projects\Lui\AntlrGrammar\Grammar.g4 by ANTLR 4.5.3
 package com.danielbigham.lui.antlr;
 import org.antlr.v4.runtime.tree.ParseTreeListener;
 
@@ -60,18 +60,6 @@ public interface GrammarListener extends ParseTreeListener {
 	 */
 	void exitOrRulePart(GrammarParser.OrRulePartContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code BasicRulePart2}
-	 * labeled alternative in {@link GrammarParser#rulePart}.
-	 * @param ctx the parse tree
-	 */
-	void enterBasicRulePart2(GrammarParser.BasicRulePart2Context ctx);
-	/**
-	 * Exit a parse tree produced by the {@code BasicRulePart2}
-	 * labeled alternative in {@link GrammarParser#rulePart}.
-	 * @param ctx the parse tree
-	 */
-	void exitBasicRulePart2(GrammarParser.BasicRulePart2Context ctx);
-	/**
 	 * Enter a parse tree produced by the {@code SeqRulePart}
 	 * labeled alternative in {@link GrammarParser#rulePart}.
 	 * @param ctx the parse tree
@@ -83,6 +71,18 @@ public interface GrammarListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitSeqRulePart(GrammarParser.SeqRulePartContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code BasicRulePart2}
+	 * labeled alternative in {@link GrammarParser#rulePart}.
+	 * @param ctx the parse tree
+	 */
+	void enterBasicRulePart2(GrammarParser.BasicRulePart2Context ctx);
+	/**
+	 * Exit a parse tree produced by the {@code BasicRulePart2}
+	 * labeled alternative in {@link GrammarParser#rulePart}.
+	 * @param ctx the parse tree
+	 */
+	void exitBasicRulePart2(GrammarParser.BasicRulePart2Context ctx);
 	/**
 	 * Enter a parse tree produced by the {@code Binding}
 	 * labeled alternative in {@link GrammarParser#rulePart}.

@@ -32,9 +32,9 @@ public class TestChartParser
 		
 		ParserState state = ChartParser.parse(grammar, "just just testing");
 		
-		List<IPatternMatch> matches = state.chart().getMatchesForSpan(ChartParser.START_SYMBOL, 0, 2);
+		List<IPatternMatch> matches = state.chart().getMatchesForSpan(ChartParser.START_SYMBOL, 0, 5);
 		assertEquals(1, matches.size());
-		assertEquals("[0, 1, 2, 3]", TestUtils.intArrayToStr(matches.get(0).subPatternStartPositions()));
+		assertEquals("[0, 2, 4, 6]", TestUtils.intArrayToStr(matches.get(0).subPatternStartPositions()));
 	}
 	
 	// Because 'just' is the rarest literal, this will match in a left-to-right fashion.
@@ -50,9 +50,9 @@ public class TestChartParser
 		
 		ParserState state = ChartParser.parse(grammar, "just testing testing");
 		
-		List<IPatternMatch> matches = state.chart().getMatchesForSpan(ChartParser.START_SYMBOL, 0, 2);
+		List<IPatternMatch> matches = state.chart().getMatchesForSpan(ChartParser.START_SYMBOL, 0, 5);
 		assertEquals(1, matches.size());
-		assertEquals("[0, 1, 2, 3]", TestUtils.intArrayToStr(matches.get(0).subPatternStartPositions()));
+		assertEquals("[0, 2, 4, 6]", TestUtils.intArrayToStr(matches.get(0).subPatternStartPositions()));
 	}
 	
 	// Trigger will be 'testing', so this will match to the right, then match
@@ -67,9 +67,9 @@ public class TestChartParser
 		
 		ParserState state = ChartParser.parse(grammar, "just testing just");
 		
-		List<IPatternMatch> matches = state.chart().getMatchesForSpan(ChartParser.START_SYMBOL, 0, 2);
+		List<IPatternMatch> matches = state.chart().getMatchesForSpan(ChartParser.START_SYMBOL, 0, 5);
 		assertEquals(1, matches.size());
-		assertEquals("[0, 1, 2, 3]", TestUtils.intArrayToStr(matches.get(0).subPatternStartPositions()));
+		assertEquals("[0, 2, 4, 6]", TestUtils.intArrayToStr(matches.get(0).subPatternStartPositions()));
 	}
 	
 	// One rule produces a symbol and the other rule uses that symbol.
@@ -87,14 +87,14 @@ public class TestChartParser
 		ParserState state = ChartParser.parse(grammar, "just testing again");
 		
 		// Check that "just testing" matched
-		List<IPatternMatch> matches = state.chart().getMatchesForSpan(grammar.getTokenId("$symbol"), 0, 1);
+		List<IPatternMatch> matches = state.chart().getMatchesForSpan(grammar.getTokenId("$symbol"), 0, 3);
 		assertEquals(1, matches.size());
-		assertEquals("[0, 1, 2]", TestUtils.intArrayToStr(matches.get(0).subPatternStartPositions()));
+		assertEquals("[0, 2, 4]", TestUtils.intArrayToStr(matches.get(0).subPatternStartPositions()));
 		
 		// Check that "$symbol again" matched
-		matches = state.chart().getMatchesForSpan(ChartParser.START_SYMBOL, 0, 2);
+		matches = state.chart().getMatchesForSpan(ChartParser.START_SYMBOL, 0, 5);
 		assertEquals(1, matches.size());
-		assertEquals("[0, 2, 3]", TestUtils.intArrayToStr(matches.get(0).subPatternStartPositions()));
+		assertEquals("[0, 4, 6]", TestUtils.intArrayToStr(matches.get(0).subPatternStartPositions()));
 		
 		assertEquals(1, state.results().size());
 	}
@@ -115,19 +115,19 @@ public class TestChartParser
 		ParserState state = ChartParser.parse(grammar, "just testing again again");
 		
 		// Check that "just testing" matched
-		List<IPatternMatch> matches = state.chart().getMatchesForSpan(grammar.getTokenId("$symbol"), 0, 1);
-		assertEquals(1, matches.size());
-		assertEquals("[0, 1, 2]", TestUtils.intArrayToStr(matches.get(0).subPatternStartPositions()));
-		
-		// Check that "again again" matched
-		matches = state.chart().getMatchesForSpan(grammar.getTokenId("$symbol2"), 2, 3);
-		assertEquals(1, matches.size());
-		assertEquals("[2, 3, 4]", TestUtils.intArrayToStr(matches.get(0).subPatternStartPositions()));
-		
-		// Check that "$symbol $symbol2" matched
-		matches = state.chart().getMatchesForSpan(ChartParser.START_SYMBOL, 0, 3);
+		List<IPatternMatch> matches = state.chart().getMatchesForSpan(grammar.getTokenId("$symbol"), 0, 3);
 		assertEquals(1, matches.size());
 		assertEquals("[0, 2, 4]", TestUtils.intArrayToStr(matches.get(0).subPatternStartPositions()));
+		
+		// Check that "again again" matched
+		matches = state.chart().getMatchesForSpan(grammar.getTokenId("$symbol2"), 4, 7);
+		assertEquals(1, matches.size());
+		assertEquals("[4, 6, 8]", TestUtils.intArrayToStr(matches.get(0).subPatternStartPositions()));
+		
+		// Check that "$symbol $symbol2" matched
+		matches = state.chart().getMatchesForSpan(ChartParser.START_SYMBOL, 0, 7);
+		assertEquals(1, matches.size());
+		assertEquals("[0, 4, 8]", TestUtils.intArrayToStr(matches.get(0).subPatternStartPositions()));
 		
 		assertEquals(1, state.results().size());
 	}
@@ -151,17 +151,17 @@ public class TestChartParser
 		ParserState state = ChartParser.parse(grammar, "just testing testing");
 		
 		// Check that "testing" matched twice.
-		List<IPatternMatch> matches = state.chart().getMatchesForSpan(grammar.getTokenId("$symbol"), 1, 1);
+		List<IPatternMatch> matches = state.chart().getMatchesForSpan(grammar.getTokenId("$symbol"), 2, 3);
 		assertEquals(1, matches.size());
-		assertEquals("[1, 2]", TestUtils.intArrayToStr(matches.get(0).subPatternStartPositions()));
-		matches = state.chart().getMatchesForSpan(grammar.getTokenId("$symbol"), 2, 2);
+		assertEquals("[2, 4]", TestUtils.intArrayToStr(matches.get(0).subPatternStartPositions()));
+		matches = state.chart().getMatchesForSpan(grammar.getTokenId("$symbol"), 4, 5);
 		assertEquals(1, matches.size());
-		assertEquals("[2, 3]", TestUtils.intArrayToStr(matches.get(0).subPatternStartPositions()));
+		assertEquals("[4, 6]", TestUtils.intArrayToStr(matches.get(0).subPatternStartPositions()));
 		
 		// Check that "just $symbol $symbol" matched
-		matches = state.chart().getMatchesForSpan(ChartParser.START_SYMBOL, 0, 2);
+		matches = state.chart().getMatchesForSpan(ChartParser.START_SYMBOL, 0, 5);
 		assertEquals(1, matches.size());
-		assertEquals("[0, 1, 2, 3]", TestUtils.intArrayToStr(matches.get(0).subPatternStartPositions()));
+		assertEquals("[0, 2, 4, 6]", TestUtils.intArrayToStr(matches.get(0).subPatternStartPositions()));
 		
 		assertEquals(1, state.results().size());
 		
@@ -180,9 +180,9 @@ public class TestChartParser
 		
 		ParserState state = ChartParser.parse(grammar, "apple");
 		
-		List<IPatternMatch> matches = state.chart().getMatchesForSpan(ChartParser.START_SYMBOL, 0, 0);
+		List<IPatternMatch> matches = state.chart().getMatchesForSpan(ChartParser.START_SYMBOL, 0, 1);
 		assertEquals(1, matches.size());
-		assertEquals("[0, 1]", TestUtils.intArrayToStr(matches.get(0).subPatternStartPositions()));
+		assertEquals("[0, 2]", TestUtils.intArrayToStr(matches.get(0).subPatternStartPositions()));
 	}
 	
 	// OrPattern. Input matches second sub-pattern.
@@ -196,9 +196,9 @@ public class TestChartParser
 		
 		ParserState state = ChartParser.parse(grammar, "orange");
 		
-		List<IPatternMatch> matches = state.chart().getMatchesForSpan(ChartParser.START_SYMBOL, 0, 0);
+		List<IPatternMatch> matches = state.chart().getMatchesForSpan(ChartParser.START_SYMBOL, 0, 1);
 		assertEquals(1, matches.size());
-		assertEquals("[0, 1]", TestUtils.intArrayToStr(matches.get(0).subPatternStartPositions()));
+		assertEquals("[0, 2]", TestUtils.intArrayToStr(matches.get(0).subPatternStartPositions()));
 	}
 	
 	// Test that uses the ANTLR parsing.
@@ -223,7 +223,7 @@ public class TestChartParser
 			1,
 			parses(
 				"start: $webpage\n" +
-				"webpage: spacex|spx reddit",
+				"webpage: (spacex|spx) reddit",
 				"spacex reddit"
 			)
 		);
@@ -237,8 +237,34 @@ public class TestChartParser
 			1,
 			parses(
 				"start: $webpage\n" +
-				"webpage: spacex|spx webpage|(web page)",
+				"webpage: (spacex|spx) (webpage|(web page))",
 				"spacex web page"
+			)
+		);
+	}
+	
+	// ID regex parser
+	@Test
+	public void test12()
+	{
+		assertEquals(
+			1,
+			parses(
+				"start: $ID and $ID",
+				"one and two"
+			)
+		);
+	}
+	
+	// URL regex parser
+	@Test
+	public void test13()
+	{
+		assertEquals(
+			1,
+			parses(
+				"start: $URL",
+				"http://www.danielbigham.ca"
 			)
 		);
 	}

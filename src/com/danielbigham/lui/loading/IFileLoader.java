@@ -33,4 +33,9 @@ public interface IFileLoader
 	 * The given file was removed.
 	 */
 	public void fileRemoved(Path path);
+
+	/**
+	 * Called once all of the files have been visited/loaded.
+	 */
+	public void doneVisitingFiles();
 }
