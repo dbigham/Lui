@@ -1,9 +1,5 @@
 package test.com.danielbigham.lui;
 
-import static org.junit.Assert.assertEquals;
-
-import org.junit.Test;
-
 import com.danielbigham.lui.ChartParser;
 import com.danielbigham.lui.Grammar;
 import com.danielbigham.lui.ParserState;
