@@ -150,6 +150,22 @@ public class TestAntlrParsing
 		assertEquals(2, rules.size());
 	}
 	
+	// Whitespace
+	@Test
+	public void test16()
+	{
+		List<GrammarRule> rules = parseGrammar("start:\n\t$symbol\n \n  \n   \n\t$symbol2");
+		assertEquals(2, rules.size());
+	}
+	
+	// Whitespace before and after rules
+	@Test
+	public void test17()
+	{
+		List<GrammarRule> rules = parseGrammar(" \n start:\n\t$symbol\n \n  \n   \n\t$symbol2 \n ");
+		assertEquals(2, rules.size());
+	}
+	
 	/**
 	 * Parses the given grammar rules.
 	 * 
