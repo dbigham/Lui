@@ -44,7 +44,8 @@ rulePart2:		basicRulePart (ws* '|' ws* basicRulePart)+
 
 basicRulePart:
     ID |
-    symbol
+    symbol |
+    STRING
     ;
     
 symbol: ('$'|'~') ID ;

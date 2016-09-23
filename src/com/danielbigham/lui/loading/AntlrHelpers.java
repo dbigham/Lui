@@ -11,6 +11,7 @@ import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 
 import com.danielbigham.lui.Grammar;
+import com.danielbigham.lui.Tokenizer;
 import com.danielbigham.lui.antlr.DescriptiveErrorListener;
 import com.danielbigham.lui.antlr.GrammarLexer;
 import com.danielbigham.lui.antlr.GrammarParser;
@@ -34,6 +35,7 @@ import com.danielbigham.lui.pattern.OrPattern;
 import com.danielbigham.lui.pattern.Pattern;
 import com.danielbigham.lui.pattern.SequencePattern;
 import com.danielbigham.lui.pattern.SymbolPattern;
+import com.danielbigham.lui.patternmatch.IPatternMatch;
 
 /**
  * Code for converting ANTLR-parsed grammar rules to our internal GrammarRule class.
@@ -359,6 +361,27 @@ public class AntlrHelpers
 			// implies that our decision to make BasicPattern implement
 			// IPatternMatch seems suspect.
 			return new SymbolPattern(grammar, symbolName, -1, -1, true);
+		}
+		else if (rulePart.STRING() != null)
+		{
+			String literal = rulePart.getText();
+			literal = literal.substring(1, literal.length() - 1);
+			
+			List<IPatternMatch> subPatterns =
+				grammar.getTokenizer().tokenize(grammar, literal, true);
+			if (subPatterns.size() > 1)
+			{
+				List<IPattern> subPatterns2 = new ArrayList<IPattern>();
+				for (IPatternMatch subPattern : subPatterns)
+				{
+					subPatterns2.add(subPattern.pattern());
+				}
+				return new SequencePattern(subPatterns2, Pattern.NO_LHS);
+			}
+			else
+			{
+				return new LiteralPattern(grammar, literal, -1, true);
+			}
 		}
 		else
 		{

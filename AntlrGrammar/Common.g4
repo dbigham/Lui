@@ -29,5 +29,7 @@ NEWLINE : '\r'? '\n' ;
 
 OTHER_WS : ' ' | '  ' | '   ' | '     ' | '\t\t\t' | '\t\t\t\t' | '\t\t\t\t\t' ;
 
+STRING : '"' (~["] | '\\"')+ '"' ;
+
 // Ignore whitespace
 WS : [ \t] -> skip ;

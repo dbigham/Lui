@@ -166,6 +166,15 @@ public class TestAntlrParsing
 		assertEquals(2, rules.size());
 	}
 	
+	// String
+	@Test
+	public void test18()
+	{
+		List<GrammarRule> rules = parseGrammar("symbol: twenty|\"twenty one\"");
+		assertEquals(1, rules.size());
+		assertEquals("<$symbol:2>:\n    (<twenty:0>|{<twenty:0> <one:1>})\n        null", rules.get(0).toString());
+	}
+	
 	/**
 	 * Parses the given grammar rules.
 	 * 

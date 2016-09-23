@@ -27,8 +27,6 @@ integer : INTEGER ;
 
 real : REAL ;
 
-STRING : '"' (~["] | '\\"')+ '"' ;
-
 INTEGER : DIGITS ;
 
 REAL : DIGITS '.' DIGITS? ;

@@ -51,6 +51,8 @@ public class Grammar
 	private int ruleCount;
 
 	private boolean debugFlag;
+
+	private Tokenizer tokenizer;
 	
 	public Grammar()
 	{
@@ -61,6 +63,7 @@ public class Grammar
 		dynamicRuleCounter = 0;
 		finalPatterns = new ArrayList<IPattern>();
 		finalPatternsToResultSymbol = new HashMap<IPattern, Integer>();
+		tokenizer = new Tokenizer();
 		
 		tokenIds.put("$start", ChartParser.START_SYMBOL);
 		tokenIdToSymbolOrLiteral.put(ChartParser.START_SYMBOL, "$start");
@@ -389,5 +392,10 @@ public class Grammar
 	public int getRuleCount()
 	{
 		return ruleCount;
+	}
+
+	public Tokenizer getTokenizer()
+	{
+		return tokenizer;
 	}
 }
