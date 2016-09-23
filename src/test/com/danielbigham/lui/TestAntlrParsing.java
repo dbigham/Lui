@@ -67,7 +67,7 @@ public class TestAntlrParsing
 	{
 		List<GrammarRule> rules = parseGrammar("directory: $directory (dir|directory)");
 		assertEquals(1, rules.size());
-		assertEquals("<$directory:0>:\n    {<$directory:0> (<dir:1>|<directory:2>)}\n        null", rules.get(0).toString());
+		assertEquals("<$directory:0>:\n    {directory=<$directory:0> (<dir:1>|<directory:2>)}\n        directory", rules.get(0).toString());
 	}
 	
 	// Rules grouped by LHS symbol
@@ -86,7 +86,7 @@ public class TestAntlrParsing
 	{
 		List<GrammarRule> rules = parseGrammar("start: $webpage\nwebpage: slashdot");
 		assertEquals(2, rules.size());
-		assertEquals("<$start:-1>:\n    {<$webpage:0>}\n        null", rules.get(0).toString());
+		assertEquals("<$start:-1>:\n    {webpage=<$webpage:0>}\n        webpage", rules.get(0).toString());
 		assertEquals("<$webpage:0>:\n    {<slashdot:1>}\n        null", rules.get(1).toString());
 	}
 	
@@ -96,7 +96,7 @@ public class TestAntlrParsing
 	{
 		List<GrammarRule> rules = parseGrammar("expr: a=$integer b=$integer -> a + b");
 		assertEquals(1, rules.size());
-		assertEquals("<$expr:1>:\n    {a=<$integer:0> b=<$integer:0>}\n        a+b", rules.get(0).toString());
+		assertEquals("<$expr:1>:\n    {a=<$integer:0> b=<$integer:0>}\n        a + b", rules.get(0).toString());
 	}
 	
 	// Bindings inside of an OR pattern
@@ -106,7 +106,49 @@ public class TestAntlrParsing
 		List<GrammarRule> rules = parseGrammar("expr: (a=$integer|b=$integer) -> Wrapper[a,b]");
 		assertEquals(1, rules.size());
 		assertEquals("<$expr:1>:\n    (a=<$integer:0>|b=<$integer:0>)\n        Wrapper[a,b]", rules.get(0).toString());
-	}	
+	}
+	
+	// Default action
+	@Test
+	public void test11()
+	{
+		List<GrammarRule> rules = parseGrammar("start: $symbol test");
+		assertEquals(1, rules.size());
+		assertEquals("<$start:-1>:\n    {symbol=<$symbol:0> <test:1>}\n        symbol", rules.get(0).toString());
+	}
+	
+	// Default action
+	@Test
+	public void test12()
+	{
+		List<GrammarRule> rules = parseGrammar("start: $symbol");
+		assertEquals(1, rules.size());
+		assertEquals("<$start:-1>:\n    {symbol=<$symbol:0>}\n        symbol", rules.get(0).toString());
+	}
+	
+	// Newlines between rules
+	@Test
+	public void test13()
+	{
+		List<GrammarRule> rules = parseGrammar("start: $symbol\n\nstart: $symbol2");
+		assertEquals(2, rules.size());
+	}
+	
+	// Newline + tab between rules
+	@Test
+	public void test14()
+	{
+		List<GrammarRule> rules = parseGrammar("start:\n\t$symbol\n\t\n\t$symbol2");
+		assertEquals(2, rules.size());
+	}
+	
+	// Newline between rules
+	@Test
+	public void test15()
+	{
+		List<GrammarRule> rules = parseGrammar("start:\n\t$symbol\n\n\t$symbol2");
+		assertEquals(2, rules.size());
+	}
 	
 	/**
 	 * Parses the given grammar rules.

@@ -2,23 +2,25 @@ grammar Grammar;
 
 import WolframLanguage, Common;
 
-grammarRules: WS2* grammarRule (grammarRule)* (WS2|WS|NEWLINE)*;
+grammarRules: grammarRule (grammarRule)* ;
 
-grammarRule:	lhs COLON rulePart+ NEWLINE_INDENT expr (NEWLINE|EOF)
-	|			lhs COLON rulePart+ ARROW expr (NEWLINE|EOF)
-	|			lhs COLON rulePart+ (NEWLINE|EOF)
-	|			lhs COLON? (NEWLINE_INDENT simpleRule)+ (NEWLINE|EOF)
+end_of_rule: ws* ((NEWLINE ws*)+|EOF) ;
+
+grammarRule:	lhs ws* COLON ws* (rulePart ws*)+ NEWLINE INDENT expr end_of_rule
+	|			lhs ws* COLON ws* (rulePart ws*)+ ARROW ws* expr end_of_rule
+	|			lhs ws* COLON ws* (rulePart ws*)+ end_of_rule
+	|			lhs ws* COLON? ws* (NEWLINE (ws* NEWLINE)* INDENT simpleRule ws*)+ end_of_rule
 	;
 
-simpleRule:		rulePart+
-	|			rulePart+ ARROW expr
-	|			rulePart+ NEWLINE_DOUBLE_INDENT expr
+simpleRule:		(rulePart ws?)+
+	|			(rulePart ws?)+ ARROW ws? expr ws?
+	|			(rulePart ws?)+ NEWLINE DOUBLE_INDENT expr ws?
 	;
 
 lhs: ID | symbol ;
 
 rulePart:		'(' rulePart ('|' rulePart)+ ')'	# OrRulePart
-	|			'(' rulePart+ ')'					# SeqRulePart
+	|			'(' (rulePart ws*)+ ')'				# SeqRulePart
 	|			basicRulePart						# BasicRulePart2
 				// Unfortunately this allows multiple/nested bindings,
 				// but I'm not sure how to prevent that. If I break this

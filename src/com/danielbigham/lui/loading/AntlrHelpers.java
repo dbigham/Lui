@@ -73,10 +73,7 @@ public class AntlrHelpers
 			String lhs = rule.lhs().getText();
 			String action = rule.expr() == null ? null : rule.expr().getText();
 			
-			if (action != null && "start".equals(lhs) && !action.isEmpty())
-			{
-				action = "HoldComplete[" + action + "]";
-			}
+			action = processAction(action, lhs);
 			
 			// This is actually multiple rules in one.
 			if (rule.simpleRule().size() > 0)
@@ -84,10 +81,7 @@ public class AntlrHelpers
 				for (SimpleRuleContext simpleRule : rule.simpleRule())
 				{
 					action = simpleRule.expr() == null ? null : simpleRule.expr().getText();
-					if (action != null && "start".equals(lhs) && !action.isEmpty())
-					{
-						action = "HoldComplete[" + action + "]";
-					}
+					action = processAction(action, lhs);
 					
 					out.add(
 							convert(
@@ -114,6 +108,29 @@ public class AntlrHelpers
 		}
 	}
 	
+	/**
+	 * - If this is a $start rule, then wrap the action in HoldComplete to
+	 *   prevent it from evaluating.
+	 * 
+	 * @param action	the grammar action.
+	 * @param lhs		the lhs symbol of the rule.
+	 * @return			the action, possibly modified.
+	 */
+	private static String processAction(String action, String lhs)
+	{
+		if (action != null && "start".equals(lhs) && !action.isEmpty())
+		{
+			action = "HoldComplete[" + action + "]";
+		}
+		
+		if (action == null)
+		{
+			
+		}
+		
+		return action;
+	}
+
 	/**
 	 * Convert a grammar rule.
 	 * 
@@ -151,6 +168,14 @@ public class AntlrHelpers
 				);
 		}
 		
+		if (action == null)
+		{
+			if (pattern instanceof SequencePattern)
+			{
+				action = defaultAction((SequencePattern)pattern);
+			}
+		}
+		
 		GrammarRule rule =
 			new GrammarRule(
 				grammar,
@@ -167,9 +192,41 @@ public class AntlrHelpers
 		pattern.setSymbol(rule.getResultSymbolInt());
 		
 		return rule;
-
 	}
 	
+	/**
+	 * If a rule doesn't have an action, but it does have $symbol sub-patterns,
+	 * then create a default action that uses the value of that sub-match.
+	 * 
+	 * @param pattern	the rule's pattern.
+	 * @return			the action to use. (possibly null)
+	 */
+	private static String defaultAction(SequencePattern pattern)
+	{
+		// Any sub-patterns that are symbol patterns that have
+		// a binding?
+		for (IPattern subPattern : pattern.patterns())
+		{
+			if (subPattern instanceof SymbolPattern && subPattern.getBinding() != null)
+			{
+				return subPattern.getBinding();
+			}
+		}
+		
+		// Any sub-patterns that are at least a symbol pattern?
+		for (IPattern subPattern : pattern.patterns())
+		{
+			if (subPattern instanceof SymbolPattern)
+			{
+				String symbol = ((SymbolPattern)subPattern).symbol().substring(1);
+				subPattern.setBinding(symbol);
+				return symbol;
+			}
+		}
+		
+		return null;
+	}
+
 	/**
 	 * Convert a list of rule parts into a list of IPattern.
 	 * 

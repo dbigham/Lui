@@ -18,6 +18,16 @@ public interface GrammarListener extends ParseTreeListener {
 	 */
 	void exitGrammarRules(GrammarParser.GrammarRulesContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link GrammarParser#end_of_rule}.
+	 * @param ctx the parse tree
+	 */
+	void enterEnd_of_rule(GrammarParser.End_of_ruleContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link GrammarParser#end_of_rule}.
+	 * @param ctx the parse tree
+	 */
+	void exitEnd_of_rule(GrammarParser.End_of_ruleContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link GrammarParser#grammarRule}.
 	 * @param ctx the parse tree
 	 */
@@ -287,4 +297,14 @@ public interface GrammarListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitReal(GrammarParser.RealContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link GrammarParser#ws}.
+	 * @param ctx the parse tree
+	 */
+	void enterWs(GrammarParser.WsContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link GrammarParser#ws}.
+	 * @param ctx the parse tree
+	 */
+	void exitWs(GrammarParser.WsContext ctx);
 }

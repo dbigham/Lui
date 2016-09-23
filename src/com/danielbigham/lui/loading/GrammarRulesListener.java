@@ -19,6 +19,7 @@ import com.danielbigham.lui.antlr.GrammarParser.ERuleContext;
 import com.danielbigham.lui.antlr.GrammarParser.EStringContext;
 import com.danielbigham.lui.antlr.GrammarParser.ESymbolContext;
 import com.danielbigham.lui.antlr.GrammarParser.ETimesContext;
+import com.danielbigham.lui.antlr.GrammarParser.End_of_ruleContext;
 import com.danielbigham.lui.antlr.GrammarParser.GrammarRuleContext;
 import com.danielbigham.lui.antlr.GrammarParser.GrammarRulesContext;
 import com.danielbigham.lui.antlr.GrammarParser.IntegerContext;
@@ -30,6 +31,7 @@ import com.danielbigham.lui.antlr.GrammarParser.SimpleRuleContext;
 import com.danielbigham.lui.antlr.GrammarParser.StringContext;
 import com.danielbigham.lui.antlr.GrammarParser.SymbolContext;
 import com.danielbigham.lui.antlr.GrammarParser.WlSymbolContext;
+import com.danielbigham.lui.antlr.GrammarParser.WsContext;
 
 /**
  * Class that can be passed in to the ANTLR parser such that
@@ -379,6 +381,34 @@ public class GrammarRulesListener implements GrammarListener
 
 	@Override
 	public void exitBinding(BindingContext ctx)
+	{
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void enterWs(WsContext ctx)
+	{
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void exitWs(WsContext ctx)
+	{
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void enterEnd_of_rule(End_of_ruleContext ctx)
+	{
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void exitEnd_of_rule(End_of_ruleContext ctx)
 	{
 		// TODO Auto-generated method stub
 		

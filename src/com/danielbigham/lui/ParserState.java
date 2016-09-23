@@ -48,7 +48,6 @@ public class ParserState
 			}
 		}
 		this.endPos = maxEndPos;
-		Out.print("Max end pos: " + maxEndPos);
 		this.iterationCounter = 0;
 	}
 	

@@ -26,7 +26,7 @@ public abstract class RegexParserBase implements RegexParser
 		Matcher matcher = pattern.matcher(str);
 		while (matcher.find())
 		{
-			Out.print(this.getClass().getCanonicalName() + " regex match: " + matcher.start() + " to " + matcher.end() + ": " + str.substring(matcher.start(), matcher.end()));
+			//Out.print(this.getClass().getCanonicalName() + " regex match: " + matcher.start() + " to " + matcher.end() + ": " + str.substring(matcher.start(), matcher.end()));
 			tokens.add(new SymbolPattern(grammar, symbols.get(0), matcher.start(), matcher.end() - 1, false));
 		}
 	}
