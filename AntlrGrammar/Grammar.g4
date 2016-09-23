@@ -32,6 +32,13 @@ rulePart:		'(' ws* rulePart ws* (ws* '|' ws* rulePart)+ ')'	# OrRulePart
 	|			ID ws* EQUALS ws* rulePart							# Binding
 	;
 
+// Since OR patterns cause problems when they both:
+// - Don't have surround parentheses
+// - And have a binding on the first subpattern
+// ... we require they have parentheses if they are to have a binding.
+// That is all done in the 'rulePart: ...' rules above, but it would be
+// too unfortunate to loose all ability for OR patterns without parens,
+// so we use this additional rule to allow that.
 rulePart2:		basicRulePart (ws* '|' ws* basicRulePart)+
 	;
 
