@@ -58,6 +58,16 @@ public interface GrammarListener extends ParseTreeListener {
 	 */
 	void exitLhs(GrammarParser.LhsContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link GrammarParser#rulePart3}.
+	 * @param ctx the parse tree
+	 */
+	void enterRulePart3(GrammarParser.RulePart3Context ctx);
+	/**
+	 * Exit a parse tree produced by {@link GrammarParser#rulePart3}.
+	 * @param ctx the parse tree
+	 */
+	void exitRulePart3(GrammarParser.RulePart3Context ctx);
+	/**
 	 * Enter a parse tree produced by the {@code OrRulePart}
 	 * labeled alternative in {@link GrammarParser#rulePart}.
 	 * @param ctx the parse tree
@@ -94,6 +104,18 @@ public interface GrammarListener extends ParseTreeListener {
 	 */
 	void exitBasicRulePart2(GrammarParser.BasicRulePart2Context ctx);
 	/**
+	 * Enter a parse tree produced by the {@code OrRulePart2}
+	 * labeled alternative in {@link GrammarParser#rulePart}.
+	 * @param ctx the parse tree
+	 */
+	void enterOrRulePart2(GrammarParser.OrRulePart2Context ctx);
+	/**
+	 * Exit a parse tree produced by the {@code OrRulePart2}
+	 * labeled alternative in {@link GrammarParser#rulePart}.
+	 * @param ctx the parse tree
+	 */
+	void exitOrRulePart2(GrammarParser.OrRulePart2Context ctx);
+	/**
 	 * Enter a parse tree produced by the {@code Binding}
 	 * labeled alternative in {@link GrammarParser#rulePart}.
 	 * @param ctx the parse tree
@@ -105,6 +127,16 @@ public interface GrammarListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitBinding(GrammarParser.BindingContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link GrammarParser#rulePart2}.
+	 * @param ctx the parse tree
+	 */
+	void enterRulePart2(GrammarParser.RulePart2Context ctx);
+	/**
+	 * Exit a parse tree produced by {@link GrammarParser#rulePart2}.
+	 * @param ctx the parse tree
+	 */
+	void exitRulePart2(GrammarParser.RulePart2Context ctx);
 	/**
 	 * Enter a parse tree produced by {@link GrammarParser#basicRulePart}.
 	 * @param ctx the parse tree

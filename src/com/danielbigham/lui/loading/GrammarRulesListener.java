@@ -24,8 +24,11 @@ import com.danielbigham.lui.antlr.GrammarParser.GrammarRuleContext;
 import com.danielbigham.lui.antlr.GrammarParser.GrammarRulesContext;
 import com.danielbigham.lui.antlr.GrammarParser.IntegerContext;
 import com.danielbigham.lui.antlr.GrammarParser.LhsContext;
+import com.danielbigham.lui.antlr.GrammarParser.OrRulePart2Context;
 import com.danielbigham.lui.antlr.GrammarParser.OrRulePartContext;
 import com.danielbigham.lui.antlr.GrammarParser.RealContext;
+import com.danielbigham.lui.antlr.GrammarParser.RulePart2Context;
+import com.danielbigham.lui.antlr.GrammarParser.RulePart3Context;
 import com.danielbigham.lui.antlr.GrammarParser.SeqRulePartContext;
 import com.danielbigham.lui.antlr.GrammarParser.SimpleRuleContext;
 import com.danielbigham.lui.antlr.GrammarParser.StringContext;
@@ -409,6 +412,48 @@ public class GrammarRulesListener implements GrammarListener
 
 	@Override
 	public void exitEnd_of_rule(End_of_ruleContext ctx)
+	{
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void enterRulePart3(RulePart3Context ctx)
+	{
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void exitRulePart3(RulePart3Context ctx)
+	{
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void enterOrRulePart2(OrRulePart2Context ctx)
+	{
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void exitOrRulePart2(OrRulePart2Context ctx)
+	{
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void enterRulePart2(RulePart2Context ctx)
+	{
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void exitRulePart2(RulePart2Context ctx)
 	{
 		// TODO Auto-generated method stub
 		

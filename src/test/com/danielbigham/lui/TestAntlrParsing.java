@@ -38,7 +38,7 @@ public class TestAntlrParsing
 	@Test
 	public void test3()
 	{
-		List<GrammarRule> rules = parseGrammar("webpage: (spacex|spx) reddit");
+		List<GrammarRule> rules = parseGrammar("webpage: spacex|spx reddit");
 		assertEquals(1, rules.size());
 		assertEquals("<$webpage:3>:\n    {(<spacex:0>|<spx:1>) <reddit:2>}\n        null", rules.get(0).toString());
 	}
@@ -47,7 +47,7 @@ public class TestAntlrParsing
 	@Test
 	public void test4()
 	{
-		List<GrammarRule> rules = parseGrammar("~spacex: (spacex|spx)");
+		List<GrammarRule> rules = parseGrammar("~spacex: spacex|spx");
 		assertEquals(1, rules.size());
 		assertEquals("<~spacex:2>:\n    (<spacex:0>|<spx:1>)\n        null", rules.get(0).toString());
 	}

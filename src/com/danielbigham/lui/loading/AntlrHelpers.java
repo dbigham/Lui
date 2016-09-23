@@ -20,6 +20,8 @@ import com.danielbigham.lui.antlr.GrammarParser.BindingContext;
 import com.danielbigham.lui.antlr.GrammarParser.GrammarRuleContext;
 import com.danielbigham.lui.antlr.GrammarParser.GrammarRulesContext;
 import com.danielbigham.lui.antlr.GrammarParser.OrRulePartContext;
+import com.danielbigham.lui.antlr.GrammarParser.RulePart2Context;
+import com.danielbigham.lui.antlr.GrammarParser.RulePart3Context;
 import com.danielbigham.lui.antlr.GrammarParser.RulePartContext;
 import com.danielbigham.lui.antlr.GrammarParser.SeqRulePartContext;
 import com.danielbigham.lui.antlr.GrammarParser.SimpleRuleContext;
@@ -86,7 +88,7 @@ public class AntlrHelpers
 					out.add(
 							convert(
 								lhs,
-								simpleRule.rulePart(),
+								simpleRule.rulePart3(),
 								action,
 								grammar
 							)
@@ -99,7 +101,7 @@ public class AntlrHelpers
 				out.add(
 					convert(
 						lhs,
-						rule.rulePart(),
+						rule.rulePart3(),
 						action,
 						grammar
 					)
@@ -139,7 +141,7 @@ public class AntlrHelpers
 	 * @param action		the grammar action.
 	 * @param grammar		the grammar.
 	 */
-	static GrammarRule convert(String lhs, List<RulePartContext> ruleParts, String action, Grammar grammar)
+	static GrammarRule convert(String lhs, List<RulePart3Context> ruleParts, String action, Grammar grammar)
 	{
 		List<IPattern> subPatterns = convert(ruleParts, grammar);
 		IPattern pattern;
@@ -234,10 +236,58 @@ public class AntlrHelpers
 	 * @param grammar		the grammar.
 	 * @return				list of IPattern.
 	 */
-	static List<IPattern> convert(List<RulePartContext> ruleParts, Grammar grammar)
+	static List<IPattern> convert(List<RulePart3Context> ruleParts, Grammar grammar)
+	{
+		List<IPattern> res = new ArrayList<IPattern>(ruleParts.size());
+		for (RulePart3Context rulePart : ruleParts)
+		{
+			res.add(convert(rulePart, grammar));
+		}
+		return res;
+	}
+	
+	/**
+	 * Convert a list of rule parts into a list of IPattern.
+	 * 
+	 * @param ruleParts		the rule parts.
+	 * @param grammar		the grammar.
+	 * @return				list of IPattern.
+	 */
+	static List<IPattern> convert2(List<RulePartContext> ruleParts, Grammar grammar)
 	{
 		List<IPattern> res = new ArrayList<IPattern>(ruleParts.size());
 		for (RulePartContext rulePart : ruleParts)
+		{
+			res.add(convert(rulePart, grammar));
+		}
+		return res;
+	}
+	
+	static IPattern convert(RulePart3Context rulePart, Grammar grammar)
+	{
+		if (rulePart.rulePart() != null)
+		{
+			return convert(rulePart.rulePart(), grammar);
+		}
+		else
+		{
+			return convert(rulePart.rulePart2(), grammar);
+		}
+	}
+	
+	static IPattern convert(RulePart2Context rulePart, Grammar grammar)
+	{
+		return
+			new OrPattern(
+				convert3(rulePart.basicRulePart(), grammar),
+				Pattern.NO_LHS
+			);
+	}
+	
+	static List<IPattern> convert3(List<BasicRulePartContext> ruleParts, Grammar grammar)
+	{
+		List<IPattern> res = new ArrayList<IPattern>(ruleParts.size());
+		for (BasicRulePartContext rulePart : ruleParts)
 		{
 			res.add(convert(rulePart, grammar));
 		}
@@ -254,7 +304,7 @@ public class AntlrHelpers
 		{
 			return
 				new OrPattern(
-					convert(((OrRulePartContext) rulePart).rulePart(), grammar),
+					convert2(((OrRulePartContext) rulePart).rulePart(), grammar),
 					Pattern.NO_LHS
 				);
 		}
@@ -274,7 +324,7 @@ public class AntlrHelpers
 			{
 				return
 					new SequencePattern(
-						convert(((SeqRulePartContext) rulePart).rulePart(), grammar),
+						convert2(((SeqRulePartContext) rulePart).rulePart(), grammar),
 						Pattern.NO_LHS
 					);
 			}
