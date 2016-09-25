@@ -40,7 +40,7 @@ public class TestRegexParser extends TestCase
 		assertEquals(pos, tokens.get(0).startPos());
 		assertEquals(pos + substring.length() - 1, tokens.get(0).endPos());
 		assertTrue(
-			tokens.toString().matches("\\[<\\" + grammarSymbol + ":-2>.*\\]")
+			tokens.toString().matches("\\[\\" + grammarSymbol + ".*\\]")
 		);
 		return tokens.get(0);
 	}

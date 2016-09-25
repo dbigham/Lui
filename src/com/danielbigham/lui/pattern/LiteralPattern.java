@@ -73,8 +73,7 @@ public class LiteralPattern extends BasicPattern
 	
 	public String toString()
 	{
-		StringBuilder str = new StringBuilder(literal.length() + 6);
-		return toStringHelper(str.append("<").append(literal).append(":").append(tokenId).append(">").toString());
+		return toStringHelper(literal);
 	}
 	
 	public boolean subPatternsAreAllLiterals()

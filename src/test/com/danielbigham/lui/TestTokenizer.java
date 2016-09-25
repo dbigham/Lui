@@ -20,7 +20,7 @@ public class TestTokenizer
 		// This will initialize the literal-to-integer mapping.
 		Pattern.parse(grammar, "just testing");
 		List<IPatternMatch> tokens = new Tokenizer().tokenize(grammar, "just testing");
-		assertEquals("[<just:0>, <testing:1>]", tokens.toString());
+		assertEquals("[just, testing]", tokens.toString());
 	}
 	
 	@Test
@@ -30,7 +30,7 @@ public class TestTokenizer
 		// This will initialize the literal-to-integer mapping.
 		Pattern.parse(grammar, "testing 123");
 		List<IPatternMatch> tokens = new Tokenizer().tokenize(grammar, "testing123");
-		assertEquals("[<testing:0>, <123:1>]", tokens.toString());
+		assertEquals("[testing, 123]", tokens.toString());
 	}
 	
 	@Test
@@ -40,6 +40,6 @@ public class TestTokenizer
 		// This will initialize the literal-to-integer mapping.
 		Pattern.parse(grammar, "testing ( 123 )");
 		List<IPatternMatch> tokens = new Tokenizer().tokenize(grammar, "testing(123)");
-		assertEquals("[<testing:0>, <(:1>, <123:2>, <):3>]", tokens.toString());
+		assertEquals("[testing, (, 123, )]", tokens.toString());
 	}
 }

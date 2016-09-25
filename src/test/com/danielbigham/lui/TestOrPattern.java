@@ -17,6 +17,6 @@ public class TestOrPattern
 		Grammar grammar = new Grammar();
 		OrPattern pattern = OrPattern.create(grammar, "apple|orange|banana", RESULT_SYMBOL);
 		
-		assertEquals("(<apple:0>|<orange:1>|<banana:2>)", pattern.toString());
+		assertEquals("(apple|orange|banana)", pattern.toString());
 	}
 }

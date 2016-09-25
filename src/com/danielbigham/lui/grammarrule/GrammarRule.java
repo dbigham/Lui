@@ -68,7 +68,7 @@ public class GrammarRule
 	{
 		StringBuilder str = new StringBuilder();
 		
-		str.append("<").append(resultSymbol).append(":").append(resultSymbolInt).append(">")
+		str.append(resultSymbol)
 			.append(":\n    ")
 				.append(pattern.toString())
 			.append("\n        ")

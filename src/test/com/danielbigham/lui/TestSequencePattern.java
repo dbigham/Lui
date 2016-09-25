@@ -18,6 +18,6 @@ public class TestSequencePattern
 		Grammar grammar = new Grammar();
 		SequencePattern pattern = SequencePattern.create(grammar, "just just testing", RESULT_SYMBOL);
 		
-		assertEquals("{<just:0> <just:0> <testing:1>}", pattern.toString());
+		assertEquals("{just just testing}", pattern.toString());
 	}
 }

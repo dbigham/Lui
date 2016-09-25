@@ -8,7 +8,7 @@
 Test[
 	WUtils`WUtils`CapturePrint[Lui`Parse`CreateGrammar["Test", "start -> hello"]]
 	,
-	{{"Line 1 column 6: no viable alternative at input 'start->'"}}
+	{{"Line 1 column 6: no viable alternative at input 'start ->'"}}
 	,
 	TestID -> "CreateGrammar-20160709-AMS19Z"
 ]
@@ -17,7 +17,7 @@ Test[
 Test[
 	Lui`Parse`GrammarToAssoc[Lui`Parse`CreateGrammar["Test", "start: hello"]]
 	,
-	<|"Name" -> "Test", "RuleCount" -> 1, "Rules" -> {"<$start:-1>: {<<hello:0>>}"}|>
+	<|"Name" -> "Test", "RuleCount" -> 1, "Rules" -> {"$start: {<hello>}"}|>
 	,
 	TestID -> "CreateGrammar-20160709-LHRS2Y"
 ]

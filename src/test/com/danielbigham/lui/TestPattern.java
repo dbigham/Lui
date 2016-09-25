@@ -20,7 +20,7 @@ public class TestPattern
 		
 		List<IPattern> pattern = Pattern.parse(grammar, "just testing");
 		
-		assertEquals("[<just:0>, <testing:1>]", pattern.toString());
+		assertEquals("[just, testing]", pattern.toString());
 	}
 	
 	// Literals and symbols
@@ -31,6 +31,6 @@ public class TestPattern
 		
 		List<IPattern> pattern = Pattern.parse(grammar, "just $testing");
 		
-		assertEquals("[<just:0>, <$testing:1>]", pattern.toString());
+		assertEquals("[just, $testing]", pattern.toString());
 	}
 }

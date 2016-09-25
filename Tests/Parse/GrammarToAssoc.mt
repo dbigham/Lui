@@ -16,10 +16,10 @@ Test[
 		"RuleCount" -> 3,
 		"Rules" ->
 		{
-			"<$start:-1>: {<<go:0>> <to:1> webpage=<$webpage:2>} -> webpage",
-			"<$webpage:2>: {<<slashdot:3>>} -> \"http://www.slashdot.org\"",
-			"<$1:7>: (<spacex:4>|<spx:5>)",
-			"<$webpage:2>: {<<$1:7>> <reddit:6>} -> TODO"
+			"$start: {<go> to webpage=$webpage} -> webpage",
+			"$webpage: {<slashdot>} -> \"http://www.slashdot.org\"",
+			"$1: (spacex|spx)",
+			"$webpage: {<$1> reddit} -> TODO"
 		}
 	|>
 	,
@@ -39,11 +39,11 @@ Test[
 		"RuleCount" -> 2,
 		"Rules" ->
 		{
-			"<$start:-1>: {<webpage=<$webpage:0>>} -> webpage",
-			"<$1:6>: (<spacex:1>|<spx:2>)",
-			"<$2:7>: {<<web:4>> <page:5>}",
-			"<$3:8>: (<webpage:3>|<$2:7>)",
-			"<$webpage:0>: {<<$1:6>> <$3:8>}"
+			"$start: {<webpage=$webpage>} -> webpage",
+			"$1: (spacex|spx)",
+			"$2: {<web> page}",
+			"$3: (webpage|$2)",
+			"$webpage: {<$1> $3}"
 		}
 	|>
 	,
