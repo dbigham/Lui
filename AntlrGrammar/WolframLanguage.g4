@@ -32,9 +32,9 @@ integer : INTEGER ;
 
 real : REAL ;
 
-INTEGER : DIGITS ;
+INTEGER : '-'? DIGITS ;
 
-REAL : DIGITS '.' DIGITS? ;
+REAL : '-'? DIGITS '.' DIGITS? ;
 
 fragment
 DIGITS : ('0'..'9')+ ;

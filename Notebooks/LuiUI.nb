@@ -10,10 +10,10 @@
 NotebookFileLineBreakTest
 NotebookFileLineBreakTest
 NotebookDataPosition[       158,          7]
-NotebookDataLength[      4585,        115]
-NotebookOptionsPosition[      4210,         97]
-NotebookOutlinePosition[      4551,        112]
-CellTagsIndexPosition[      4508,        109]
+NotebookDataLength[      3506,         94]
+NotebookOptionsPosition[      3196,         78]
+NotebookOutlinePosition[      3537,         93]
+CellTagsIndexPosition[      3494,         90]
 WindowFrame->Normal*)
 
 (* Beginning of Notebook Content *)
@@ -23,19 +23,21 @@ Cell[CellGroupData[{
 Cell[BoxData[
  RowBox[{
   RowBox[{"Get", "[", "\"\<Lui`\>\"", "]"}], ";", " ", 
+  RowBox[{"ReloadFiles", "[", "]"}], ";", " ", 
   RowBox[{"Lui`UI`Lui", "[", "]"}]}]], "Input",
  CellChangeTimes->{{3.6765848266429305`*^9, 3.676584832267493*^9}, {
   3.6765877576853848`*^9, 3.676587758266385*^9}, {3.67986876914653*^9, 
   3.6798687732342377`*^9}, {3.67986954935845*^9, 3.6798695509327416`*^9}, {
   3.6825476556197166`*^9, 3.6825476635415277`*^9}, {3.682547857937076*^9, 
-  3.6825478591019993`*^9}, {3.6825479218876004`*^9, 3.682547922133755*^9}}],
+  3.6825478591019993`*^9}, {3.6825479218876004`*^9, 3.682547922133755*^9}, {
+  3.6837599239115543`*^9, 3.68375992564156*^9}}],
 
 Cell[BoxData[
- DynamicModuleBox[{Lui`UI`Private`input$$ = "dropbox dir", 
+ DynamicModuleBox[{Lui`UI`Private`input$$ = "", 
   Lui`UI`Private`interpHeldVar$$ = HoldComplete[
-  WUtils`WUtils`Private`NewVar`Unique368365947722], 
+  WUtils`WUtils`Private`NewVar`Unique368374557022], 
   Lui`UI`Private`actionResHeldVar$$ = HoldComplete[
-  WUtils`WUtils`Private`NewVar`Unique368365947723]}, 
+  WUtils`WUtils`Private`NewVar`Unique368374557023]}, 
   DynamicBox[ToBoxes[
     ReplaceAll[Lui`UI`Private`interpHeldVar$$, HoldComplete[
        Pattern[Lui`UI`Private`interp$, 
@@ -46,7 +48,7 @@ Cell[BoxData[
           EventHandler[
            InputField[
             Dynamic[Lui`UI`Private`input$$], String, 
-            ImageSize -> {400, Automatic}, FrameMargins -> Medium, BoxID -> 
+            ImageSize -> {450, Automatic}, FrameMargins -> Medium, BoxID -> 
             "LuiInputFieldBoxID24"], {
            "ReturnKeyDown" :> 
             Lui`UI`Private`HandleInput[
@@ -64,38 +66,17 @@ Cell[BoxData[
                Blank[NotebookObject]]]], 
             Lui`UI`Private`displayIfNotNull[Lui`UI`Private`actionResult$], 
             Apply[Sequence, {}]]]}]]], StandardForm],
-   ImageSizeCache->{402., {11., 18.}}],
+   ImageSizeCache->{452., {11., 18.}}],
   DynamicModuleValues:>{}]], "Output",
- CellChangeTimes->{3.683448257231699*^9, 3.683487513587181*^9, 
-  3.68349071461502*^9, 3.683534121423407*^9, 3.6835738398258123`*^9, 
-  3.6835753712166543`*^9, 3.68357805917747*^9, 3.6835863194359007`*^9, 
-  3.683673876223529*^9}]
-}, Open  ]],
-
-Cell[BoxData[
- RowBox[{
-  RowBox[{"CreateIssueNotebook", "[", 
-   RowBox[{"\"\<Name\>\"", " ", "\[Rule]", " ", "\"\<Love\>\""}], "]"}], 
-  ";"}]], "Code",
- InitializationCell->False,
- CellChangeTimes->{{3.6770009609329395`*^9, 3.677000970488677*^9}, {
-   3.6770012618248253`*^9, 3.677001266597372*^9}, {3.677001726670476*^9, 
-   3.677001731472435*^9}, {3.677001819867714*^9, 3.6770018236685624`*^9}, {
-   3.677790321418405*^9, 3.6777903497109175`*^9}, {3.6777904492769656`*^9, 
-   3.677790471724967*^9}, {3.677790668624853*^9, 3.6777907007602415`*^9}, {
-   3.677792151735156*^9, 3.6777921790104885`*^9}, {3.67779270689454*^9, 
-   3.6777927095083947`*^9}, 3.677874856334351*^9, {3.678271938805974*^9, 
-   3.6782719393097043`*^9}, {3.6782727437474327`*^9, 
-   3.6782727442519717`*^9}, {3.6793419886007485`*^9, 
-   3.6793419898031855`*^9}, {3.680462813408258*^9, 3.680462814687668*^9}, {
-   3.6804636797141757`*^9, 3.6804636829056735`*^9}, {3.6806393129175673`*^9, 
-   3.6806393141125345`*^9}, {3.6807202230871267`*^9, 
-   3.6807202240740175`*^9}, {3.6807202638089046`*^9, 
-   3.6807202648134947`*^9}, {3.682619822654536*^9, 3.68261983238199*^9}, {
-   3.6834953608165736`*^9, 3.6834953626241803`*^9}, {3.6835742136546125`*^9, 
-   3.6835742140540686`*^9}}]
+ CellChangeTimes->{
+  3.683448257231699*^9, 3.683487513587181*^9, 3.68349071461502*^9, 
+   3.683534121423407*^9, 3.6835738398258123`*^9, 3.6835753712166543`*^9, 
+   3.68357805917747*^9, 3.6835863194359007`*^9, 3.683673876223529*^9, 
+   3.6837597592058506`*^9, 3.6837598135756702`*^9, {3.683759921071015*^9, 
+   3.683759928055928*^9}, {3.6837599603270535`*^9, 3.6837599691943073`*^9}}]
+}, Open  ]]
 },
-WindowSize->{646, 244},
+WindowSize->{646, 328},
 WindowMargins->{{Automatic, -7}, {Automatic, 5}},
 FrontEndVersion->"11.0 for Microsoft Windows (64-bit) (July 28, 2016)",
 StyleDefinitions->"Default.nb"
@@ -112,11 +93,9 @@ CellTagsIndex->{}
 (*NotebookFileOutline
 Notebook[{
 Cell[CellGroupData[{
-Cell[580, 22, 495, 8, 30, "Input"],
-Cell[1078, 32, 1861, 39, 46, "Output"]
-}, Open  ]],
-Cell[2954, 74, 1252, 21, 34, "Code",
- InitializationCell->False]
+Cell[580, 22, 593, 10, 30, "Input"],
+Cell[1176, 34, 2004, 41, 46, "Output"]
+}, Open  ]]
 }
 ]
 *)

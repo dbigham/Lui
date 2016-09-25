@@ -34,9 +34,9 @@ ConsiderFileInterpretation::usage = "ConsiderFileInterpretation  "
 
 EditGrammar::usage = "EditGrammar  "
 
-$ParseForest::usage = "$ParseForest  "
-
 PossibleExpressions::usage = "PossibleExpressions  "
+
+$ParserState::usage = "$ParserState  "
 
 Begin["`Private`"]
 
@@ -67,6 +67,9 @@ Options[LuiParse] =
 }
 LuiParse[input_String, opts:OptionsPattern[]] :=
 	Block[{parse},
+		
+		ReloadFiles[];
+		
 		parse = LuiParse[$Grammar, input, opts];
 		
 		If [Length[parse] > 0,
@@ -76,33 +79,28 @@ LuiParse[input_String, opts:OptionsPattern[]] :=
 		ConsiderFileInterpretation[input]
 	]
 
-LuiParse[g_Grammar, input_String, opts:OptionsPattern[]] :=
-	Block[{state, forest, wlString, prevDebug, debug = TrueQ[OptionValue["Debug"]]},
+LuiParse[g_Grammar, inputIn_String, opts:OptionsPattern[]] :=
+	Block[{state, prevDebug, debug = TrueQ[OptionValue["Debug"]],
+		   input = inputIn},
+		
+		input = StringReplace[input, "\[Rule]" :> "->"];
 		
 		prevDebug = ChartParser`debugFlag;
 		ChartParser`debugFlag = debug;
 		
-		Global`$ParserState = state = ChartParser`parse[g["JavaObject"], input];
+		
+		$ParserState = state = GetParserState[g, input];
 		
 		If [debug && prevDebug === False,
 			ChartParser`debugFlag = False;
 		]; 
 		
-		wlString = state@toWL[];
-		If [StringQ[wlString],
-			Block[{$ContextPath = Join[$ContextPath, {"WUtils`WUtils`"}]},
-				$ParseForest = forest = ToExpression[wlString];
-			];
+		If [!FailureQ[state],
 			If [debug,
-				Print[forest // Indent2];
+				Print[state // Indent2];
 			];
-			If [FailureQ[forest],
-				Message[LuiParse::te];
-				Return[$Failed]
-			];
-			ProcessParseForest[forest]
+			ProcessParseForest[state]
 			,
-			Message[LuiParse::jf];
 			$Failed
 		]
 	]
@@ -278,7 +276,7 @@ GrammarToAssoc[grammar_] :=
 	\maintainer danielb
 *)
 ProcessParseForest[state_] :=
-	Block[{forest, endPos, topLevelNodes, parseForestLookup},
+	Block[{forest, endPos, topLevelNodes, parseForestLookup, res},
 		
 		endPos = state["EndPos"];
 		
@@ -289,12 +287,23 @@ ProcessParseForest[state_] :=
 		   and who's result symbol is the START symbol. *)
 		topLevelNodes = Select[forest, First[#] === {START, 0, endPos} &];
 		
+		res =
 		Lui`Parse`Private`blockParseForestLookup[
 			forest,
 			Flatten[
 				(evaluateRule /@ topLevelNodes[[All, 2;;]])[[All, 1]],
 				1
 			]
+		];
+		
+		If [True,
+			Replace[
+				res,
+				p_PossibleExpressions :> Sequence @@ p,
+				{1}
+			]
+			,
+			res
 		]
 	];
 
@@ -386,16 +395,19 @@ GetParseForest[grammar_, input_] :=
 LuiParse::jf = "The return value from Java wasn't a string as expected.";
 LuiParse::te = "ToExpression returned $Failed on the result from Java.";
 GetParserState[grammar_, input_] :=
-	Block[{state, forest, wlString},
+	Block[{state, state2, wlString},
 		state = ChartParser`parse[grammar["JavaObject"], input];
 		wlString = state@toWL[];
 		If [StringQ[wlString],
-			forest = ToExpression[wlString];
-			If [FailureQ[forest],
+			state2 = ToExpression[wlString];
+			If [FailureQ[state2],
 				Message[LuiParse::te];
 				Return[$Failed]
 			];
-			forest
+			(* What's the best way to deal with this? Should it be done
+			   on the Java side of things? *)
+			state2["Forest"] = DeleteDuplicates[state2["Forest"]];
+			state2
 			,
 			Message[LuiParse::jf];
 			$Failed

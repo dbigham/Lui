@@ -17,26 +17,40 @@ start:
 	
 	add ling|linguistic -> AddLinguistic[]
 	
-	efunc $function -> EditFunction[function]
+	~edit $function -> EditFunction[function]
+	
+	ling=($quotedString|$id) "->" $url -> AddLinguistic[ling, "webpage", url]
+	
+	$url -> URL[url]
+	
+	run tests -> RunUnitTests[FileNameDrop[FindFile["Lui`"], -2]]
 
 file:
 	$id
 	a=$id "." b=$id -> StringJoin[a, ".", b]
+	wl -> "WolframLanguage.g4"
 
 function:
 	$id
-		If[Names[id] =!= List[], ToExpression[id], $Failed] 
+		If[Names[id] =!= List[], ToExpression[id], $Failed]
+	~function $function
+	$function ~function
 
 notebook:
 	spacex -> "SpaceX.nb"
 	lui -> "Lui.nb"
 	create ~function -> "CreateFunction.nb"
+	debug input -> "DebugInput.nb"
 
 directory:
 	lui -> $LuiDir
+	issues -> FileNameJoin[{$DropboxDir, "Notebooks"}]
 
 webpage:
 	(spacex|spx) reddit -> "https://www.reddit.com/r/spacex/"
+	twins monthly photos -> "https://www.facebook.com/daniel.bigham/media_set?set=a.10154061489747959.1073741837.599027958&type=3"
+	"olive's" monthly photos -> "https://www.facebook.com/daniel.bigham/media_set?set=a.10154061498762959.1073741838.599027958&type=3"
+	"emma's" monthly photos -> "https://www.facebook.com/daniel.bigham/media_set?set=a.10154061501277959.1073741839.599027958&type=3"
 
 ~function: function|func
 

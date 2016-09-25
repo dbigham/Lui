@@ -12,6 +12,7 @@ import com.danielbigham.io.Out;
 import com.danielbigham.lui.patternmatch.IPatternMatch;
 import com.danielbigham.lui.patternmatch.PatternMatchWrapper;
 import com.danielbigham.lui.regex.IdParser;
+import com.danielbigham.lui.regex.QuotedStringParser;
 import com.danielbigham.lui.regex.RegexParser;
 import com.danielbigham.lui.regex.UrlParser;
 
@@ -31,6 +32,7 @@ public class ChartParser
 		regexParsers = new ArrayList<RegexParser>();
 		regexParsers.add(new IdParser());
 		regexParsers.add(new UrlParser());
+		regexParsers.add(new QuotedStringParser());
 	}
 
 	public static ParserState parse(Grammar grammar, String str)

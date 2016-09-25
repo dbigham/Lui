@@ -10,10 +10,15 @@ Test[
 	]
 	,
 	<|
-		"EndPos" -> 1,
+		"EndPos" -> 3,
 		"Forest" ->
 		{
-			{{-1, 0, 1}, "E", HoldComplete["Hey!"], {{{0, 0, 0}, "L", Null}, {{1, 1, 1}, "L", Null}}},
+			{
+				{-1, 0, 3},
+				"E",
+				HoldComplete[HoldComplete["Hey!"]],
+				{{{0, 0, 1}, "L", Null}, {{1, 2, 3}, "L", Null}}
+			},
 			Null
 		}
 	|>

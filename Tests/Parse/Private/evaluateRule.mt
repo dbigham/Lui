@@ -54,7 +54,7 @@ Test[
 		]
 	]
 	,
-	{{3}, <||>}
+	{3, <||>}
 	,
 	TestID -> "evaluateRule-20160911-YXHSE8"
 ]
@@ -78,7 +78,7 @@ Test[
 		]
 	]
 	,
-	{{Null}, <|HoldComplete[a] -> {1}|>}
+	{Null, <|HoldComplete[a] -> {1}|>}
 	,
 	TestID -> "evaluateRule-20160911-QT15L3"
 ]

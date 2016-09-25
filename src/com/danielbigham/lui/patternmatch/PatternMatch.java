@@ -4,11 +4,9 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import com.danielbigham.io.Out;
 import com.danielbigham.lui.Chart;
 import com.danielbigham.lui.Grammar;
 import com.danielbigham.lui.ParserState;
-import com.danielbigham.lui.pattern.BasicPattern;
 import com.danielbigham.lui.pattern.IPattern;
 import com.danielbigham.lui.pattern.SymbolPattern;
 
