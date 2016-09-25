@@ -32,7 +32,7 @@ public interface IFileLoader
 	/**
 	 * The given file was removed.
 	 */
-	public void fileRemoved(Path path);
+	public void fileRemoved(Path path) throws IOException;
 
 	/**
 	 * Called once all of the files have been visited/loaded.

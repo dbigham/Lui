@@ -121,4 +121,10 @@ public interface IPatternMatch
 	 * @param newEnd		the new end position.
 	 */
 	public void setStartEnd(int newStart, int newEnd);
+	
+	/**
+	 * The semantic expression associated with this pattern match, if
+	 * applicable. (null otherwise)
+	 */
+	public String expr();
 }

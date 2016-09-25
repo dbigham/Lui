@@ -279,7 +279,10 @@ public class Chart
 		}
 		partials.add(new PatternMatchWrapper(match, iterationCounter));
 		
-		Out.print(match.toString() + " -> Partials\n  End: " + endPos + "\n  Symbol: " + symbol);
+		if (ChartParser.debugFlag)
+		{
+			Out.print(match.toString() + " -> Partials\n  End: " + endPos + "\n  Symbol: " + symbol);
+		}
 	}
 	
 	/**

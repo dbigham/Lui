@@ -250,7 +250,7 @@ public class TestChartParser
 		assertEquals(
 			1,
 			parses(
-				"start: $ID and $ID",
+				"start: $id and $id",
 				"one and two"
 			)
 		);
@@ -263,7 +263,7 @@ public class TestChartParser
 		assertEquals(
 			1,
 			parses(
-				"start: $URL",
+				"start: $url",
 				"http://www.danielbigham.ca"
 			)
 		);

@@ -13,4 +13,12 @@ public interface RegexParser
 	 * Returns the list of grammar symbols used by this parser.
 	 */
 	public List<String> grammarSymbols();
+	
+	/**
+	 * Takes the matched substring and turns it into a semantic expression.
+	 * 
+	 * @param str		the matched substring.
+	 * @return			a semantic expression.
+	 */
+	public String toExpression(String str);
 }

@@ -1,23 +1,44 @@
 start:
 	a=$webpage -> SystemOpen[a]
+	
 	~new ~nb name=($id|$quotedString)
 		CreateNotebook[name]
+	
 	open ~nb name=($id|$quotedString)
 		OpenNotebook[name]
+	
 	name=$notebook -> OpenNotebook[name]
-	$directory ~dir -> SystemOpen[dir]
+	
+	dir=$directory ~dir -> SystemOpen[dir]
+	
+	~edit grammar -> EditGrammar[]
+	
+	~edit $file -> EditFile[file]
+
+file:
+	a=$id "." b=$id -> File[a, b] 
+
 notebook:
 	spacex -> "SpaceX.nb"
 	lui -> "Lui.nb"
+
 directory:
 	lui -> $LuiDir
+
 webpage:
 	(spacex|spx) reddit -> "https://www.reddit.com/r/spacex/"
+
 ~new:
 	(create|new)
+
 ~nb:
 	(notebook|nb)
+
 ~dir:
 	(directory|dir)
+
 ~open:
 	(open|go|display)
+
+~edit:
+	edit|e

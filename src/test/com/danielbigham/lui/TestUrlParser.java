@@ -2,6 +2,7 @@ package test.com.danielbigham.lui;
 
 import org.junit.Test;
 
+import com.danielbigham.lui.GrammarSymbols;
 import com.danielbigham.lui.regex.UrlParser;
 
 public class TestUrlParser extends TestRegexParser
@@ -9,7 +10,7 @@ public class TestUrlParser extends TestRegexParser
 	@Override
 	protected void setUp() throws Exception
 	{
-		super.setUp(new UrlParser(), "$URL"); 
+		super.setUp(new UrlParser(), GrammarSymbols.URL); 
 	}
 	
 	@Test

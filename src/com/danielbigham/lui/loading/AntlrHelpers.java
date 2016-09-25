@@ -11,7 +11,6 @@ import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 
 import com.danielbigham.lui.Grammar;
-import com.danielbigham.lui.Tokenizer;
 import com.danielbigham.lui.antlr.DescriptiveErrorListener;
 import com.danielbigham.lui.antlr.GrammarLexer;
 import com.danielbigham.lui.antlr.GrammarParser;
@@ -205,7 +204,7 @@ public class AntlrHelpers
 	 * @param pattern	the rule's pattern.
 	 * @return			the action to use. (possibly null)
 	 */
-	private static String defaultAction(SequencePattern pattern)
+	public static String defaultAction(SequencePattern pattern)
 	{
 		// Any sub-patterns that are symbol patterns that have
 		// a binding?

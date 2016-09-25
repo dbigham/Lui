@@ -30,12 +30,14 @@ public abstract class BasicPattern implements IPattern, IPatternMatch
 	protected int endPos;
 	protected String type;
 	protected String binding;
+	protected String expr;
 	
 	BasicPattern(int startPos, int endPos, String type)
 	{
 		this.startPos = startPos;
 		this.endPos = endPos;
 		this.type = type;
+		this.expr = null;
 	}
 	
 	/**
@@ -215,12 +217,7 @@ public abstract class BasicPattern implements IPattern, IPatternMatch
 	
 	public String toString(Grammar grammar)
 	{
-		String str = toString();
-		if (binding != null)
-		{
-			str = binding + "=" + str;
-		}
-		return str;
+		return toStringHelper(toString());
 	}
 	
 	public void setBinding(String binding)
@@ -241,26 +238,27 @@ public abstract class BasicPattern implements IPattern, IPatternMatch
 	{
 		if (binding != null)
 		{
-			return binding + "=" + str;
+			str = binding + "=" + str;
 		}
-		else
+		if (expr != null)
 		{
-			return str;
+			str = str + "=" + expr;
 		}
+		return str;
 	}
 	
 	@Override
 	public void toWL(StringBuilder wl, ParserState state)
 	{
-		// Do we need to return basic tokens that are at
-		// the bottom of the parse forest?
-//		wl.append("{");
-//		wl.append(tokenId).append(",");
-//		wl.append(startPos).append(",");
-//		wl.append(endPos).append(",");
-//		wl.append("Null").append(",");
-//		wl.append("},");
-		return;
+		if (expr != null)
+		{
+			wl.append("{{");
+			wl.append(tokenId).append(",");
+			wl.append(startPos).append(",");
+			wl.append(endPos).append("},");
+			wl.append(expr).append("");
+			wl.append("},");
+		}
 	}
 	
 	@Override
@@ -292,5 +290,19 @@ public abstract class BasicPattern implements IPattern, IPatternMatch
 	{
 		this.startPos = newStart;
 		this.endPos = newEnd;
+	}
+	
+	@Override
+	public String expr()
+	{
+		return expr;
+	}
+	
+	/**
+	 * Specify the semantic expression associated with this pattern match.
+	 */
+	public void setExpr(String expr)
+	{
+		this.expr = expr;
 	}
 }

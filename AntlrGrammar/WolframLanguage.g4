@@ -9,6 +9,7 @@ expr:	string												# EString
 	|	expr ws* ARROW ws* expr								# ERule
 	|	'{' ws* expr ws* (',' ws* expr ws*)* '}'			# EList
 	|	expr '[' ws* expr ws* (',' ws* expr ws*)* ']' ws*	# EHeadedExpr
+	|	expr '[' ws* ']' ws*								# EHeadedExpr
 	|	expr ws* '^' ws* expr								# EPower
 	|	expr ws* '*' ws* expr								# ETimes
 	|	expr ws* '/' ws* expr								# EDivide

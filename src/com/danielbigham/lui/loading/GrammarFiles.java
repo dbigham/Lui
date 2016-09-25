@@ -3,6 +3,7 @@ package com.danielbigham.lui.loading;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.List;
 
 import com.danielbigham.io.Out;
@@ -20,12 +21,14 @@ import com.danielbigham.lui.grammarrule.GrammarRule;
  */
 public class GrammarFiles implements IFileLoader
 {
-	private Thread fileWatcherThread;
+	private FileLoaderAndReloader fileWatcherThread;
 	private Grammar grammar;
+	private final List<Path> allFiles;
 	
 	public GrammarFiles(Path baseDir, Grammar grammar) throws IOException
 	{
 		this.grammar = grammar;
+		this.allFiles = new ArrayList<Path>();
 		fileWatcherThread = new FileLoaderAndReloader(baseDir, this);
 		fileWatcherThread.run();
 	}
@@ -33,8 +36,41 @@ public class GrammarFiles implements IFileLoader
 	public GrammarFiles(String baseDir, Grammar grammar) throws IOException
 	{
 		this.grammar = grammar;
+		this.allFiles = new ArrayList<Path>();
 		fileWatcherThread = new FileLoaderAndReloader(Paths.get(baseDir), this);
 		fileWatcherThread.start();
+	}
+	
+	/**
+	 * Reloads the entire grammar.
+	 * 
+	 * For now, whenever a file is modified/created/removed, we just
+	 * reload the whole grammar. Once grammars gets large, we would want
+	 * to be more sophisticated than this. ie. Remove the old version of
+	 * a rule and add a new version of a rule. (ie. diff old version of file
+	 * to new version of file)
+	 * 
+	 * @throws IOException 
+	 */
+	private void reloadAll() throws IOException
+	{
+		grammar.init();
+		for (Path path : allFiles)
+		{
+			class RuleHandler implements IRuleHandler
+			{
+				@Override
+				public void handle(GrammarRulesContext rules)
+				{
+					List<GrammarRule> luiRules = AntlrHelpers.convert(rules, grammar);
+					grammar.addRules(luiRules);
+				}
+			}
+			
+			AntlrHelpers.loadGrammarFile(path, new RuleHandler());
+		}
+		
+		grammar.processRules();
 	}
 	
 	/**
@@ -50,7 +86,9 @@ public class GrammarFiles implements IFileLoader
 	{
 		if (isGrammarFile(path))
 		{
-			Out.print("Load file: " + path);
+			//Out.print("Load file: " + path);
+			
+			allFiles.add(path);
 			
 			class RuleHandler implements IRuleHandler
 			{
@@ -72,21 +110,10 @@ public class GrammarFiles implements IFileLoader
 	{
 		if (isGrammarFile(path))
 		{
-			Out.print("--------------------------------------------------------------------------------");
-			Out.print("File modified: " + path);
+			//Out.print("--------------------------------------------------------------------------------");
+			//Out.print("File modified: " + path);
 			
-			class RuleHandler implements IRuleHandler
-			{
-				@Override
-				public void handle(GrammarRulesContext rules)
-				{
-					List<GrammarRule> luiRules = AntlrHelpers.convert(rules, grammar);
-					
-					//Out.print("TODO: Reload file.");
-				}
-			}
-			
-			AntlrHelpers.loadGrammarFile(path, new RuleHandler());
+			reloadAll();
 		}
 	}
 
@@ -95,16 +122,20 @@ public class GrammarFiles implements IFileLoader
 	{
 		if (isGrammarFile(path))
 		{
+			allFiles.add(path);
 			Out.print("File created: " + path);
+			reloadAll();
 		}
 	}
 
 	@Override
-	public void fileRemoved(Path path)
+	public void fileRemoved(Path path) throws IOException
 	{
 		if (isGrammarFile(path))
 		{
+			allFiles.remove(path);
 			Out.print("File removed: " + path);
+			reloadAll();
 		}
 	}
     

@@ -26,6 +26,14 @@ $GrammarFile::usage = "$GrammarFile  "
 
 Dir::usage = "Dir  "
 
+InitializeParser::usage = "InitializeParser  "
+
+$Grammar::usage = "$Grammar  "
+
+ConsiderFileInterpretation::usage = "ConsiderFileInterpretation  "
+
+EditGrammar::usage = "EditGrammar  "
+
 Begin["`Private`"]
 
 $GrammarDir = FileNameJoin[{$LuiDir, "Grammar"}];
@@ -49,57 +57,39 @@ START = -1;
 	
 	\maintainer danielb
 *)
-LuiParse[input_String] :=
-	Block[{},
-		If [False,
-			Switch[
-				input,
-				
-				"time",
-				HoldComplete[Date[]]
-				,
-				"spacex reddit",
-				HoldComplete[SystemOpen["https://www.reddit.com/r/spacex/"]]
-				,
-				"hello",
-				HoldComplete["Hello, world!"]
-				,
-				_,
-				HoldComplete["?"]
-			]
+Options[LuiParse] =
+{
+	"Debug" -> False			(*< Debug output? *)
+}
+LuiParse[input_String, opts:OptionsPattern[]] :=
+	Block[{parse},
+		parse = LuiParse[$Grammar, input, opts];
+		
+		If [Length[parse] > 0,
+			Return[First[parse]];
 		];
 		
-		Block[{dir},
-			dir = "E:\\Users\\" <> $UserName <> "\\Dropbox\\Maluuba\\Notebooks";
-			If [!FileExistsQ[dir],
-				dir = "C:\\Users\\" <> $UserName <> "\\Dropbox\\Maluuba\\Notebooks";
-			];
-			With[{textFile = FileNameJoin[{dir, input <> ".txt"}]},
-				If [FileExistsQ[textFile],
-					SystemOpen[textFile]
-					,
-					If [ResolveIssueNotebook[input] =!= $Failed,
-						HoldComplete @ OpenNotebook[input]
-						,
-						With[{matchingFiles = FileNames[input <> "*", dir]},
-							If [Length[matchingFiles] > 0,
-								SystemOpen[matchingFiles[[1]]]
-								,
-								HoldComplete @ $Failed
-							]
-						]
-					]
-				]
-			]
-		]
+		ConsiderFileInterpretation[input]
 	]
 
-LuiParse[g_Grammar, input_String] :=
-	Block[{state, forest, wlString},
+LuiParse[g_Grammar, input_String, opts:OptionsPattern[]] :=
+	Block[{state, forest, wlString, prevDebug, debug = TrueQ[OptionValue["Debug"]]},
+		
+		prevDebug = ChartParser`debugFlag;
+		ChartParser`debugFlag = debug;
+		
 		Global`$ParserState = state = ChartParser`parse[g["JavaObject"], input];
+		
+		If [debug && prevDebug === False,
+			ChartParser`debugFlag = False;
+		]; 
+		
 		wlString = state@toWL[];
 		If [StringQ[wlString],
 			forest = ToExpression[wlString];
+			If [debug,
+				Print[forest // Indent2];
+			];
 			If [FailureQ[forest],
 				Message[LuiParse::te];
 				Return[$Failed]
@@ -725,6 +715,69 @@ evaluateRule[type_, action_, children_List] :=
 		];
 		XPrint["res: ", res];
 		res
+	];
+
+(*!
+	\function InitializeParser
+	
+	\calltable
+		InitializeParser[] '' loads the grammar, etc.
+	
+	\maintainer danielb
+*)
+InitializeParser[] :=
+	Block[{},
+		$Grammar = CreateGrammar["Lui", Dir[$GrammarDir]]
+	];
+
+(*!
+	\function ConsiderFileInterpretation
+	
+	\calltable
+		ConsiderFileInterpretation[input] '' considers whether the input is referring to a notebook file or text file, etc.
+	
+	\maintainer danielb
+*)
+ConsiderFileInterpretation[input_String] :=
+	Block[{},
+		Block[{dir},
+			dir = "E:\\Users\\" <> $UserName <> "\\Dropbox\\Maluuba\\Notebooks";
+			If [!FileExistsQ[dir],
+				dir = "C:\\Users\\" <> $UserName <> "\\Dropbox\\Maluuba\\Notebooks";
+			];
+			With[{textFile = FileNameJoin[{dir, input <> ".txt"}]},
+				If [FileExistsQ[textFile],
+					SystemOpen[textFile]
+					,
+					If [ResolveIssueNotebook[input] =!= $Failed,
+						HoldComplete @ OpenNotebook[input]
+						,
+						With[{matchingFiles = FileNames[input <> "*", dir]},
+							If [Length[matchingFiles] > 0,
+								SystemOpen[matchingFiles[[1]]]
+								,
+								HoldComplete @ $Failed
+							]
+						]
+					]
+				]
+			]
+		]
+	];
+
+(*!
+	\function EditGrammar
+	
+	\calltable
+		EditGrammar[] '' edit the LUI grammar.
+	
+	\related '
+	
+	\maintainer danielb
+*)
+EditGrammar[] :=
+	Block[{},
+		OpenFileInWorkbench[$GrammarFile]
 	];
 
 End[]

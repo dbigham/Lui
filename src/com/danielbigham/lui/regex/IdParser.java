@@ -8,7 +8,7 @@ public class IdParser extends RegexParserBase
 {
 	public IdParser()
 	{
-		pattern = Pattern.compile("[A-Za-z][A-Za-z0-9]+");
+		pattern = Pattern.compile("[A-Za-z][A-Za-z0-9]*");
 		symbols.add(GrammarSymbols.ID);
 	}
 }

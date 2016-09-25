@@ -86,4 +86,16 @@ public class SymbolPattern extends BasicPattern implements IPatternMatch
 	{
 		return false;
 	}
+
+	public String symbolName()
+	{
+		if (!Character.isLetter(symbol.charAt(0)))
+		{
+			return symbol.substring(1);
+		}
+		else
+		{
+			return symbol;
+		}
+	}
 }

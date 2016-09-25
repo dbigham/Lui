@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import com.danielbigham.io.Out;
 import com.danielbigham.lui.Grammar;
 import com.danielbigham.lui.pattern.SymbolPattern;
 import com.danielbigham.lui.patternmatch.IPatternMatch;
@@ -27,7 +26,12 @@ public abstract class RegexParserBase implements RegexParser
 		while (matcher.find())
 		{
 			//Out.print(this.getClass().getCanonicalName() + " regex match: " + matcher.start() + " to " + matcher.end() + ": " + str.substring(matcher.start(), matcher.end()));
-			tokens.add(new SymbolPattern(grammar, symbols.get(0), matcher.start(), matcher.end() - 1, false));
+			SymbolPattern patternMatch = new SymbolPattern(grammar, symbols.get(0), matcher.start(), matcher.end() - 1, false);
+			
+			String substr = str.substring(matcher.start(), matcher.end());
+			patternMatch.setExpr(toExpression(substr));
+			
+			tokens.add(patternMatch);
 		}
 	}
 
@@ -35,5 +39,11 @@ public abstract class RegexParserBase implements RegexParser
 	public List<String> grammarSymbols()
 	{
 		return symbols;
+	}
+	
+	@Override
+	public String toExpression(String str)
+	{
+		return str;
 	}
 }

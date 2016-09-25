@@ -176,7 +176,14 @@ public class FileLoaderAndReloader extends Thread
 					if (!Files.isDirectory(path, LinkOption.NOFOLLOW_LINKS))
 					{
 						// File deleted
-						fileLoader.fileRemoved(path);
+						try
+						{
+							fileLoader.fileRemoved(path);
+						}
+						catch (IOException e)
+						{
+							e.printStackTrace();
+						}
 					}
 				}
 				else if (kind == StandardWatchEventKinds.ENTRY_MODIFY)

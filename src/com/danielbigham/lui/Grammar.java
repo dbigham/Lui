@@ -2,8 +2,10 @@ package com.danielbigham.lui;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import com.danielbigham.io.Out;
 import com.danielbigham.lui.grammarrule.GrammarRule;
@@ -11,6 +13,7 @@ import com.danielbigham.lui.loading.AntlrHelpers;
 import com.danielbigham.lui.pattern.BasicPattern;
 import com.danielbigham.lui.pattern.IPattern;
 import com.danielbigham.lui.pattern.Pattern;
+import com.danielbigham.lui.pattern.SymbolPattern;
 import com.danielbigham.lui.patternmatch.IPatternMatch;
 
 /**
@@ -56,17 +59,9 @@ public class Grammar
 	
 	public Grammar()
 	{
-		triggers = new HashMap<Integer, List<IPattern>>();
-		tokenIds = new HashMap<String, Integer>();
-		tokenIdToSymbolOrLiteral = new HashMap<Integer, String>();
-		tokenCounter = 0;
-		dynamicRuleCounter = 0;
-		finalPatterns = new ArrayList<IPattern>();
-		finalPatternsToResultSymbol = new HashMap<IPattern, Integer>();
-		tokenizer = new Tokenizer();
+		init();
 		
-		tokenIds.put("$start", ChartParser.START_SYMBOL);
-		tokenIdToSymbolOrLiteral.put(ChartParser.START_SYMBOL, "$start");
+		tokenizer = new Tokenizer();
 	}
 	
 	/**
@@ -122,6 +117,8 @@ public class Grammar
 		// Ensure all of the grammar symbols used by regex parsers are defined.
 		ChartParser.defineRegexParserSymbols(this);
 		
+		defaultBindings();
+		
 		if (debugFlag)
 		{
 			for (IPattern pattern : finalPatterns)
@@ -140,6 +137,47 @@ public class Grammar
 		finalPatternsToResultSymbol = null;
 		
 		return res;
+	}
+
+	/**
+	 * Add default bindings to patterns so that for example:
+	 * 
+	 * start: go to $directory -> SystemOpen[directory]
+	 * 
+	 * ... works.
+	 */
+	private void defaultBindings()
+	{
+		for (IPattern pattern : finalPatterns)
+		{
+			defaultBindings(pattern);
+		}
+	}
+
+	private void defaultBindings(IPattern pattern)
+	{
+		Set<String> userSpecifiedBindings = new HashSet<String>();
+		for (IPattern subPattern : pattern.patterns())
+		{
+			if (subPattern.getBinding() != null)
+			{
+				userSpecifiedBindings.add(subPattern.getBinding());
+			}
+		}
+		
+		for (IPattern subPattern : pattern.patterns())
+		{
+			if (subPattern instanceof SymbolPattern &&
+				subPattern.getBinding() == null &&
+				!"D".equals(subPattern.getType())) {
+				
+				String symbolName = ((SymbolPattern)subPattern).symbolName();
+				if (!userSpecifiedBindings.contains(symbolName))
+				{
+					subPattern.setBinding(symbolName);
+				}
+			}
+		}
 	}
 
 	/**
@@ -346,7 +384,8 @@ public class Grammar
 			tokenIds.put(str, id);
 			tokenIdToSymbolOrLiteral.put(id, str);
 		}
-		
+	
+		//Out.print(str + " -> " + id);
 		return id;
 	}
 	
@@ -397,5 +436,22 @@ public class Grammar
 	public Tokenizer getTokenizer()
 	{
 		return tokenizer;
+	}
+
+	/**
+	 * Initialize or reset a grammar.
+	 */
+	public void init()
+	{
+		triggers = new HashMap<Integer, List<IPattern>>();
+		tokenIds = new HashMap<String, Integer>();
+		tokenIdToSymbolOrLiteral = new HashMap<Integer, String>();
+		tokenCounter = 0;
+		dynamicRuleCounter = 0;
+		finalPatterns = new ArrayList<IPattern>();
+		finalPatternsToResultSymbol = new HashMap<IPattern, Integer>();
+		
+		tokenIds.put("$start", ChartParser.START_SYMBOL);
+		tokenIdToSymbolOrLiteral.put(ChartParser.START_SYMBOL, "$start");
 	}
 }

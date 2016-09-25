@@ -2,6 +2,7 @@ package test.com.danielbigham.lui;
 
 import org.junit.Test;
 
+import com.danielbigham.lui.GrammarSymbols;
 import com.danielbigham.lui.regex.QuotedStringParser;
 
 public class TestQuotedStringParser extends TestRegexParser
@@ -9,13 +10,13 @@ public class TestQuotedStringParser extends TestRegexParser
 	@Override
 	protected void setUp() throws Exception
 	{
-		super.setUp(new QuotedStringParser(), "$QuotedString"); 
+		super.setUp(new QuotedStringParser(), GrammarSymbols.QuotedString); 
 	}
 	
 	@Test
 	public void test1()
 	{
-		doTest("\"quoted string\"");
+		testExpression("\"quoted string\"", "\"quoted string\"");
 	}
 	
 	@Test

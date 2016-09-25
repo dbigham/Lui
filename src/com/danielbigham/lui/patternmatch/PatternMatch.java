@@ -120,6 +120,19 @@ public abstract class PatternMatch implements IPatternMatch
 		wl.append(pattern.getType()).append("\",");
 		wl.append("HoldComplete[");
 		String action = pattern.getAction();
+		
+		String dynamicBinding = null;
+		
+		if (action == null && this instanceof OrPatternMatch)
+		{
+			// This is an OR sub-pattern. Set it's 'action' to the semantic expression
+			// of the alternative that did match.
+			action = getMatchedSubPatterns().get(0).getBinding();
+			if (action == null) {
+				dynamicBinding = action = "auto";
+			}
+		}
+		
 		wl.append(action == null ? "Null" : action).append("],");
 
 		// Children
@@ -140,6 +153,10 @@ public abstract class PatternMatch implements IPatternMatch
 			wl.append(subMatchEndPos).append("},\"");
 			wl.append(subPattern.getType()).append("\",");
 			String binding = subPattern.getBinding();
+			if (binding == null && dynamicBinding != null)
+			{
+				binding = dynamicBinding;
+			}
 			if (binding == null)
 			{
 				wl.append("Null");

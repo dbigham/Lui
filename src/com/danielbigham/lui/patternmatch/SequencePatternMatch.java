@@ -245,4 +245,10 @@ public class SequencePatternMatch extends PatternMatch
 			throw new UnsupportedOperationException();
 		}
 	}
+	
+	@Override
+	public String expr()
+	{
+		return null;
+	}
 }
