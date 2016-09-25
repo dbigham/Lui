@@ -375,4 +375,14 @@ public interface GrammarListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitWs(GrammarParser.WsContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link GrammarParser#wsn}.
+	 * @param ctx the parse tree
+	 */
+	void enterWsn(GrammarParser.WsnContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link GrammarParser#wsn}.
+	 * @param ctx the parse tree
+	 */
+	void exitWsn(GrammarParser.WsnContext ctx);
 }

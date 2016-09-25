@@ -38,6 +38,8 @@ PossibleExpressions::usage = "PossibleExpressions  "
 
 $ParserState::usage = "$ParserState  "
 
+HeldHead::usage = "HeldHead  "
+
 Begin["`Private`"]
 
 $GrammarDir = FileNameJoin[{$LuiDir, "Grammar"}];
@@ -51,6 +53,8 @@ b: TWO -> 2
 
 (* The start symbol. *)
 START = -1;
+
+Attributes[HeldHead] = {HoldAllComplete};
 
 (*!
 	\function LuiParse
@@ -803,6 +807,7 @@ EditGrammar[] :=
 	Block[{},
 		OpenFileInWorkbench[$GrammarFile]
 	];
+
 
 End[]
 

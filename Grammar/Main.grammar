@@ -24,6 +24,23 @@ start:
 	$url -> URL[url]
 	
 	run tests -> RunUnitTests[FileNameDrop[FindFile["Lui`"], -2]]
+	
+	create $sourceFile ~function name=$id "[" $funcArgs "]" $quotedString
+		HeldHead[CreateFunctionInFile][
+			FindFile[sourceFile], 
+			StringJoin[name, "[", Riffle[funcArgs, ", "], "]"],
+			"Description" -> quotedString
+		]
+		
+	work on $function -> WorkOn["Function", function]
+
+sourceFile:
+	parse -> "Lui`Parse`"
+	wutil|wutils -> "WUtils`WUtils`"
+
+funcArgs:
+	$id -> {id}
+	$funcArgs "," $id -> Append[funcArgs, id]
 
 file:
 	$id
@@ -31,8 +48,7 @@ file:
 	wl -> "WolframLanguage.g4"
 
 function:
-	$id
-		If[Names[id] =!= List[], ToExpression[id], $Failed]
+	$id -> StringToSymbol[id]
 	~function $function
 	$function ~function
 
@@ -53,6 +69,7 @@ webpage:
 	"emma's" monthly photos -> "https://www.facebook.com/daniel.bigham/media_set?set=a.10154061501277959.1073741839.599027958&type=3"
 
 ~function: function|func
+~func: ~function
 
 ~new: create|new
 

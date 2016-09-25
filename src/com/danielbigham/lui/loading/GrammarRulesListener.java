@@ -38,6 +38,7 @@ import com.danielbigham.lui.antlr.GrammarParser.StringContext;
 import com.danielbigham.lui.antlr.GrammarParser.SymbolContext;
 import com.danielbigham.lui.antlr.GrammarParser.WlSymbolContext;
 import com.danielbigham.lui.antlr.GrammarParser.WsContext;
+import com.danielbigham.lui.antlr.GrammarParser.WsnContext;
 
 /**
  * Class that can be passed in to the ANTLR parser such that
@@ -499,6 +500,20 @@ public class GrammarRulesListener implements GrammarListener
 
 	@Override
 	public void exitEEqual(EEqualContext ctx)
+	{
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void enterWsn(WsnContext ctx)
+	{
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void exitWsn(WsnContext ctx)
 	{
 		// TODO Auto-generated method stub
 		

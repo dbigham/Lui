@@ -2,6 +2,8 @@ grammar Common;
 
 ws: OTHER_WS | INDENT | DOUBLE_INDENT ;
 
+wsn: NEWLINE | OTHER_WS | INDENT | DOUBLE_INDENT ;
+
 COLON : ':' ;
 
 EQUALS : '=' ;

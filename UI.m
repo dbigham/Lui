@@ -115,7 +115,7 @@ HandleInput[input_, interpHeldVar_, actionResHeldVar_] :=
 		
 		SetHeldVar[interpHeldVar, interpretation];
 		
-		actionResult = ReleaseHold[interpretation];
+		actionResult = ReleaseHold[interpretation /. HeldHead[h_] :> h];
 		SetHeldVar[actionResHeldVar, actionResult];
 		
 		(*
@@ -140,8 +140,16 @@ HandleInput[input_, interpHeldVar_, actionResHeldVar_] :=
 *)
 Clear[formatInterpretation];
 formatInterpretation[HoldComplete[str_String]] := str
-formatInterpretation[other_] := ToStringHeld[other]
-	
+formatInterpretation[other_] :=
+	If [!FreeQ[other, HeldHead],
+		StringReplace[
+			Indent2[ReleaseHold[other], "RemoveHold" -> True],
+			"HeldHead[" ~~ inner:Shortest[__] ~~ "]" :> inner
+		] 
+		,
+		Indent2[other, "RemoveHold" -> True]
+	]
+
 (*!
 	\function displayIfNotNull
 	
@@ -152,7 +160,7 @@ formatInterpretation[other_] := ToStringHeld[other]
 	
 	\maintainer danielb
 *)
-displayIfNotNull[val_, formatFunc_:Identity] :=
+displayIfNotNull[val_, formatFunc_:Indent2] :=
 	Block[{},
 		If [val === Null,
 			Sequence @@ {}
