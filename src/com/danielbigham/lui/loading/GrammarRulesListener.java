@@ -9,6 +9,7 @@ import com.danielbigham.lui.antlr.GrammarParser.BasicRulePart2Context;
 import com.danielbigham.lui.antlr.GrammarParser.BasicRulePartContext;
 import com.danielbigham.lui.antlr.GrammarParser.BindingContext;
 import com.danielbigham.lui.antlr.GrammarParser.EDivideContext;
+import com.danielbigham.lui.antlr.GrammarParser.EEqualContext;
 import com.danielbigham.lui.antlr.GrammarParser.EHeadedExprContext;
 import com.danielbigham.lui.antlr.GrammarParser.EIntegerContext;
 import com.danielbigham.lui.antlr.GrammarParser.EListContext;
@@ -16,9 +17,11 @@ import com.danielbigham.lui.antlr.GrammarParser.EPlusContext;
 import com.danielbigham.lui.antlr.GrammarParser.EPowerContext;
 import com.danielbigham.lui.antlr.GrammarParser.ERealContext;
 import com.danielbigham.lui.antlr.GrammarParser.ERuleContext;
+import com.danielbigham.lui.antlr.GrammarParser.ESameQContext;
 import com.danielbigham.lui.antlr.GrammarParser.EStringContext;
 import com.danielbigham.lui.antlr.GrammarParser.ESymbolContext;
 import com.danielbigham.lui.antlr.GrammarParser.ETimesContext;
+import com.danielbigham.lui.antlr.GrammarParser.EUnsameQContext;
 import com.danielbigham.lui.antlr.GrammarParser.End_of_ruleContext;
 import com.danielbigham.lui.antlr.GrammarParser.GrammarRuleContext;
 import com.danielbigham.lui.antlr.GrammarParser.GrammarRulesContext;
@@ -454,6 +457,48 @@ public class GrammarRulesListener implements GrammarListener
 
 	@Override
 	public void exitRulePart2(RulePart2Context ctx)
+	{
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void enterEUnsameQ(EUnsameQContext ctx)
+	{
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void exitEUnsameQ(EUnsameQContext ctx)
+	{
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void enterESameQ(ESameQContext ctx)
+	{
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void exitESameQ(ESameQContext ctx)
+	{
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void enterEEqual(EEqualContext ctx)
+	{
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void exitEEqual(EEqualContext ctx)
 	{
 		// TODO Auto-generated method stub
 		

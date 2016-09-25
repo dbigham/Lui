@@ -60,7 +60,7 @@ Lui[] :=
 							InputField[
 								Dynamic[input],
 								String,
-								ImageSize -> {400, Automatic},
+								ImageSize -> {450, Automatic},
 								(*ReturnEntersInput -> False,*)
 								FrameMargins -> Medium,
 								BoxID -> boxId

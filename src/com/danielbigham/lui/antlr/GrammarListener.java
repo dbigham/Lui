@@ -170,18 +170,6 @@ public interface GrammarListener extends ParseTreeListener {
 	 */
 	void exitETimes(GrammarParser.ETimesContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code EPlus}
-	 * labeled alternative in {@link GrammarParser#expr}.
-	 * @param ctx the parse tree
-	 */
-	void enterEPlus(GrammarParser.EPlusContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code EPlus}
-	 * labeled alternative in {@link GrammarParser#expr}.
-	 * @param ctx the parse tree
-	 */
-	void exitEPlus(GrammarParser.EPlusContext ctx);
-	/**
 	 * Enter a parse tree produced by the {@code EInteger}
 	 * labeled alternative in {@link GrammarParser#expr}.
 	 * @param ctx the parse tree
@@ -194,42 +182,6 @@ public interface GrammarListener extends ParseTreeListener {
 	 */
 	void exitEInteger(GrammarParser.EIntegerContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code EDivide}
-	 * labeled alternative in {@link GrammarParser#expr}.
-	 * @param ctx the parse tree
-	 */
-	void enterEDivide(GrammarParser.EDivideContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code EDivide}
-	 * labeled alternative in {@link GrammarParser#expr}.
-	 * @param ctx the parse tree
-	 */
-	void exitEDivide(GrammarParser.EDivideContext ctx);
-	/**
-	 * Enter a parse tree produced by the {@code EPower}
-	 * labeled alternative in {@link GrammarParser#expr}.
-	 * @param ctx the parse tree
-	 */
-	void enterEPower(GrammarParser.EPowerContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code EPower}
-	 * labeled alternative in {@link GrammarParser#expr}.
-	 * @param ctx the parse tree
-	 */
-	void exitEPower(GrammarParser.EPowerContext ctx);
-	/**
-	 * Enter a parse tree produced by the {@code ESymbol}
-	 * labeled alternative in {@link GrammarParser#expr}.
-	 * @param ctx the parse tree
-	 */
-	void enterESymbol(GrammarParser.ESymbolContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code ESymbol}
-	 * labeled alternative in {@link GrammarParser#expr}.
-	 * @param ctx the parse tree
-	 */
-	void exitESymbol(GrammarParser.ESymbolContext ctx);
-	/**
 	 * Enter a parse tree produced by the {@code ERule}
 	 * labeled alternative in {@link GrammarParser#expr}.
 	 * @param ctx the parse tree
@@ -241,18 +193,6 @@ public interface GrammarListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitERule(GrammarParser.ERuleContext ctx);
-	/**
-	 * Enter a parse tree produced by the {@code EString}
-	 * labeled alternative in {@link GrammarParser#expr}.
-	 * @param ctx the parse tree
-	 */
-	void enterEString(GrammarParser.EStringContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code EString}
-	 * labeled alternative in {@link GrammarParser#expr}.
-	 * @param ctx the parse tree
-	 */
-	void exitEString(GrammarParser.EStringContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code EList}
 	 * labeled alternative in {@link GrammarParser#expr}.
@@ -277,6 +217,102 @@ public interface GrammarListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitEHeadedExpr(GrammarParser.EHeadedExprContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code EUnsameQ}
+	 * labeled alternative in {@link GrammarParser#expr}.
+	 * @param ctx the parse tree
+	 */
+	void enterEUnsameQ(GrammarParser.EUnsameQContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code EUnsameQ}
+	 * labeled alternative in {@link GrammarParser#expr}.
+	 * @param ctx the parse tree
+	 */
+	void exitEUnsameQ(GrammarParser.EUnsameQContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code EPlus}
+	 * labeled alternative in {@link GrammarParser#expr}.
+	 * @param ctx the parse tree
+	 */
+	void enterEPlus(GrammarParser.EPlusContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code EPlus}
+	 * labeled alternative in {@link GrammarParser#expr}.
+	 * @param ctx the parse tree
+	 */
+	void exitEPlus(GrammarParser.EPlusContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code EDivide}
+	 * labeled alternative in {@link GrammarParser#expr}.
+	 * @param ctx the parse tree
+	 */
+	void enterEDivide(GrammarParser.EDivideContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code EDivide}
+	 * labeled alternative in {@link GrammarParser#expr}.
+	 * @param ctx the parse tree
+	 */
+	void exitEDivide(GrammarParser.EDivideContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code ESameQ}
+	 * labeled alternative in {@link GrammarParser#expr}.
+	 * @param ctx the parse tree
+	 */
+	void enterESameQ(GrammarParser.ESameQContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code ESameQ}
+	 * labeled alternative in {@link GrammarParser#expr}.
+	 * @param ctx the parse tree
+	 */
+	void exitESameQ(GrammarParser.ESameQContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code ESymbol}
+	 * labeled alternative in {@link GrammarParser#expr}.
+	 * @param ctx the parse tree
+	 */
+	void enterESymbol(GrammarParser.ESymbolContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code ESymbol}
+	 * labeled alternative in {@link GrammarParser#expr}.
+	 * @param ctx the parse tree
+	 */
+	void exitESymbol(GrammarParser.ESymbolContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code EPower}
+	 * labeled alternative in {@link GrammarParser#expr}.
+	 * @param ctx the parse tree
+	 */
+	void enterEPower(GrammarParser.EPowerContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code EPower}
+	 * labeled alternative in {@link GrammarParser#expr}.
+	 * @param ctx the parse tree
+	 */
+	void exitEPower(GrammarParser.EPowerContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code EString}
+	 * labeled alternative in {@link GrammarParser#expr}.
+	 * @param ctx the parse tree
+	 */
+	void enterEString(GrammarParser.EStringContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code EString}
+	 * labeled alternative in {@link GrammarParser#expr}.
+	 * @param ctx the parse tree
+	 */
+	void exitEString(GrammarParser.EStringContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code EEqual}
+	 * labeled alternative in {@link GrammarParser#expr}.
+	 * @param ctx the parse tree
+	 */
+	void enterEEqual(GrammarParser.EEqualContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code EEqual}
+	 * labeled alternative in {@link GrammarParser#expr}.
+	 * @param ctx the parse tree
+	 */
+	void exitEEqual(GrammarParser.EEqualContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code EReal}
 	 * labeled alternative in {@link GrammarParser#expr}.

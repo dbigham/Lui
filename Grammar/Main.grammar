@@ -2,7 +2,7 @@ start:
 	a=$webpage -> SystemOpen[a]
 	
 	~new ~nb name=($id|$quotedString)
-		CreateNotebook[name]
+		CreateIssueNotebook["Name" -> name]
 	
 	open ~nb name=($id|$quotedString)
 		OpenNotebook[name]
@@ -14,13 +14,23 @@ start:
 	~edit grammar -> EditGrammar[]
 	
 	~edit $file -> EditFile[file]
+	
+	add ling|linguistic -> AddLinguistic[]
+	
+	efunc $function -> EditFunction[function]
 
 file:
-	a=$id "." b=$id -> File[a, b] 
+	$id
+	a=$id "." b=$id -> StringJoin[a, ".", b]
+
+function:
+	$id
+		If[Names[id] =!= List[], ToExpression[id], $Failed] 
 
 notebook:
 	spacex -> "SpaceX.nb"
 	lui -> "Lui.nb"
+	create ~function -> "CreateFunction.nb"
 
 directory:
 	lui -> $LuiDir
@@ -28,17 +38,14 @@ directory:
 webpage:
 	(spacex|spx) reddit -> "https://www.reddit.com/r/spacex/"
 
-~new:
-	(create|new)
+~function: function|func
 
-~nb:
-	(notebook|nb)
+~new: create|new
 
-~dir:
-	(directory|dir)
+~nb: notebook|nb
 
-~open:
-	(open|go|display)
+~dir: directory|dir
 
-~edit:
-	edit|e
+~open: open|"go to"|display
+
+~edit: edit|e

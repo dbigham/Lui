@@ -12,7 +12,7 @@ Test[
 		}
 	]
 	,
-	{4, 6, 5, 7}
+	Lui`Parse`PossibleExpressions[4, 6, 5, 7]
 	,
 	TestID -> "evaluateAction-20160709-K0PISL"
 ]
@@ -30,7 +30,18 @@ Test[
 		]
 	]
 	,
-	{11, 13, 13, 15, 12, 14, 14, 16}
+	Lui`Parse`PossibleExpressions[11, 13, 13, 15, 12, 14, 14, 16]
 	,
 	TestID -> "evaluateAction-20160709-IDS5UQ"
+]
+
+Test[
+	Lui`Parse`Private`evaluateAction[
+		HoldComplete[a],
+		{HoldComplete[a] -> {HoldComplete[{"x", "y"}]}}
+	]
+	,
+	{"x", "y"}
+	,
+	TestID -> "evaluateAction-20160924-AFWKZY"
 ]

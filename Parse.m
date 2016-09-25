@@ -34,6 +34,10 @@ ConsiderFileInterpretation::usage = "ConsiderFileInterpretation  "
 
 EditGrammar::usage = "EditGrammar  "
 
+$ParseForest::usage = "$ParseForest  "
+
+PossibleExpressions::usage = "PossibleExpressions  "
+
 Begin["`Private`"]
 
 $GrammarDir = FileNameJoin[{$LuiDir, "Grammar"}];
@@ -86,7 +90,9 @@ LuiParse[g_Grammar, input_String, opts:OptionsPattern[]] :=
 		
 		wlString = state@toWL[];
 		If [StringQ[wlString],
-			forest = ToExpression[wlString];
+			Block[{$ContextPath = Join[$ContextPath, {"WUtils`WUtils`"}]},
+				$ParseForest = forest = ToExpression[wlString];
+			];
 			If [debug,
 				Print[forest // Indent2];
 			];
@@ -434,7 +440,7 @@ levelToIndent[lvl_] := StringJoin[Table["\t", {lvl}]]
 
 	===
 
-	{4, 6, 5, 7}
+	PossibleExpressions[4, 6, 5, 7]
 
 	Unit tests:
 
@@ -449,14 +455,20 @@ evaluateAction[heldAction_, bindings_] :=
 			ReleaseHold[heldAction]
 			,
 			{Repeated[HoldComplete[_Symbol] -> _List]},
-			(* TODO *)
 			heldAction /. HoldComplete[innerAction_] :>
 				(
 				func =
 					ListOfHeldToHeldList[Keys[bindings]] /. HoldComplete[inner_] :>
 	  					Function[inner, innerAction];
 	  			);
-			func @@@ permuteBindings[bindings]
+			Replace[
+				func @@@ permuteBindings[bindings],
+				{
+					List[arg_] :> arg,
+					List[args__] :> PossibleExpressions[args]
+				},
+				{0}
+			]
 			,
 			_,
 			Print["Unexpected bindings: ", bindings];
@@ -713,7 +725,7 @@ evaluateRule[type_, action_, children_List] :=
 				mergedVariables
 			};
 		];
-		XPrint["res: ", res];
+		XPrint["res: ", type, ": ", res];
 		res
 	];
 
