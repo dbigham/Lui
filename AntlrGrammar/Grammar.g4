@@ -6,15 +6,19 @@ grammarRules: (ws | NEWLINE)* grammarRule (grammarRule)* (ws | NEWLINE)* ;
 
 end_of_rule: ws* ((NEWLINE ws*)+|EOF) ;
 
-grammarRule:	lhs ws* COLON ws* (rulePart3 ws*)+ NEWLINE INDENT expr end_of_rule
-	|			lhs ws* COLON ws* (rulePart3 ws*)+ ARROW ws* expr end_of_rule
-	|			lhs ws* COLON ws* (rulePart3 ws*)+ end_of_rule
+grammarRule:	lhs ws* COLON ws* rulePattern NEWLINE INDENT expr end_of_rule
+	|			lhs ws* COLON ws* rulePattern ARROW ws* expr end_of_rule
+	|			lhs ws* COLON ws* rulePattern end_of_rule
 	|			lhs ws* COLON? ws* (NEWLINE (ws* NEWLINE)* INDENT simpleRule ws*)+ end_of_rule
 	;
 
-simpleRule:		(rulePart3 ws?)+
-	|			(rulePart3 ws?)+ ARROW ws? expr ws?
-	|			(rulePart3 ws?)+ NEWLINE DOUBLE_INDENT expr ws?
+simpleRule:		rulePattern
+	|			rulePattern ARROW ws? expr ws?
+	|			rulePattern NEWLINE DOUBLE_INDENT expr ws?
+	;
+	
+rulePattern:
+	(rulePart3 ws?)+
 	;
 
 lhs: ID | symbol ;

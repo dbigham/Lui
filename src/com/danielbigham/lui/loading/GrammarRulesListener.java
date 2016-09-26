@@ -32,6 +32,7 @@ import com.danielbigham.lui.antlr.GrammarParser.OrRulePartContext;
 import com.danielbigham.lui.antlr.GrammarParser.RealContext;
 import com.danielbigham.lui.antlr.GrammarParser.RulePart2Context;
 import com.danielbigham.lui.antlr.GrammarParser.RulePart3Context;
+import com.danielbigham.lui.antlr.GrammarParser.RulePatternContext;
 import com.danielbigham.lui.antlr.GrammarParser.SeqRulePartContext;
 import com.danielbigham.lui.antlr.GrammarParser.SimpleRuleContext;
 import com.danielbigham.lui.antlr.GrammarParser.StringContext;
@@ -64,7 +65,7 @@ public class GrammarRulesListener implements GrammarListener
 	@Override
 	public void exitGrammarRules(GrammarRulesContext ctx)
 	{
-		ruleHandler.handle(ctx);
+		if (ruleHandler != null) { ruleHandler.handle(ctx); }
 	}
 
 	@Override
@@ -514,6 +515,20 @@ public class GrammarRulesListener implements GrammarListener
 
 	@Override
 	public void exitWsn(WsnContext ctx)
+	{
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void enterRulePattern(RulePatternContext ctx)
+	{
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void exitRulePattern(RulePatternContext ctx)
 	{
 		// TODO Auto-generated method stub
 		

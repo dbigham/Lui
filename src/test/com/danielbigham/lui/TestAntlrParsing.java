@@ -1,6 +1,6 @@
 package test.com.danielbigham.lui;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 
 import java.util.List;
 
@@ -184,5 +184,12 @@ public class TestAntlrParsing
 	private static List<GrammarRule> parseGrammar(String grammarRules)
 	{
 		return AntlrHelpers.parseGrammar(grammarRules);
+	}
+	
+	@Test
+	public void test19()
+	{
+		assertTrue(AntlrHelpers.isSimpleRule("one -> 1"));
+		assertFalse(AntlrHelpers.isSimpleRule(":"));
 	}
 }

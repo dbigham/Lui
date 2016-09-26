@@ -48,6 +48,16 @@ public interface GrammarListener extends ParseTreeListener {
 	 */
 	void exitSimpleRule(GrammarParser.SimpleRuleContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link GrammarParser#rulePattern}.
+	 * @param ctx the parse tree
+	 */
+	void enterRulePattern(GrammarParser.RulePatternContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link GrammarParser#rulePattern}.
+	 * @param ctx the parse tree
+	 */
+	void exitRulePattern(GrammarParser.RulePatternContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link GrammarParser#lhs}.
 	 * @param ctx the parse tree
 	 */

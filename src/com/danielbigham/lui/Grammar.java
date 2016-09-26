@@ -527,11 +527,29 @@ public class Grammar
 		return symbol + "::" + expression;
 	}
 	
+	/**
+	 * Sets the linguistic for a certain grammar symbol and expression.
+	 * For example, the linguistics associated with a webpage.
+	 * 
+	 * @param symbol		The grammar symbol.
+	 * @param expression	The semantic expression.
+	 * @param linguistic	The linguistic.
+	 * 
+	 * @throws Exception
+	 */
 	public void setLinguistic(String symbol, String expression, String linguistic) throws Exception
 	{
+		symbol = symbol.trim();
+		expression = expression.trim();
+		
 		//Out.print("setLinguistic: " + symbol + ", " + expression);
 		
 		String newRule = linguistic + " -> " + expression;
+		
+		if (!AntlrHelpers.isSimpleRule(newRule))
+		{
+			throw new Exception("Invalid rule: " + newRule);
+		}
 		
 		String key = objectFileSpanKey(symbol, expression);
 		FilePositionSpan fileSpan = objectFileSpan.get(key);

@@ -7,6 +7,7 @@ import java.util.List;
 
 import org.antlr.v4.runtime.ANTLRFileStream;
 import org.antlr.v4.runtime.ANTLRInputStream;
+import org.antlr.v4.runtime.BailErrorStrategy;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 
@@ -26,6 +27,7 @@ import com.danielbigham.lui.antlr.GrammarParser.RulePartContext;
 import com.danielbigham.lui.antlr.GrammarParser.SeqRulePartContext;
 import com.danielbigham.lui.antlr.GrammarParser.SimpleRuleContext;
 import com.danielbigham.lui.antlr.GrammarParser.SymbolContext;
+import com.danielbigham.lui.antlr.QuietErrorListener;
 import com.danielbigham.lui.grammarrule.GrammarRule;
 import com.danielbigham.lui.pattern.BasicPattern;
 import com.danielbigham.lui.pattern.IPattern;
@@ -113,7 +115,7 @@ public class AntlrHelpers
 					out.add(
 							convert(
 								lhs,
-								simpleRule.rulePart3(),
+								simpleRule.rulePattern().rulePart3(),
 								action,
 								grammar
 							)
@@ -126,7 +128,7 @@ public class AntlrHelpers
 				out.add(
 					convert(
 						lhs,
-						rule.rulePart3(),
+						rule.rulePattern().rulePart3(),
 						action,
 						grammar
 					)
@@ -451,6 +453,22 @@ public class AntlrHelpers
 			GrammarRulesListener extractor = new GrammarRulesListener(ruleHandler);
 			ParseTreeWalker.DEFAULT.walk(extractor, tree);		
 		}
+	}
+	
+	/**
+	 * Returns true if the given string is a valid simple rule.
+	 * ie. A rule without a grammar symbol.
+	 */
+	public static boolean isSimpleRule(String str)
+	{
+		GrammarLexer lexer = new GrammarLexer(new ANTLRInputStream(str));
+		lexer.addErrorListener(QuietErrorListener.INSTANCE);
+		CommonTokenStream tokens = new CommonTokenStream(lexer);
+		GrammarParser parser = new GrammarParser(tokens);
+		parser.addErrorListener(QuietErrorListener.INSTANCE);
+		parser.setErrorHandler(new BailErrorStrategy());
+		GrammarParser.SimpleRuleContext tree = parser.simpleRule();
+		return tree.exception == null && tree.stop.getStopIndex() == str.length() - 1;
 	}
 
 	/**
