@@ -1,6 +1,5 @@
 package com.danielbigham.lui;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -573,6 +572,32 @@ public class Grammar
 		{
 			//Out.print("  " + filePos);
 			fileSpan.replace(newRule);
+		}
+	}
+	
+	/**
+	 * Gets the linguistic for a certain grammar symbol and expression.
+	 * For example, the linguistics associated with a webpage.
+	 * 
+	 * @param symbol		The grammar symbol.
+	 * @param expression	The semantic expression.
+	 * 
+	 * @throws Exception
+	 */
+	public String getLinguistic(String symbol, String expression) throws Exception
+	{
+		symbol = symbol.trim();
+		expression = expression.trim();
+				
+		String key = objectFileSpanKey(symbol, expression);
+		FilePositionSpan fileSpan = objectFileSpan.get(key);
+		if (fileSpan != null)
+		{
+			return fileSpan.getText().trim();
+		}
+		else
+		{
+			return null;
 		}
 	}
 }

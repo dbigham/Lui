@@ -8,16 +8,19 @@ import com.danielbigham.lui.antlr.GrammarListener;
 import com.danielbigham.lui.antlr.GrammarParser.BasicRulePart2Context;
 import com.danielbigham.lui.antlr.GrammarParser.BasicRulePartContext;
 import com.danielbigham.lui.antlr.GrammarParser.BindingContext;
+import com.danielbigham.lui.antlr.GrammarParser.EAndContext;
 import com.danielbigham.lui.antlr.GrammarParser.EDivideContext;
 import com.danielbigham.lui.antlr.GrammarParser.EEqualContext;
 import com.danielbigham.lui.antlr.GrammarParser.EHeadedExprContext;
 import com.danielbigham.lui.antlr.GrammarParser.EIntegerContext;
 import com.danielbigham.lui.antlr.GrammarParser.EListContext;
+import com.danielbigham.lui.antlr.GrammarParser.EOrContext;
 import com.danielbigham.lui.antlr.GrammarParser.EPlusContext;
 import com.danielbigham.lui.antlr.GrammarParser.EPowerContext;
 import com.danielbigham.lui.antlr.GrammarParser.ERealContext;
 import com.danielbigham.lui.antlr.GrammarParser.ERuleContext;
 import com.danielbigham.lui.antlr.GrammarParser.ESameQContext;
+import com.danielbigham.lui.antlr.GrammarParser.ESetContext;
 import com.danielbigham.lui.antlr.GrammarParser.EStringContext;
 import com.danielbigham.lui.antlr.GrammarParser.ESymbolContext;
 import com.danielbigham.lui.antlr.GrammarParser.ETimesContext;
@@ -529,6 +532,48 @@ public class GrammarRulesListener implements GrammarListener
 
 	@Override
 	public void exitRulePattern(RulePatternContext ctx)
+	{
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void enterESet(ESetContext ctx)
+	{
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void exitESet(ESetContext ctx)
+	{
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void enterEOr(EOrContext ctx)
+	{
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void exitEOr(EOrContext ctx)
+	{
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void enterEAnd(EAndContext ctx)
+	{
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void exitEAnd(EAndContext ctx)
 	{
 		// TODO Auto-generated method stub
 		

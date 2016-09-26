@@ -5,3 +5,5 @@ notebook:
 	debug input -> "DebugInput.nb"
 	aii -> "ai.nb"
 	debug java -> "DebugJava.nb"
+	blah -> "DefineLinguisticHotkey.nb"
+	blah2 -> "DynamicRuleCreation.nb"

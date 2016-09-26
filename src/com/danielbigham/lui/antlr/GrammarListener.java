@@ -228,6 +228,18 @@ public interface GrammarListener extends ParseTreeListener {
 	 */
 	void exitEHeadedExpr(GrammarParser.EHeadedExprContext ctx);
 	/**
+	 * Enter a parse tree produced by the {@code ESet}
+	 * labeled alternative in {@link GrammarParser#expr}.
+	 * @param ctx the parse tree
+	 */
+	void enterESet(GrammarParser.ESetContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code ESet}
+	 * labeled alternative in {@link GrammarParser#expr}.
+	 * @param ctx the parse tree
+	 */
+	void exitESet(GrammarParser.ESetContext ctx);
+	/**
 	 * Enter a parse tree produced by the {@code EUnsameQ}
 	 * labeled alternative in {@link GrammarParser#expr}.
 	 * @param ctx the parse tree
@@ -239,6 +251,18 @@ public interface GrammarListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitEUnsameQ(GrammarParser.EUnsameQContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code EOr}
+	 * labeled alternative in {@link GrammarParser#expr}.
+	 * @param ctx the parse tree
+	 */
+	void enterEOr(GrammarParser.EOrContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code EOr}
+	 * labeled alternative in {@link GrammarParser#expr}.
+	 * @param ctx the parse tree
+	 */
+	void exitEOr(GrammarParser.EOrContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code EPlus}
 	 * labeled alternative in {@link GrammarParser#expr}.
@@ -311,6 +335,18 @@ public interface GrammarListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitEString(GrammarParser.EStringContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code EAnd}
+	 * labeled alternative in {@link GrammarParser#expr}.
+	 * @param ctx the parse tree
+	 */
+	void enterEAnd(GrammarParser.EAndContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code EAnd}
+	 * labeled alternative in {@link GrammarParser#expr}.
+	 * @param ctx the parse tree
+	 */
+	void exitEAnd(GrammarParser.EAndContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code EEqual}
 	 * labeled alternative in {@link GrammarParser#expr}.

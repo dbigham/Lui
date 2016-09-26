@@ -4,20 +4,25 @@ Needs["JLink`"]
 Needs["Lui`Lui`"];
 Needs["WUtils`WUtils`"]
 
-AddLinguistic::usage = "AddLinguistic  "
+DefineLinguistic::usage = "DefineLinguistic  "
 
 Begin["`Private`"]
 
 (*!
-	\function AddLinguistic
+	\function DefineLinguistic
 	
 	\calltable
-		AddLinguistic[] '' adds a linguistic.
+		DefineLinguistic[] '' defines a linguistic.
 	
 	\maintainer danielb
 *)
-AddLinguistic[] :=
-	Block[{input},
+Clear[DefineLinguistic];
+Options[DefineLinguistic] =
+{
+	"Linguistic" -> ""		(*< the default linguistic. *)
+};
+DefineLinguistic[OptionsPattern[]] :=
+	DynamicModule[{input},
 		
 		$addLinguisticBoxId = ToString[Unique["AddLinguisticBoxId"]];
 		
@@ -31,9 +36,12 @@ AddLinguistic[] :=
 			]
 		];
 		
+		input = OptionValue["Linguistic"];
+		input = input /. Null :> "";
+		
 		Column[
 			{
-			Style["Add Linguistic", "Subsection"],
+			Style["Define Linguistic", "Subsection"],
 			With[{boxId = $addLinguisticBoxId},
 				InputField[
 					Dynamic[input],

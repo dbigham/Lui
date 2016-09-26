@@ -3,6 +3,7 @@ BeginPackage["Lui`UI`"]
 Needs["JLink`"];
 Needs["Lui`Lui`"];
 Needs["Lui`Parse`"];
+Needs["Lui`Actions`"];
 Needs["Lui`Util`"];
 Needs["WUtils`WUtils`"];
 
@@ -20,6 +21,14 @@ LuiMiniBoxes::usage = "LuiMiniBoxes  "
 
 SelectedExpression::usage = "SelectedExpression  "
 
+DefineLinguisticHotkey::usage = "DefineLinguistic  "
+
+SetActionRes::usage = "SetActionRes  "
+
+SetInterpretation::usage = "SetInterpretation  "
+
+SetLuiInputField::usage = "SetLuiInputField  "
+
 Begin["`Private`"]
 
 (*!
@@ -31,12 +40,20 @@ Begin["`Private`"]
 	\maintainer danielb
 *)
 Lui[] :=
-	DynamicModule[{input = "", interpHeldVar = NewHeldVar[], actionResHeldVar = NewHeldVar[]},
+	DynamicModule[{input},
+		
+		With[{var = input},
+			$luiInputFieldSymbol = HoldComplete[var];
+		];
+		
+		input = "";
 		
 		$luiInputFieldBoxId = ToString[Unique["LuiInputFieldBoxID"]];
+		$interpHeldVar = NewHeldVar[];
+		$actionResHeldVar = NewHeldVar[];
 		
-		SetHeldVar[interpHeldVar, Null];
-		SetHeldVar[actionResHeldVar, Null];
+		SetHeldVar[$interpHeldVar, Null];
+		SetHeldVar[$actionResHeldVar, Null];
 		
 		StartScheduledTask[
 			CreateScheduledTask[
@@ -50,9 +67,9 @@ Lui[] :=
 		
 		With[{boxId = $luiInputFieldBoxId},
 			Dynamic[
-				interpHeldVar /. HoldComplete[interp_] :>
+				$interpHeldVar /. HoldComplete[interp_] :>
 				(
-				actionResHeldVar /. HoldComplete[actionResult_] :>
+				$actionResHeldVar /. HoldComplete[actionResult_] :>
 				(
 					Column[
 						{
@@ -68,7 +85,7 @@ Lui[] :=
 							{
 								"ReturnKeyDown" :>
 								(
-									HandleInput[input, interpHeldVar, actionResHeldVar]
+									HandleInput[input, $interpHeldVar, $actionResHeldVar]
 								)
 							}
 						],
@@ -160,11 +177,18 @@ formatInterpretation[other_] :=
 	
 	\maintainer danielb
 *)
-displayIfNotNull[val_, formatFunc_:Indent2] :=
-	Block[{},
+displayIfNotNull[val_, formatFuncIn_:Automatic] :=
+	Block[{formatFunc = formatFuncIn},
 		If [val === Null,
 			Sequence @@ {}
 			,
+			If [formatFunc === Automatic,
+				If [!MatchQ[val, _Column | _Row | _Grid | _DynamicModule],
+					formatFunc = Indent2;
+					,
+					formatFunc = Identity;
+				]
+			];
 			Framed[formatFunc[val], FrameMargins -> Medium, FrameStyle -> None]
 		]
 	]
@@ -632,21 +656,84 @@ If [!TrueQ[$luiJavaInitDone],
 	LuiJavaInit[];
 ];
 
-End[]
-
-EndPackage[]
-
 (*!
-	\function MyFunc
+	\function DefineLinguisticHotkey
 	
 	\calltable
-		MyFunc[] '' desc
+		DefineLinguisticHotkey[abc] '' called when hotkey pressed to define a linguistic.
+
+	Examples:
+	
+	DefineLinguisticHotkey[abc] === TODO
 	
 	\related '
 	
 	\maintainer danielb
 *)
-MyFunc[] :=
+Clear[DefineLinguisticHotkey];
+Options[DefineLinguisticHotkey] =
+{
+	"Title" -> None		(*< The window title. *)
+};
+DefineLinguisticHotkey[OptionsPattern[]] :=
+	Block[{title = OptionValue["Title"], file = Null, existingLinguistic},
+		If [!StringFreeQ[title, "Wolfram Mathematica"],
+			StringReplace[
+				title,
+				Shortest[f__] ~~ (" * "|" ") ~~ "- Wolfram Mathematica" ~~ __ :> (file = f)
+			];
+			If [StringQ[file],
+				FocusLuiUI[];
+				existingLinguistic =
+					$Grammar["JavaObject"]@getLinguistic["notebook", ToString[file, InputForm]];
+				SetActionRes[
+					DefineLinguistic["Linguistic" -> existingLinguistic]
+				]
+			]
+		]
+	];
+
+(*!
+	\function SetActionRes
+	
+	\calltable
+		SetActionRes[e] '' sets the LUI UI's action result section.
+	
+	\maintainer danielb
+*)
+SetActionRes[e_] :=
 	Block[{},
-		1
-	]
+		SetHeldVar[$actionResHeldVar, e]
+	];
+
+(*!
+	\function SetInterpretation
+	
+	\calltable
+		SetInterpretation[e] '' sets the LUI UI's interpretation section.
+	
+	\maintainer danielb
+*)
+SetInterpretation[e_] :=
+	Block[{},
+		SetHeldVar[$interpHeldVar, e]
+	];
+
+(*!
+	\function SetLuiInputField
+	
+	\calltable
+		SetLuiInputField[str] '' sets the text in the LUI input field.
+		
+	NOTE: Doesn't seem to be working, not sure how to do this.
+	
+	\maintainer danielb
+*)
+SetLuiInputField[str_] :=
+	Block[{},
+		SetHeldVar[$luiInputFieldSymbol, str]
+	];
+
+End[]
+
+EndPackage[]

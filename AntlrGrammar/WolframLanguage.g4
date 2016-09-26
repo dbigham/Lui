@@ -16,9 +16,12 @@ expr:	string												# EString
 	|	expr wsn* '/' wsn* expr								# EDivide
 	|	expr wsn* '+' wsn* expr								# EPlus
 	|	expr wsn* '-' wsn* expr								# EPlus
+	|	expr wsn* '=' wsn* expr								# ESet
 	|	expr wsn* '==' wsn* expr							# EEqual
 	|	expr wsn* '===' wsn* expr							# ESameQ
-	|	expr wsn* '=!=' wsn* expr							# EUnsameQ	
+	|	expr wsn* '=!=' wsn* expr							# EUnsameQ
+	|	expr wsn* '&&' wsn* expr							# EAnd
+	|	expr wsn* '||' wsn* expr							# EOr
 	;
  
 wlSymbol:

@@ -99,4 +99,14 @@ public class FilePositionSpan
 			Paths.get(file).getFileName().toString() +
 			"@" + start + "-" + end + ">";
 	}
+
+	/**
+	 * Returns the text associated with this span of the file.
+	 * 
+	 * @throws IOException 
+	 */
+	public String getText() throws IOException
+	{
+		return IOHelpers.readFile(Paths.get(file)).substring(start - 1, end + 1);
+	}
 }
