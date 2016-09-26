@@ -71,7 +71,7 @@ public class AntlrHelpers
 	{
 		if (rule != null && rule.lhs() != null)
 		{
-			//if (ChartParser.debugFlag) { Out.print("Parsing Rule; " + rule.lhs().getText()); }
+			//Out.print("Parsing Rule; " + rule.lhs().getText());
 			
 			String lhs = rule.lhs().getText();
 			String action = rule.expr() == null ? null : rule.expr().getText();
@@ -81,10 +81,34 @@ public class AntlrHelpers
 			// This is actually multiple rules in one.
 			if (rule.simpleRule().size() > 0)
 			{
+				// Record where linguistics get defined for this
+				// grammar symbol.
+				if (grammar.symbolSupportsDynamicRuleCreation(lhs))
+				{
+					int start = rule.lhs().start.getStartIndex();
+					int end = rule.lhs().stop.getStopIndex();
+					String file = rule.start.getTokenSource().getSourceName();
+					
+					grammar.setGrammarSymbolFileSpan(
+						lhs, file, start, end);
+				}
+				
 				for (SimpleRuleContext simpleRule : rule.simpleRule())
 				{
 					action = simpleRule.expr() == null ? null : simpleRule.expr().getText();
 					action = processAction(action, lhs);
+					
+					// Record where linguistics get defined for this
+					// grammar symbol + expression.
+					if (grammar.symbolSupportsDynamicRuleCreation(lhs))
+					{
+						int start = simpleRule.start.getStartIndex();
+						int end = simpleRule.stop.getStopIndex();
+						String file = simpleRule.start.getTokenSource().getSourceName();
+						
+						grammar.setObjectFileSpan(
+							lhs, action, file, start, end);
+					}
 					
 					out.add(
 							convert(

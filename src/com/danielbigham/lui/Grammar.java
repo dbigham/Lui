@@ -1,5 +1,6 @@
 package com.danielbigham.lui;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -7,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import com.danielbigham.FilePositionSpan;
 import com.danielbigham.io.Out;
 import com.danielbigham.lui.grammarrule.GrammarRule;
 import com.danielbigham.lui.loading.AntlrHelpers;
@@ -35,7 +37,6 @@ public class Grammar
 	// operations are more efficient than string operations.
 	private Map<String, Integer> tokenIds;
 	private Map<Integer, String> tokenIdToSymbolOrLiteral;
-	
 	private int dynamicRuleCounter;
 	
 	// The following two are used during setPattern's many calls to pattern.explode, then then
@@ -43,17 +44,29 @@ public class Grammar
 	
 	// The final list of patterns after grammar explosion.
 	private List<IPattern> finalPatterns;
-	
 	// Mapping from pattern+symbol -> grammar symbol integer
 	// wrt generating dynamic rules during grammar explosion.
 	// See also: Rule Explosion.md
 	private Map<IPattern, Integer> finalPatternsToResultSymbol;
-
-	private int tokenCounter;
 	
+	private int tokenCounter;
 	private int ruleCount;
-
 	private boolean debugFlag;
+	private static Set<String> symbolsSupportingDynamicRuleCreation;
+	// Given a grammar symbol, is there a particular grammar file
+	// and span within that file where we define linguistics for
+	// objects of that type?
+	private Map<String, FilePositionSpan> grammarSymbolFileSpan;
+	// Given a grammar symbol and expression, is there an existing
+	// file and position in that file where we define its linguistic?
+	private Map<String, FilePositionSpan> objectFileSpan;
+	
+	static
+	{
+		symbolsSupportingDynamicRuleCreation = new HashSet<String>();
+		symbolsSupportingDynamicRuleCreation.add("notebook");
+		symbolsSupportingDynamicRuleCreation.add("sourceFile");
+	}
 
 	private Tokenizer tokenizer;
 	
@@ -450,8 +463,98 @@ public class Grammar
 		dynamicRuleCounter = 0;
 		finalPatterns = new ArrayList<IPattern>();
 		finalPatternsToResultSymbol = new HashMap<IPattern, Integer>();
+		grammarSymbolFileSpan = new HashMap<String, FilePositionSpan>();
+		objectFileSpan = new HashMap<String, FilePositionSpan>();
 		
 		tokenIds.put("$start", ChartParser.START_SYMBOL);
 		tokenIdToSymbolOrLiteral.put(ChartParser.START_SYMBOL, "$start");
+	}
+	
+	/**
+	 * Does the given symbol support the dynamic creation of new rules?
+	 * (and/or the modification of existing ones?) ie. Updating the
+	 * appropriate source file.
+	 */
+	public boolean symbolSupportsDynamicRuleCreation(String symbol)
+	{
+		return symbolsSupportingDynamicRuleCreation.contains(symbol);
+	}
+	
+	/**
+	 * For a given grammar symbol, record the file and the span in
+	 * that file where linguistics for it are defined.
+	 * 
+	 * @param symbol	The grammar symbol.
+	 * @param file		The file.
+	 * @param start		The starting position in the file.
+	 * @param end		The ending position in the file.
+	 */
+	public void setGrammarSymbolFileSpan(String symbol, String file, int start, int end)
+	{
+		FilePositionSpan fileSpan = new FilePositionSpan(file, start, end);
+		grammarSymbolFileSpan.put(symbol, fileSpan);
+		//Out.print("setGrammarSymbolFileSpan: " + symbol + ": " + fileSpan);
+	}
+	
+	/**
+	 * For a given object, record the file and the span in that file where
+	 * linguistics for it are defined.
+	 * 
+	 * @param symbol		The grammar symbol.
+	 * @param expression	The semantic expression.
+	 * @param file			The file.
+	 * @param start			The starting position in the file.
+	 * @param end			The ending position in the file.
+	 */
+	public void setObjectFileSpan(
+		String symbol, String expression, String file, int start, int end)
+	{
+		String key = objectFileSpanKey(symbol, expression);
+		FilePositionSpan fileSpan = new FilePositionSpan(file, start, end);
+		objectFileSpan.put(key, fileSpan);
+		//Out.print("setObjectFileSpan: " + symbol + ", " + expression + ": " + fileSpan);
+	}
+	
+	/**
+	 * Create a hash key for an object. (grammar symbol + expression)
+	 * Used by objectFileSpan.
+	 * 
+	 * @param symbol		The grammar symbol.
+	 * @param expression	The semantic expression.
+	 */
+	private String objectFileSpanKey(String symbol, String expression)
+	{
+		return symbol + "::" + expression;
+	}
+	
+	public void setLinguistic(String symbol, String expression, String linguistic) throws Exception
+	{
+		//Out.print("setLinguistic: " + symbol + ", " + expression);
+		
+		String newRule = linguistic + " -> " + expression;
+		
+		String key = objectFileSpanKey(symbol, expression);
+		FilePositionSpan fileSpan = objectFileSpan.get(key);
+		if (fileSpan == null)
+		{
+			FilePositionSpan grammarSymbolSpan =
+				grammarSymbolFileSpan.get(symbol);
+			
+			if (grammarSymbolSpan != null)
+			{
+				grammarSymbolSpan.replace(symbol + ":\n\t" + newRule, 1);
+			}
+			else
+			{
+				// We don't even have a section yet for this grammar
+				// symbol.
+				throw new Exception("No section yet defined for grammar symbol: " + symbol);
+			}
+		}
+		else
+		{
+			//Out.print("  " + filePos);
+			fileSpan.replace(newRule);
+		}
 	}
 }

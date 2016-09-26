@@ -10,10 +10,10 @@
 NotebookFileLineBreakTest
 NotebookFileLineBreakTest
 NotebookDataPosition[       158,          7]
-NotebookDataLength[      3258,         90]
-NotebookOptionsPosition[      2948,         74]
-NotebookOutlinePosition[      3289,         89]
-CellTagsIndexPosition[      3246,         86]
+NotebookDataLength[      3392,         93]
+NotebookOptionsPosition[      3082,         77]
+NotebookOutlinePosition[      3423,         92]
+CellTagsIndexPosition[      3380,         89]
 WindowFrame->Normal*)
 
 (* Beginning of Notebook Content *)
@@ -35,9 +35,9 @@ Cell[BoxData[
 Cell[BoxData[
  DynamicModuleBox[{Lui`UI`Private`input$$ = "", 
   Lui`UI`Private`interpHeldVar$$ = HoldComplete[
-  WUtils`WUtils`Private`NewVar`Unique368381250858], 
+  WUtils`WUtils`Private`NewVar`Unique368382270431], 
   Lui`UI`Private`actionResHeldVar$$ = HoldComplete[
-  WUtils`WUtils`Private`NewVar`Unique368381250859]}, 
+  WUtils`WUtils`Private`NewVar`Unique368382270432]}, 
   DynamicBox[ToBoxes[
     ReplaceAll[Lui`UI`Private`interpHeldVar$$, HoldComplete[
        Pattern[Lui`UI`Private`interp$, 
@@ -49,7 +49,7 @@ Cell[BoxData[
            InputField[
             Dynamic[Lui`UI`Private`input$$], String, 
             ImageSize -> {450, Automatic}, FrameMargins -> Medium, BoxID -> 
-            "LuiInputFieldBoxID60"], {
+            "LuiInputFieldBoxID33"], {
            "ReturnKeyDown" :> 
             Lui`UI`Private`HandleInput[
              Lui`UI`Private`input$$, Lui`UI`Private`interpHeldVar$$, 
@@ -68,12 +68,15 @@ Cell[BoxData[
             Apply[Sequence, {}]]]}]]], StandardForm],
    ImageSizeCache->{452., {11., 18.}}],
   DynamicModuleValues:>{}]], "Output",
- CellChangeTimes->{3.6838260167133512`*^9, 3.683826136453045*^9, 
-  3.683826450210724*^9, 3.6838265303218193`*^9, 3.683826907182346*^9}]
+ CellChangeTimes->{
+  3.6838260167133512`*^9, 3.683826136453045*^9, 3.683826450210724*^9, 
+   3.6838265303218193`*^9, 3.683826907182346*^9, {3.6838293033668537`*^9, 
+   3.6838293276405783`*^9}, 3.6838298699464025`*^9, 3.6838299396962967`*^9, 
+   3.6838371039588757`*^9}]
 }, Open  ]]
 },
 WindowSize->{646, 328},
-WindowMargins->{{Automatic, -7}, {Automatic, 5}},
+WindowMargins->{{Automatic, -5}, {Automatic, 1}},
 FrontEndVersion->"11.0 for Microsoft Windows (64-bit) (July 28, 2016)",
 StyleDefinitions->"Default.nb"
 ]
@@ -90,7 +93,7 @@ CellTagsIndex->{}
 Notebook[{
 Cell[CellGroupData[{
 Cell[580, 22, 593, 10, 30, "Input"],
-Cell[1176, 34, 1756, 37, 46, "Output"]
+Cell[1176, 34, 1890, 40, 46, "Output"]
 }, Open  ]]
 }
 ]

@@ -52,12 +52,6 @@ function:
 	~function $function
 	$function ~function
 
-notebook:
-	spacex -> "SpaceX.nb"
-	lui -> "Lui.nb"
-	create ~function -> "CreateFunction.nb"
-	debug input -> "DebugInput.nb"
-
 directory:
 	lui -> $LuiDir
 	issues -> FileNameJoin[{$DropboxDir, "Notebooks"}]

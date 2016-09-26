@@ -1,0 +1,7 @@
+notebook:
+	spacex -> "SpaceX.nb"
+	lui -> "Lui.nb"
+	create ~function -> "CreateFunction.nb"
+	debug input -> "DebugInput.nb"
+	aii -> "ai.nb"
+	debug java -> "DebugJava.nb"

@@ -1,6 +1,7 @@
 package com.danielbigham.io;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -35,5 +36,21 @@ public class IOHelpers
 	{
 		byte[] encoded = Files.readAllBytes(path);
 		return new String(encoded, StandardCharsets.UTF_8);
+	}
+	
+	/**
+	 * Writes the string to a file.
+	 * 
+	 * @param path		the file.
+	 * @param str		the string to write.
+	 * 
+	 * @throws IOException
+	 */
+	public static void writeFile(String path, String str) throws IOException
+	{
+		try(PrintWriter out = new PrintWriter(path))
+		{
+		    out.print(str);
+		}
 	}
 }
