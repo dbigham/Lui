@@ -34,6 +34,7 @@ public class LuiHttpServer
 		server = HttpServer.create(new InetSocketAddress(7899), 0);
 		server.createContext("/hotkey", new MyHandler());
 		server.createContext("/define_linguistic", new DefineLinguistic());
+		server.createContext("/create_notebook", new CreateNotebook());
 		server.setExecutor(null);
 		server.start();
 	}
@@ -65,6 +66,12 @@ public class LuiHttpServer
 		}
 	}
 	
+	/**
+	 * Associate a linguistic via hotkey. For example, select a URL in Chrome's address bar
+	 * and press Ctrl-Alt-L.
+	 * 
+	 * @author Daniel
+	 */
 	static class DefineLinguistic implements HttpHandler
 	{
 		@Override
@@ -72,7 +79,32 @@ public class LuiHttpServer
 		{
 			Map<String, String> parms = LuiHttpServer.queryToMap(t.getRequestURI().getQuery());			
 			String title = parms.get("title");
-			callWL("Lui`UI`DefineLinguisticHotkey[\"Title\" -> " + Util.createDoubleQuotedString(title) + "]");
+			String selected = parms.get("selected");
+			callWL(
+				"Lui`UI`DefineLinguisticHotkey["  +
+					"\"Title\" -> " + Util.createDoubleQuotedString(title) + "," +
+					"\"Selected\" -> " + Util.createDoubleQuotedString(selected) +
+				"]");
+			LuiHttpServer.defaultResponse(t);
+		}
+	}
+	
+	/**
+	 * Create a new Mathematica notebook.
+	 * 
+	 * @author Daniel
+	 */
+	static class CreateNotebook implements HttpHandler
+	{
+		@Override
+		public void handle(HttpExchange t) throws IOException
+		{
+			Map<String, String> parms = LuiHttpServer.queryToMap(t.getRequestURI().getQuery());			
+			String name = parms.get("name");
+			callWL(
+				"CreateIssueNotebook["  +
+					"\"Name\" -> " + Util.createDoubleQuotedString(name) +
+				"]");
 			LuiHttpServer.defaultResponse(t);
 		}
 	}

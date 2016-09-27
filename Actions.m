@@ -71,8 +71,7 @@ DefineLinguistic[OptionsPattern[]] :=
 							{exceptionSymbol, messageTag, description},
 							If [StringMatchQ[
 									GetJavaException[]@getClass[]@getCanonicalName[],
-									"org.antlr.v4.runtime.misc.ParseCancellationException" |
-									"java.lang.Exception"
+									"org.antlr.v4.runtime.misc.ParseCancellationException"
 								],
 								SetHeldVar[dynamicOutput, "Invalid linguistic."];
 								failureFlag = True;

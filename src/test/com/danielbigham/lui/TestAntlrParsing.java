@@ -1,11 +1,13 @@
 package test.com.danielbigham.lui;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import java.util.List;
 
 import org.junit.Test;
 
+import com.danielbigham.lui.antlr.GrammarRuleSyntaxError;
 import com.danielbigham.lui.grammarrule.GrammarRule;
 import com.danielbigham.lui.loading.AntlrHelpers;
 
@@ -191,5 +193,26 @@ public class TestAntlrParsing
 	{
 		assertTrue(AntlrHelpers.isSimpleRule("one -> 1"));
 		//assertFalse(AntlrHelpers.isSimpleRule(":"));
+	}
+	
+	// Syntax error
+	@Test(expected=GrammarRuleSyntaxError.class)
+	public void test20()
+	{
+		parseGrammar(":");
+	}
+	
+	// Syntax error
+	@Test
+	public void test21()
+	{
+		try
+		{
+			parseGrammar(":");
+		}
+		catch (Exception e)
+		{
+			assertEquals("Syntax error at line 1, column 0.", e.getMessage());
+		}
 	}
 }

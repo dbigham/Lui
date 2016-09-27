@@ -8,6 +8,10 @@ LuiDir::usage = "LuiDir  "
 
 FileNameToDefaultLinguistic::usage = "FileNameToDefaultLinguistic  "
 
+SplitLinguisticAndAction::usage = "SplitLinguisticAndAction  "
+
+SplitLinguisticAndExpression::usage = "SplitLinguisticAndExpression  "
+
 Begin["`Private`"]
 
 (*!
@@ -54,6 +58,36 @@ LuiDir[] :=
 FileNameToDefaultLinguistic[file_] :=
 	Block[{},
 		ToLowerCase[DeCamelCase[FileBaseName[file]]]
+	];
+
+(*!
+	\function SplitLinguisticAndExpression
+	
+	\calltable
+		SplitLinguisticAndExpression[str] '' splits a linguistic and action into it's two parts.
+
+	Examples:
+	
+	SplitLinguisticAndExpression["my linguistic -> \"My Expression\""] === {"my linguistic", "\"My Expression\""}
+
+	Unit tests:
+
+	RunUnitTests[Lui`Util`SplitLinguisticAndExpression]
+
+	\maintainer danielb
+*)
+SplitLinguisticAndExpression[str_] :=
+	Block[{pattern, expression = Null},
+		pattern =
+			StringReplace[
+				str,
+				Longest[pre__] ~~ "->" ~~ expr__ :>
+					(
+						expression = StringTrim[expr];
+						StringTrim[pre]
+					)
+			];
+		{pattern, expression}
 	];
 
 End[]

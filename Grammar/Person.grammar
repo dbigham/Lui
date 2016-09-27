@@ -1,0 +1,6 @@
+person:
+	meredith | mer
+		Person[
+			"FirstName" -> "Meredith",
+			"Email" -> "meredith.bigham@gmail.com"
+		]

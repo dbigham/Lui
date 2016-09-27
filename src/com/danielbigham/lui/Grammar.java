@@ -65,6 +65,8 @@ public class Grammar
 		symbolsSupportingDynamicRuleCreation = new HashSet<String>();
 		symbolsSupportingDynamicRuleCreation.add("notebook");
 		symbolsSupportingDynamicRuleCreation.add("sourceFile");
+		symbolsSupportingDynamicRuleCreation.add("webpage");
+		symbolsSupportingDynamicRuleCreation.add("directory");
 	}
 
 	private Tokenizer tokenizer;

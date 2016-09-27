@@ -123,7 +123,7 @@ public class GrammarFiles implements IFileLoader
 		if (isGrammarFile(path))
 		{
 			allFiles.add(path);
-			Out.print("File created: " + path);
+			//Out.print("File created: " + path);
 			reloadAll();
 		}
 	}

@@ -29,6 +29,10 @@ SetInterpretation::usage = "SetInterpretation  "
 
 SetLuiInputField::usage = "SetLuiInputField  "
 
+DefineLinguisticHotkeyForNotebook::usage = "DefineLinguisticHotkeyForNotebook  "
+
+DefineLinguisticHotkeyForWebpage::usage = "DefineLinguisticHotkeyForWebpage  "
+
 Begin["`Private`"]
 
 (*!
@@ -673,42 +677,145 @@ If [!TrueQ[$luiJavaInitDone],
 Clear[DefineLinguisticHotkey];
 Options[DefineLinguisticHotkey] =
 {
-	"Title" -> None		(*< The window title. *)
+	"Title" -> None,		(*< The window title. *)
+	"Selected" -> None		(*< The selected text in the window. *)
 };
 DefineLinguisticHotkey[OptionsPattern[]] :=
-	Block[{title = OptionValue["Title"], file = Null, existingLinguistic, expression = Null},
-		If [!StringFreeQ[title, "Wolfram Mathematica"],
-			StringReplace[
-				title,
-				Shortest[f__] ~~ (" * "|" ") ~~ "- Wolfram Mathematica" ~~ __ :> (file = f)
-			];
-			If [StringQ[file],
-				FocusLuiUI[];
-				existingLinguistic =
-					$Grammar["JavaObject"]@getLinguistic["notebook", ToString[file, InputForm]];
-				If [existingLinguistic == Null,
-					existingLinguistic = FileNameToDefaultLinguistic[file];
+	Block[{
+		title = OptionValue["Title"],
+		selected = OptionValue["Selected"],
+		existingLinguistic,
+		res,
+		tmp},
+		
+		XPrint["Title: ", title];
+		XPrint["Selected: ", selected];
+		
+		Which[
+			!StringFreeQ[title, "Wolfram Mathematica"],
+			res =
+				DefineLinguisticHotkeyForNotebook[
+					title,
+					selected
 				];
-				existingLinguistic =
-					StringReplace[
-						existingLinguistic /. Null :> "",
-						Longest[pre__] ~~ "->" ~~ expr__ :>
-							(
-								expression = StringTrim[expr];
-								StringTrim[pre]
-							)
-					];
-				expression = expression /. Null :> ToString[file, InputForm];
-				SetActionRes[
-					DefineLinguistic[
-						"Linguistic" -> existingLinguistic,
-						"Symbol" -> "notebook",
-						"Expression" -> expression,
-						"Title" -> file
-					]
+			,
+			!StringFreeQ[title, "Google Chrome"],
+			res =
+				DefineLinguisticHotkeyForWebpage[
+					title,
+					selected
+				];
+		];
+		
+		If [AssociationQ[res] && !MissingQ[res["Expression"]],
+			FocusLuiUI[];
+			existingLinguistic =
+				$Grammar["JavaObject"]@getLinguistic[
+					res["Symbol"],
+					res["Expression"]
+				];
+			If [existingLinguistic === Null,
+				Which[
+					!MissingQ[res["Linguistic"]],
+					existingLinguistic = res["Linguistic"];
+					,
+					!MissingQ[res["File"]],
+					existingLinguistic = FileNameToDefaultLinguistic[res["File"]];
+				];
+			];
+			existingLinguistic = existingLinguistic /. Null :> "";
+			{existingLinguistic, tmp} = SplitLinguisticAndExpression[existingLinguistic];
+			SetActionRes[
+				DefineLinguistic[
+					"Linguistic" -> existingLinguistic,
+					"Symbol" -> res["Symbol"],
+					"Expression" -> res["Expression"],
+					"Title" -> res["UILabel"]
 				]
 			]
 		]
+	];
+	
+(*!
+	\function DefineLinguisticHotkeyForNotebook
+	
+	\calltable
+		DefineLinguisticHotkeyForNotebook[title, selected] '' called when a hotkey is pressed to define a linguistic for a Mathematica Notebook.
+
+	Example:
+
+	DefineLinguisticHotkeyForNotebook["ai.nb * - Wolfram Mathematica 11.0 (Local)", Null]
+
+	===
+
+	<|
+		"File" -> "ai.nb",
+		"Symbol" -> "notebook",
+		"Expression" -> "\"ai.nb\"",
+		"UILabel" -> "ai.nb"
+	|>
+
+	Unit tests:
+
+	RunUnitTests[Lui`UI`DefineLinguisticHotkeyForNotebook]
+
+	\maintainer danielb
+*)
+Clear[DefineLinguisticHotkeyForNotebook];
+DefineLinguisticHotkeyForNotebook[title_, selected_] :=
+	Block[{existingLinguistic, expression, file = Null},
+		StringReplace[
+			title,
+			Shortest[pre__] ~~ (" * "|" ") ~~ "- Wolfram Mathematica" ~~ __ :> (file = pre)
+		];
+		<|
+			"File" -> file,
+			"Symbol" -> "notebook",
+			"Expression" -> ToString[file, InputForm],
+			"UILabel" -> file
+		|>
+	];
+
+(*!
+	\function DefineLinguisticHotkeyForWebpage
+	
+	\calltable
+		DefineLinguisticHotkeyForWebpage[title, selected] '' called when a hotkey is pressed to define a linguistic for a webpage.
+
+	Examples:
+	
+	DefineLinguisticHotkeyForWebpage[
+		"daniel bigham.ca - Google Chrome",
+		"http://danielbigham.ca"
+	]
+
+	===
+
+	<|
+		"Linguistic" -> "daniel bigham.ca",
+		"Symbol" -> "webpage",
+		"Expression" -> "\"http://danielbigham.ca\"",
+		"UILabel" -> "http://danielbigham.ca"
+	|>
+
+	Unit tests:
+
+	RunUnitTests[Lui`UI`DefineLinguisticHotkeyForWebpage]
+
+	\maintainer danielb
+*)
+DefineLinguisticHotkeyForWebpage[title_, selected_] :=
+	Block[{existingLinguistic, expression, title2 = Null},
+		StringReplace[
+			title,
+			Shortest[pre__] ~~ " - Google Chrome" :> (title2 = StringTrim[pre])
+		];
+		<|
+			"Linguistic" -> title2,
+			"Symbol" -> "webpage",
+			"Expression" -> ToString[selected, InputForm],
+			"UILabel" -> selected
+		|>
 	];
 
 (*!

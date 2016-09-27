@@ -1,4 +1,5 @@
 notebook:
+	specific impulse -> "SpecificImpulse.nb"
 	define linguistic hotkey -> "DefineLinguisticHotkey.nb"
 	spacex -> "SpaceX.nb"
 	lui -> "Lui.nb"

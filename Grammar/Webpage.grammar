@@ -1,0 +1,12 @@
+webpage:
+	tesla -> "https://www.reddit.com/r/teslamotors/"
+	futurism -> "http://futurism.com/"
+	futurology | futureology | future -> "https://www.reddit.com/r/Futurology"
+	the verge | verge -> "http://www.theverge.com/"
+	slashdot | slash | "/." -> "https://slashdot.org/"
+	pse -> "http://209.239.12.84/Daniel/search.htm"
+	dbca | my ~webpage -> "http://danielbigham.ca/"
+	(spacex|spx) reddit -> "https://www.reddit.com/r/spacex/"
+	twins monthly photos -> "https://www.facebook.com/daniel.bigham/media_set?set=a.10154061489747959.1073741837.599027958&type=3"
+	"olive's" monthly photos -> "https://www.facebook.com/daniel.bigham/media_set?set=a.10154061498762959.1073741838.599027958&type=3"
+	"emma's" monthly photos -> "https://www.facebook.com/daniel.bigham/media_set?set=a.10154061501277959.1073741839.599027958&type=3"

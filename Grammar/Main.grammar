@@ -1,4 +1,10 @@
 start:
+	email $person -> ComposeEmail["To" -> person]
+	email $person subject=$quotedString
+		ComposeEmail["To" -> person, "Subject" -> subject]
+
+	hello|hey|hi -> "Hello!"
+
 	a=$webpage -> SystemOpen[a]
 	
 	~new ~nb name=($id|$quotedString)
@@ -65,12 +71,6 @@ directory:
 	lui -> $LuiDir
 	issues -> FileNameJoin[{$DropboxDir, "Notebooks"}]
 
-webpage:
-	(spacex|spx) reddit -> "https://www.reddit.com/r/spacex/"
-	twins monthly photos -> "https://www.facebook.com/daniel.bigham/media_set?set=a.10154061489747959.1073741837.599027958&type=3"
-	"olive's" monthly photos -> "https://www.facebook.com/daniel.bigham/media_set?set=a.10154061498762959.1073741838.599027958&type=3"
-	"emma's" monthly photos -> "https://www.facebook.com/daniel.bigham/media_set?set=a.10154061501277959.1073741839.599027958&type=3"
-
 ~function: function|func|fn
 ~func: ~function
 
@@ -83,3 +83,5 @@ webpage:
 ~open: open|"go to"|display
 
 ~edit: edit|e
+
+~webpage: webpage|website

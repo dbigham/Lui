@@ -4,6 +4,13 @@ public class Util
 {
 	public static String createDoubleQuotedString(String str)
 	{
-		return "\"" + str.replace("\\", "\\\\").replace("\"", "\\\"") + "\"";
+		if (str == null)
+		{
+			return "Null";
+		}
+		else
+		{
+			return "\"" + str.replace("\\", "\\\\").replace("\"", "\\\"") + "\"";
+		}
 	}
 }

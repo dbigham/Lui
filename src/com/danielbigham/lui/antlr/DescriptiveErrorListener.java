@@ -4,8 +4,6 @@ import org.antlr.v4.runtime.BaseErrorListener;
 import org.antlr.v4.runtime.RecognitionException;
 import org.antlr.v4.runtime.Recognizer;
 
-import com.danielbigham.io.Out;
-
 /**
  * Error listener for ANTLR that will allow us to direct output elsewhere,
  * such as to the WL notebook.
@@ -19,16 +17,17 @@ public class DescriptiveErrorListener extends BaseErrorListener
 	public static DescriptiveErrorListener INSTANCE = new DescriptiveErrorListener();
 
 	@Override
-	public void syntaxError(Recognizer<?, ?> recognizer, Object offendingSymbol,
-							int line, int charPositionInLine,
-							String msg, RecognitionException e)
+	public void syntaxError(
+		Recognizer<?, ?> recognizer,
+		Object offendingSymbol,
+		int line,
+		int charPositionInLine,
+		String msg,
+		RecognitionException e)
 	{
 		String sourceName = recognizer.getInputStream().getSourceName();
-		
-		if (!sourceName.isEmpty()) {
-			sourceName = String.format("%s:%d:%d: ", sourceName, line, charPositionInLine);
-		}
+		throw new GrammarRuleSyntaxError(sourceName, line, charPositionInLine, msg);
 
-		Out.print("Line " + line + " column " + charPositionInLine + ": " + msg);
+		//Out.print("Line " + line + " column " + charPositionInLine + ": " + msg);
 	}
 }
