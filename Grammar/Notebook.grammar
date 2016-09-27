@@ -1,9 +1,8 @@
 notebook:
+	define linguistic hotkey -> "DefineLinguisticHotkey.nb"
 	spacex -> "SpaceX.nb"
 	lui -> "Lui.nb"
 	create ~function -> "CreateFunction.nb"
 	debug input -> "DebugInput.nb"
 	aii -> "ai.nb"
 	debug java -> "DebugJava.nb"
-	blah -> "DefineLinguisticHotkey.nb"
-	blah2 -> "DynamicRuleCreation.nb"

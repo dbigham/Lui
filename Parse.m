@@ -28,8 +28,6 @@ Dir::usage = "Dir  "
 
 InitializeParser::usage = "InitializeParser  "
 
-$Grammar::usage = "$Grammar  "
-
 ConsiderFileInterpretation::usage = "ConsiderFileInterpretation  "
 
 EditGrammar::usage = "EditGrammar  "

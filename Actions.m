@@ -19,10 +19,17 @@ Begin["`Private`"]
 Clear[DefineLinguistic];
 Options[DefineLinguistic] =
 {
-	"Linguistic" -> ""		(*< the default linguistic. *)
+	"Linguistic" -> "",				(*< the default linguistic. *)
+	"Symbol" -> None,				(*< the grammar symbol. *)
+	"Expression" -> Null,			(*< the semantic expression. *)
+	"Title" -> "Define Linguistic"	(*< the label above the text field. *)
 };
 DefineLinguistic[OptionsPattern[]] :=
-	DynamicModule[{input},
+	DynamicModule[{
+		input, symbol = OptionValue["Symbol"],
+		expression = OptionValue["Expression"],
+		dynamicOutput = NewHeldVar[],
+		failureFlag},
 		
 		$addLinguisticBoxId = ToString[Unique["AddLinguisticBoxId"]];
 		
@@ -41,19 +48,48 @@ DefineLinguistic[OptionsPattern[]] :=
 		
 		Column[
 			{
-			Style["Define Linguistic", "Subsection"],
-			With[{boxId = $addLinguisticBoxId},
-				InputField[
-					Dynamic[input],
-					String,
-					ImageSize -> {450, 100},
-					FrameMargins -> Medium,
-					BoxID -> boxId
-				]
+			Style[OptionValue["Title"], "Subsection"],
+			DynamicOutputSection[
+				With[{boxId = $addLinguisticBoxId},
+					InputField[
+						Dynamic[input],
+						String,
+						ImageSize -> {450, 100},
+						FrameMargins -> Medium,
+						ReturnEntersInput -> False,
+						BoxID -> boxId
+					]
+				],
+				dynamicOutput,
+				"NakedSection" -> True
 			],
 			SmartButton[
 				"OK",
-				Print["TODO"]
+				failureFlag = False;
+				Block[{$JavaExceptionHandler =
+						Function[
+							{exceptionSymbol, messageTag, description},
+							If [StringMatchQ[
+									GetJavaException[]@getClass[]@getCanonicalName[],
+									"org.antlr.v4.runtime.misc.ParseCancellationException" |
+									"java.lang.Exception"
+								],
+								SetHeldVar[dynamicOutput, "Invalid linguistic."];
+								failureFlag = True;
+								,
+								SetHeldVar[dynamicOutput, description];
+								failureFlag = True;
+							]
+						]},
+					$Grammar["JavaObject"]@setLinguistic[
+						symbol /. None -> "start",
+						expression,
+						input
+					];
+					If [!failureFlag,
+						Lui`UI`SetActionRes[Null]
+					]
+				]
 			]
 			}
 		]

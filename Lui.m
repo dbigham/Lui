@@ -10,6 +10,8 @@ $LuiJavaPath::usage = "$LuiJavaPath  "
 
 $LuiDir::usage = "$LuiDir  "; 
 
+$Grammar::usage = "$Grammar  "
+
 Begin["`Private`"]
 
 $LuiDir = FileNameDrop[FindFile["Lui`Lui`"], -1];

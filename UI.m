@@ -676,7 +676,7 @@ Options[DefineLinguisticHotkey] =
 	"Title" -> None		(*< The window title. *)
 };
 DefineLinguisticHotkey[OptionsPattern[]] :=
-	Block[{title = OptionValue["Title"], file = Null, existingLinguistic},
+	Block[{title = OptionValue["Title"], file = Null, existingLinguistic, expression = Null},
 		If [!StringFreeQ[title, "Wolfram Mathematica"],
 			StringReplace[
 				title,
@@ -686,8 +686,26 @@ DefineLinguisticHotkey[OptionsPattern[]] :=
 				FocusLuiUI[];
 				existingLinguistic =
 					$Grammar["JavaObject"]@getLinguistic["notebook", ToString[file, InputForm]];
+				If [existingLinguistic == Null,
+					existingLinguistic = FileNameToDefaultLinguistic[file];
+				];
+				existingLinguistic =
+					StringReplace[
+						existingLinguistic /. Null :> "",
+						Longest[pre__] ~~ "->" ~~ expr__ :>
+							(
+								expression = StringTrim[expr];
+								StringTrim[pre]
+							)
+					];
+				expression = expression /. Null :> ToString[file, InputForm];
 				SetActionRes[
-					DefineLinguistic["Linguistic" -> existingLinguistic]
+					DefineLinguistic[
+						"Linguistic" -> existingLinguistic,
+						"Symbol" -> "notebook",
+						"Expression" -> expression,
+						"Title" -> file
+					]
 				]
 			]
 		]

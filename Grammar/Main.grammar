@@ -38,6 +38,7 @@ sourceFile:
 	parse -> "Lui`Parse`"
 	ui -> "Lui`UI`"
 	wutil|wutils -> "WUtils`WUtils`"
+	lutil -> "Lui`Util`"
 
 funcArgs:
 	$id -> {id}
@@ -70,7 +71,7 @@ webpage:
 	"olive's" monthly photos -> "https://www.facebook.com/daniel.bigham/media_set?set=a.10154061498762959.1073741838.599027958&type=3"
 	"emma's" monthly photos -> "https://www.facebook.com/daniel.bigham/media_set?set=a.10154061501277959.1073741839.599027958&type=3"
 
-~function: function|func
+~function: function|func|fn
 ~func: ~function
 
 ~new: create|new
