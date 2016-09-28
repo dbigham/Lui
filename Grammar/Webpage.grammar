@@ -1,4 +1,10 @@
 webpage:
+	letters to self -> "https://drive.google.com/drive/u/0/folders/0B1m9lIRgFVMRVkNIeFh4NFBtTWs"
+	new future doc -> "https://docs.google.com/document/create?usp=drive_web&folder=0B1m9lIRgFVMRUzhFYUY4Wno5VTA"
+	new google doc -> "https://docs.google.com/document/create"
+	google docs|drive -> "https://drive.google.com/drive/u/0/my-drive"
+	"2016" ~dir -> "https://drive.google.com/drive/u/0/folders/0B1m9lIRgFVMRUzhFYUY4Wno5VTA"
+	future docs -> "https://drive.google.com/drive/u/0/folders/0B1m9lIRgFVMRflRaeXFTSGtIM0prMmctV3hJSDFSamxXRGtpZDlmU2k2VmViN0o2WkpYV1E"
 	tesla -> "https://www.reddit.com/r/teslamotors/"
 	futurism -> "http://futurism.com/"
 	futurology | futureology | future -> "https://www.reddit.com/r/Futurology"
@@ -10,3 +16,4 @@ webpage:
 	twins monthly photos -> "https://www.facebook.com/daniel.bigham/media_set?set=a.10154061489747959.1073741837.599027958&type=3"
 	"olive's" monthly photos -> "https://www.facebook.com/daniel.bigham/media_set?set=a.10154061498762959.1073741838.599027958&type=3"
 	"emma's" monthly photos -> "https://www.facebook.com/daniel.bigham/media_set?set=a.10154061501277959.1073741839.599027958&type=3"
+	its video -> "file:///E:\\Users\\Daniel\\Videos\\SpaceXVideos\\SpaceX Interplanetary Transport System.mp4"

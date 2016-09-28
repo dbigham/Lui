@@ -1,0 +1,8 @@
+sourceFile:
+	parse -> "Lui`Parse`"
+	ui -> "Lui`UI`"
+	wutil|wutils -> "WUtils`WUtils`"
+	lutil -> "Lui`Util`"
+	old defs -> FileNameJoin[{$PersonalGrammarDir, "Defs.m"}]
+	old rules -> FileNameJoin[{$PersonalGrammarDir, "Rules.m"}]
+	init -> $InitFile

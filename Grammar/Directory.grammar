@@ -1,0 +1,6 @@
+directory:
+	lui -> $LuiDir
+	issues -> FileNameJoin[{$DropboxDir, "Notebooks"}]
+	personal -> FileNameJoin[{$DropboxDir, "PersonalWL", "danielb", "Daniel"}]
+	~spacex videos -> "E:\Users\Daniel\Videos\SpaceXVideos"
+	notebooks|nbs -> $NotebookDirectory

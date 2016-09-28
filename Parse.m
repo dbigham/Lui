@@ -90,7 +90,6 @@ LuiParse[g_Grammar, inputIn_String, opts:OptionsPattern[]] :=
 		prevDebug = ChartParser`debugFlag;
 		ChartParser`debugFlag = debug;
 		
-		
 		$ParserState = state = GetParserState[g, input];
 		
 		If [debug && prevDebug === False,
@@ -771,16 +770,16 @@ ConsiderFileInterpretation[input_String] :=
 			If [!FileExistsQ[dir],
 				dir = "C:\\Users\\" <> $UserName <> "\\Dropbox\\Maluuba\\Notebooks";
 			];
-			With[{textFile = FileNameJoin[{dir, input <> ".txt"}]},
-				If [FileExistsQ[textFile],
-					SystemOpen[textFile]
-					,
-					If [ResolveIssueNotebook[input] =!= $Failed,
-						HoldComplete @ OpenNotebook[input]
+			If [ResolveIssueNotebook[input] =!= $Failed,
+				HoldComplete @ OpenNotebook[input]
+				,
+				With[{matchingFiles = FileNames[input <> "*", dir]},
+					If [Length[matchingFiles] > 0,
+						SystemOpen[matchingFiles[[1]]]
 						,
-						With[{matchingFiles = FileNames[input <> "*", dir]},
-							If [Length[matchingFiles] > 0,
-								SystemOpen[matchingFiles[[1]]]
+						With[{textFile = FileNameJoin[{dir, input <> ".txt"}]},
+							If [FileExistsQ[textFile],
+								SystemOpen[textFile]
 								,
 								HoldComplete @ $Failed
 							]
@@ -788,6 +787,7 @@ ConsiderFileInterpretation[input_String] :=
 					]
 				]
 			]
+
 		]
 	];
 

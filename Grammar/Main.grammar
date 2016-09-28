@@ -16,10 +16,18 @@ start:
 	name=$notebook -> OpenNotebook[name]
 	
 	dir=$directory ~dir -> SystemOpen[dir]
+	dir=$directory -> SystemOpen[dir]
 	
 	~edit grammar -> EditGrammar[]
 	
 	~edit $file -> EditFile[file]
+	
+	~edit file=$sourceFile
+		If [StringFreeQ[file, "`"],
+			HeldHead[EditFile][file]
+			,
+			HeldHead[EditFile][FindFile[file]]
+		]
 	
 	add ling|linguistic -> AddLinguistic[]
 	
@@ -39,12 +47,6 @@ start:
 		]
 		
 	work on $function -> WorkOn["Function", function]
-
-sourceFile:
-	parse -> "Lui`Parse`"
-	ui -> "Lui`UI`"
-	wutil|wutils -> "WUtils`WUtils`"
-	lutil -> "Lui`Util`"
 
 funcArgs:
 	$id -> {id}
@@ -67,10 +69,6 @@ function:
 	~function $function
 	$function ~function
 
-directory:
-	lui -> $LuiDir
-	issues -> FileNameJoin[{$DropboxDir, "Notebooks"}]
-
 ~function: function|func|fn
 ~func: ~function
 
@@ -85,3 +83,5 @@ directory:
 ~edit: edit|e
 
 ~webpage: webpage|website
+
+~spacex: spacex|spx|"space x"
