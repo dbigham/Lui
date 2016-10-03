@@ -35,6 +35,8 @@ public class LuiHttpServer
 		server.createContext("/hotkey", new MyHandler());
 		server.createContext("/define_linguistic", new DefineLinguistic());
 		server.createContext("/create_notebook", new CreateNotebook());
+		server.createContext("/EvaluateEvaluationTarget", new EvaluateEvaluationTarget());
+		server.createContext("/SetEvaluationTarget", new SetEvaluationTarget());
 		server.setExecutor(null);
 		server.start();
 	}
@@ -85,6 +87,38 @@ public class LuiHttpServer
 					"\"Title\" -> " + Util.createDoubleQuotedString(title) + "," +
 					"\"Selected\" -> " + Util.createDoubleQuotedString(selected) +
 				"]");
+			LuiHttpServer.defaultResponse(t);
+		}
+	}
+	
+	/**
+	 * Evaluate the designated cell.
+	 * 
+	 * @author Daniel
+	 */
+	static class EvaluateEvaluationTarget implements HttpHandler
+	{
+		@Override
+		public void handle(HttpExchange t) throws IOException
+		{			
+			callWL(
+				"EvaluateEvaluationTarget[]");
+			LuiHttpServer.defaultResponse(t);
+		}
+	}
+	
+	/**
+	 * Sets the evaluation target to the currently selected cell.
+	 * 
+	 * @author Daniel
+	 */
+	static class SetEvaluationTarget implements HttpHandler
+	{
+		@Override
+		public void handle(HttpExchange t) throws IOException
+		{			
+			callWL(
+				"SetEvaluationTarget[]");
 			LuiHttpServer.defaultResponse(t);
 		}
 	}

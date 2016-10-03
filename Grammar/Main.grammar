@@ -46,6 +46,13 @@ start:
 			"Description" -> quotedString
 		]
 		
+	~new $sourceFile ~function name=$id "[" "]" $quotedString
+		HeldHead[CreateFunctionInFile][
+			FindFile[sourceFile], 
+			StringJoin[name, "[]"],
+			"Description" -> quotedString
+		]
+		
 	work on $function -> WorkOn["Function", function]
 
 funcArgs:

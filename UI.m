@@ -511,7 +511,39 @@ LuiMiniBoxes[defaultInput_:None] :=
 	]
 	
 ] (* end With *)
-	
+
+Unprotect[NamespaceBox];
+
+NamespaceBox /: 
+	MakeExpression[NamespaceBox["Lui", theboxes_, ___], fmt_] :=
+		Module[{interpHeldVar = NewHeldVar[], actionResHeldVar = NewHeldVar[]},			
+			(* Sometimes I was getting a message about Part, but not always.
+			   Will use this If statement for now to try and avoid that. *)
+			With[{input = If [MatchQ[theboxes[[1, 1]], _List], theboxes[[1, 1, 1, 2]], theboxes[[1, 1, 2]]]},
+				With[{res =
+						(
+						ReloadLui[];
+						
+						SetHeldVar[interpHeldVar, Null];
+						SetHeldVar[actionResHeldVar, Null];
+						
+						Block[{$MiniUIInUse = True},
+							HandleInput[input, interpHeldVar, actionResHeldVar];
+						];
+						
+						XPrint["Interpretation: ", ReleaseHold[interpHeldVar]];
+						If [ReleaseHold[interpHeldVar] === HoldComplete["?"],
+							"?"
+							,
+							XPrint["Action evaluated: ", ReleaseHold[actionResHeldVar]];
+							ReleaseHold[actionResHeldVar]
+						]
+						)
+					  },
+					HoldComplete[res]
+				]
+			]]
+
 (*!
 	\function deleteLuiMiniUiAndOutput
 	
@@ -571,41 +603,7 @@ deleteOutputCells[] :=
 			]
 		];
 	]
-	
-Unprotect[NamespaceBox];
 
-NamespaceBox /: 
-	MakeExpression[NamespaceBox["Lui", theboxes_, ___], fmt_] :=
-		Module[{interpHeldVar = NewHeldVar[], actionResHeldVar = NewHeldVar[]},
-			
-			(* Sometimes I was getting a message about Part, but not always.
-			   Will use this If statement for now to try and avoid that. *)
-			With[{input = If [MatchQ[theboxes[[1, 1]], _List], theboxes[[1, 1, 1, 2]], theboxes[[1, 1, 2]]]},
-				With[{res =
-						(
-						ReloadLui[];
-						
-						SetHeldVar[interpHeldVar, Null];
-						SetHeldVar[actionResHeldVar, Null];
-						
-						Block[{$MiniUIInUse = True},
-							HandleInput[input, interpHeldVar, actionResHeldVar];
-						];
-						
-						XPrint["Interpretation: ", ReleaseHold[interpHeldVar]];
-						If [ReleaseHold[interpHeldVar] === HoldComplete["?"],
-							"?"
-							,
-							XPrint["Action evaluated: ", ReleaseHold[actionResHeldVar]];
-							ReleaseHold[actionResHeldVar]
-						]
-						)
-					  },
-					HoldComplete[res]
-				]
-			]
-		]
-		
 (*!
 	\function installHotkey
 	

@@ -1,4 +1,6 @@
 webpage:
+	diep | "diep.io" -> "http://diep.io/"
+	weather radar -> "https://weather.gc.ca/radar/index_e.html?id"
 	letters to self -> "https://drive.google.com/drive/u/0/folders/0B1m9lIRgFVMRVkNIeFh4NFBtTWs"
 	new future doc -> "https://docs.google.com/document/create?usp=drive_web&folder=0B1m9lIRgFVMRUzhFYUY4Wno5VTA"
 	new google doc -> "https://docs.google.com/document/create"

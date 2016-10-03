@@ -1,4 +1,5 @@
 notebook:
+	lui scoring -> "LuiScoring.nb"
 	elon mars unveil|unveiling -> "ElonMarsUnveil.nb"
 	specific impulse -> "SpecificImpulse.nb"
 	define linguistic hotkey -> "DefineLinguisticHotkey.nb"

@@ -10,10 +10,10 @@
 NotebookFileLineBreakTest
 NotebookFileLineBreakTest
 NotebookDataPosition[       158,          7]
-NotebookDataLength[      2694,         81]
-NotebookOptionsPosition[      2386,         65]
-NotebookOutlinePosition[      2727,         80]
-CellTagsIndexPosition[      2684,         77]
+NotebookDataLength[      3069,         86]
+NotebookOptionsPosition[      2761,         70]
+NotebookOutlinePosition[      3102,         85]
+CellTagsIndexPosition[      3059,         82]
 WindowFrame->Normal*)
 
 (* Beginning of Notebook Content *)
@@ -38,7 +38,7 @@ Cell[BoxData[
            InputField[
             Dynamic[Lui`UI`Private`input$$], String, 
             ImageSize -> {450, Automatic}, FrameMargins -> Medium, BoxID -> 
-            "LuiInputFieldBoxID6"], {
+            "LuiInputFieldBoxID141"], {
            "ReturnKeyDown" :> 
             Lui`UI`Private`HandleInput[
              Lui`UI`Private`input$$, Lui`UI`Private`$interpHeldVar, 
@@ -55,12 +55,17 @@ Cell[BoxData[
                Blank[NotebookObject]]]], 
             Lui`UI`Private`displayIfNotNull[Lui`UI`Private`actionResult$], 
             Apply[Sequence, {}]]]}]]], StandardForm],
-   ImageSizeCache->{203., {3., 9.}}],
+   ImageSizeCache->{452., {11., 18.}}],
   DynamicModuleValues:>{}]], "Output",
  CellChangeTimes->{
   3.683928906475012*^9, 3.684006950174965*^9, 3.684006988804864*^9, 
    3.6840070523867116`*^9, 3.6840075284430876`*^9, 3.684007634804889*^9, {
-   3.684007880602406*^9, 3.684007896719344*^9}}]
+   3.684007880602406*^9, 3.684007966468217*^9}, 3.684008075456128*^9, 
+   3.6840081371669407`*^9, 3.6840083050117426`*^9, 3.6840933631484303`*^9, 
+   3.6840934282624903`*^9, 3.6840942724122577`*^9, 3.684096720710904*^9, 
+   3.684096847947386*^9, 3.6840968795776105`*^9, 3.6840969383648295`*^9, {
+   3.6840970307359037`*^9, 3.68409704102069*^9}, 3.684097111144457*^9, {
+   3.6840975985130143`*^9, 3.684097620981781*^9}}]
 }, Open  ]]
 },
 WindowSize->{711, 390},
@@ -81,7 +86,7 @@ CellTagsIndex->{}
 Notebook[{
 Cell[CellGroupData[{
 Cell[580, 22, 175, 4, 30, "Input"],
-Cell[758, 28, 1612, 34, 30, "Output"]
+Cell[758, 28, 1987, 39, 46, "Output"]
 }, Open  ]]
 }
 ]
