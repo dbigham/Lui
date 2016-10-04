@@ -37,6 +37,7 @@ public class LuiHttpServer
 		server.createContext("/create_notebook", new CreateNotebook());
 		server.createContext("/EvaluateEvaluationTarget", new EvaluateEvaluationTarget());
 		server.createContext("/SetEvaluationTarget", new SetEvaluationTarget());
+		server.createContext("/CreateLuiLink", new CreateLuiLink());
 		server.setExecutor(null);
 		server.start();
 	}
@@ -82,10 +83,32 @@ public class LuiHttpServer
 			Map<String, String> parms = LuiHttpServer.queryToMap(t.getRequestURI().getQuery());			
 			String title = parms.get("title");
 			String selected = parms.get("selected");
+			String process = parms.get("process");
 			callWL(
 				"Lui`UI`DefineLinguisticHotkey["  +
 					"\"Title\" -> " + Util.createDoubleQuotedString(title) + "," +
-					"\"Selected\" -> " + Util.createDoubleQuotedString(selected) +
+					"\"Selected\" -> " + Util.createDoubleQuotedString(selected) + "," +
+					"\"Process\" -> " + Util.createDoubleQuotedString(process) +
+				"]");
+			LuiHttpServer.defaultResponse(t);
+		}
+	}
+	
+	/**
+	 * Create a new LUI link cell in the current notebook.
+	 * 
+	 * @author Daniel
+	 */
+	static class CreateLuiLink implements HttpHandler
+	{
+		@Override
+		public void handle(HttpExchange t) throws IOException
+		{
+			Map<String, String> parms = LuiHttpServer.queryToMap(t.getRequestURI().getQuery());			
+			String text = parms.get("text");
+			callWL(
+				"CreateLuiLink["  +
+					Util.createDoubleQuotedString(text) +
 				"]");
 			LuiHttpServer.defaultResponse(t);
 		}

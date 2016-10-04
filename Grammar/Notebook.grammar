@@ -1,4 +1,5 @@
 notebook:
+	lui documentation|doc|docs -> "LuiDocumentation.nb"
 	lui scoring -> "LuiScoring.nb"
 	elon mars unveil|unveiling -> "ElonMarsUnveil.nb"
 	specific impulse -> "SpecificImpulse.nb"

@@ -1,4 +1,5 @@
 directory:
+	projects|project|proj -> "E:\\Users\\Daniel\\Dropbox\\Projects"
 	lui -> $LuiDir
 	issues -> FileNameJoin[{$DropboxDir, "Notebooks"}]
 	personal -> FileNameJoin[{$DropboxDir, "PersonalWL", "danielb", "Daniel"}]

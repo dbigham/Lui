@@ -33,6 +33,10 @@ DefineLinguisticHotkeyForNotebook::usage = "DefineLinguisticHotkeyForNotebook  "
 
 DefineLinguisticHotkeyForWebpage::usage = "DefineLinguisticHotkeyForWebpage  "
 
+CreateLuiLink::usage = "CreateLuiLink  "
+
+DefineLinguisticHotkeyForFile::usage = "DefineLinguisticHotkeyForFile  "
+
 Begin["`Private`"]
 
 (*!
@@ -40,6 +44,7 @@ Begin["`Private`"]
 	
 	\calltable
 		Lui[] '' displays the LUI user interface.
+		Lui[input] '' process the given input.
 	
 	\maintainer danielb
 *)
@@ -111,6 +116,12 @@ Lui[] :=
 				)
 			]
 		]
+	]
+
+Lui[input_String] :=
+	Block[{interpretation},
+		interpretation = LuiParse[input];
+		ReleaseHold[interpretation /. HeldHead[h_] :> h]
 	]
 
 (*!
@@ -516,7 +527,8 @@ Unprotect[NamespaceBox];
 
 NamespaceBox /: 
 	MakeExpression[NamespaceBox["Lui", theboxes_, ___], fmt_] :=
-		Module[{interpHeldVar = NewHeldVar[], actionResHeldVar = NewHeldVar[]},			
+		Module[{interpHeldVar = NewHeldVar[], actionResHeldVar = NewHeldVar[]},
+			
 			(* Sometimes I was getting a message about Part, but not always.
 			   Will use this If statement for now to try and avoid that. *)
 			With[{input = If [MatchQ[theboxes[[1, 1]], _List], theboxes[[1, 1, 1, 2]], theboxes[[1, 1, 2]]]},
@@ -634,8 +646,11 @@ installHotkey[] :=
 									Item[
 										"LUI (Linguistic UI)",
 										FrontEnd`KernelExecute[
-											ReloadLui[];
-											LuiMini[]
+											ReloadFiles[];
+											(* Disable this since the MakeExpression mechanism
+											   doesn't seem to want to work. But we still assign
+											   the hotkey since otherwise M beeps. *)
+											(*LuiMini[]*)
 										],
 										FrontEnd`MenuKey["e", FrontEnd`Modifiers -> keyModifiers],
 										"MenuEvaluator" -> Automatic
@@ -676,18 +691,21 @@ Clear[DefineLinguisticHotkey];
 Options[DefineLinguisticHotkey] =
 {
 	"Title" -> None,		(*< The window title. *)
-	"Selected" -> None		(*< The selected text in the window. *)
+	"Selected" -> None,		(*< The selected text in the window. *)
+	"Process" -> None		(*< The process of the window. ex. "explorer.exe" *)
 };
 DefineLinguisticHotkey[OptionsPattern[]] :=
 	Block[{
 		title = OptionValue["Title"],
 		selected = OptionValue["Selected"],
+		process = OptionValue["Process"],
 		existingLinguistic,
 		res,
 		tmp},
 		
 		XPrint["Title: ", title];
 		XPrint["Selected: ", selected];
+		XPrint["Process: ", process];
 		
 		Which[
 			!StringFreeQ[title, "Wolfram Mathematica"],
@@ -700,6 +718,13 @@ DefineLinguisticHotkey[OptionsPattern[]] :=
 			!StringFreeQ[title, "Google Chrome"],
 			res =
 				DefineLinguisticHotkeyForWebpage[
+					title,
+					selected
+				];
+			,
+			!StringFreeQ[ToLowerCase[process], "explorer.exe"],
+			res =
+				DefineLinguisticHotkeyForFile[
 					title,
 					selected
 				];
@@ -817,6 +842,41 @@ DefineLinguisticHotkeyForWebpage[title_, selected_] :=
 	];
 
 (*!
+	\function DefineLinguisticHotkeyForFile
+	
+	\calltable
+		DefineLinguisticHotkeyForFile[title, selected] '' called when a hotkey is pressed to define a linguistic for a file or directory.
+
+	Examples:
+	
+	DefineLinguisticHotkeyForFile["Dropbox", FileNameJoin[{$DropboxDir, "Projects"}]]
+
+	===
+
+	<|
+		"Linguistic" -> "projects",
+		"Symbol" -> "directory",
+		"Expression" -> "\"E:\\\\Users\\\\Daniel\\\\Dropbox\\\\Projects\"",
+		"UILabel" -> "E:\\Users\\Daniel\\Dropbox\\Projects"
+	|>
+
+	Unit tests:
+
+	RunUnitTests[Lui`UI`DefineLinguisticHotkeyForFile]
+
+	\maintainer danielb
+*)
+DefineLinguisticHotkeyForFile[title_, selected_] :=
+	Block[{},
+		<|
+			"Linguistic" -> ToLowerCase[FileNameTake[selected, -1]],
+			"Symbol" -> If [DirectoryQ[selected], "directory", "file"],
+			"Expression" -> ToString[selected, InputForm],
+			"UILabel" -> selected
+		|>
+	];
+
+(*!
 	\function SetActionRes
 	
 	\calltable
@@ -855,6 +915,32 @@ SetInterpretation[e_] :=
 SetLuiInputField[str_] :=
 	Block[{},
 		SetHeldVar[$luiInputFieldSymbol, str]
+	];
+
+(*!
+	\function CreateLuiLink
+	
+	\calltable
+		CreateLuiLink[text] '' Creates a new LUI link cell in the current notebook.
+
+	Examples:
+	
+	CreateLuiLink[text] === TODO
+	
+	\related '
+	
+	\maintainer danielb
+*)
+CreateLuiLink[text_] :=
+	Block[{},
+		With[{nb = SelectedNotebook[]},
+			NotebookWrite[
+				nb,
+				Cell["Lui[" <> ToString[text, InputForm] <> "]", "Input"]
+			];
+			SelectionMove[nb, Previous, Cell];
+			FrontEndTokenExecute[nb, "EvaluateCells"];
+		]
 	];
 
 End[]

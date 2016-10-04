@@ -10,10 +10,10 @@
 NotebookFileLineBreakTest
 NotebookFileLineBreakTest
 NotebookDataPosition[       158,          7]
-NotebookDataLength[      3069,         86]
-NotebookOptionsPosition[      2761,         70]
-NotebookOutlinePosition[      3102,         85]
-CellTagsIndexPosition[      3059,         82]
+NotebookDataLength[      2875,         83]
+NotebookOptionsPosition[      2567,         67]
+NotebookOutlinePosition[      2908,         82]
+CellTagsIndexPosition[      2865,         79]
 WindowFrame->Normal*)
 
 (* Beginning of Notebook Content *)
@@ -38,7 +38,7 @@ Cell[BoxData[
            InputField[
             Dynamic[Lui`UI`Private`input$$], String, 
             ImageSize -> {450, Automatic}, FrameMargins -> Medium, BoxID -> 
-            "LuiInputFieldBoxID141"], {
+            "LuiInputFieldBoxID44"], {
            "ReturnKeyDown" :> 
             Lui`UI`Private`HandleInput[
              Lui`UI`Private`input$$, Lui`UI`Private`$interpHeldVar, 
@@ -58,17 +58,14 @@ Cell[BoxData[
    ImageSizeCache->{452., {11., 18.}}],
   DynamicModuleValues:>{}]], "Output",
  CellChangeTimes->{
-  3.683928906475012*^9, 3.684006950174965*^9, 3.684006988804864*^9, 
-   3.6840070523867116`*^9, 3.6840075284430876`*^9, 3.684007634804889*^9, {
-   3.684007880602406*^9, 3.684007966468217*^9}, 3.684008075456128*^9, 
-   3.6840081371669407`*^9, 3.6840083050117426`*^9, 3.6840933631484303`*^9, 
-   3.6840934282624903`*^9, 3.6840942724122577`*^9, 3.684096720710904*^9, 
-   3.684096847947386*^9, 3.6840968795776105`*^9, 3.6840969383648295`*^9, {
-   3.6840970307359037`*^9, 3.68409704102069*^9}, 3.684097111144457*^9, {
-   3.6840975985130143`*^9, 3.684097620981781*^9}}]
+  3.6845289669536233`*^9, 3.684529276809664*^9, 3.6845299348678217`*^9, 
+   3.6845302468736515`*^9, 3.6845318564764338`*^9, {3.6845322625133696`*^9, 
+   3.6845323033659463`*^9}, 3.6845323575886583`*^9, 3.68453277315744*^9, {
+   3.68453280445919*^9, 3.684532814493379*^9}, 3.6845337936567307`*^9, 
+   3.6845338507031384`*^9, 3.6845339266587296`*^9, 3.684533972925894*^9}]
 }, Open  ]]
 },
-WindowSize->{711, 390},
+WindowSize->{780, 390},
 WindowMargins->{{Automatic, -7}, {Automatic, 1}},
 FrontEndVersion->"11.0 for Microsoft Windows (64-bit) (July 28, 2016)",
 StyleDefinitions->"Default.nb"
@@ -86,7 +83,7 @@ CellTagsIndex->{}
 Notebook[{
 Cell[CellGroupData[{
 Cell[580, 22, 175, 4, 30, "Input"],
-Cell[758, 28, 1987, 39, 46, "Output"]
+Cell[758, 28, 1793, 36, 46, "Output"]
 }, Open  ]]
 }
 ]
