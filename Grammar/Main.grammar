@@ -28,6 +28,16 @@ start:
 			,
 			HeldHead[EditFile][FindFile[file]]
 		]
+		
+	file=$sourceFile
+		Scored[
+			If [StringFreeQ[file, "`"],
+				HeldHead[EditFile][file]
+				,
+				HeldHead[EditFile][FindFile[file]]
+			],
+			0.6
+		]
 	
 	add ling|linguistic -> AddLinguistic[]
 	
@@ -37,7 +47,7 @@ start:
 	
 	$url -> URL[url]
 	
-	run tests -> RunUnitTests[FileNameDrop[FindFile["Lui`"], -2]]
+	run tests -> Print[RunUnitTests[FileNameDrop[FindFile["Lui`"], -2]]]
 	
 	~new $sourceFile ~function name=$id "[" $funcArgs "]" $quotedString
 		HeldHead[CreateFunctionInFile][
@@ -56,6 +66,14 @@ start:
 	work on $function -> WorkOn["Function", function]
 	
 	delete ~nb -> DeleteCurrentNotebook[]
+	
+	$sourceCodeDirectory
+	
+	~new $sourceCodeDirectory file name=($id|$quotedString)
+		CreateSourceFile[
+			name,
+			sourceCodeDirectory
+		]
 
 funcArgs:
 	$id -> {id}
@@ -64,7 +82,6 @@ funcArgs:
 file:
 	$id
 	a=$id "." b=$id -> StringJoin[a, ".", b]
-	wl -> "WolframLanguage.g4"
 
 function:
 	$id

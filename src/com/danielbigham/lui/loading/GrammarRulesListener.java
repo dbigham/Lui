@@ -9,6 +9,7 @@ import com.danielbigham.lui.antlr.GrammarParser.BasicRulePart2Context;
 import com.danielbigham.lui.antlr.GrammarParser.BasicRulePartContext;
 import com.danielbigham.lui.antlr.GrammarParser.BindingContext;
 import com.danielbigham.lui.antlr.GrammarParser.EAndContext;
+import com.danielbigham.lui.antlr.GrammarParser.EAssociationContext;
 import com.danielbigham.lui.antlr.GrammarParser.EDivideContext;
 import com.danielbigham.lui.antlr.GrammarParser.EEqualContext;
 import com.danielbigham.lui.antlr.GrammarParser.EHeadedExprContext;
@@ -574,6 +575,20 @@ public class GrammarRulesListener implements GrammarListener
 
 	@Override
 	public void exitEAnd(EAndContext ctx)
+	{
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void enterEAssociation(EAssociationContext ctx)
+	{
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void exitEAssociation(EAssociationContext ctx)
 	{
 		// TODO Auto-generated method stub
 		

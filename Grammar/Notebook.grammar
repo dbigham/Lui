@@ -1,4 +1,6 @@
 notebook:
+	antlr -> "antlr.nb"
+	create project -> "CreateProject.nb"
 	"lui ambiguity" | ambiguity -> "LuiAmbiguity.nb"
 	antlr parsing | antlr -> "Antlr.nb"
 	family journal -> "familyjournal.nb"

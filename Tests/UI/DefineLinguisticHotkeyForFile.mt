@@ -7,9 +7,9 @@ Test[
 	Lui`UI`DefineLinguisticHotkeyForFile["Dropbox", FileNameJoin[{$DropboxDir, "Projects"}]]
 	,
 	<|
-		"Linguistic" -> "Projects",
+		"Linguistic" -> "projects",
 		"Symbol" -> "directory",
-		"Expression" -> "\"E:\\\\Users\\\\Daniel\\\\Dropbox\\\\Projects\"",
+		"Expression" -> "E:\\Users\\Daniel\\Dropbox\\Projects",
 		"UILabel" -> "E:\\Users\\Daniel\\Dropbox\\Projects"
 	|>
 	,

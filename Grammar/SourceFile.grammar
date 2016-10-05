@@ -1,4 +1,6 @@
 sourceFile:
+	wl -> "WolframLanguage.g4"
+	"antlr grammar" | agrammar -> "E:\\Users\\Daniel\\Dropbox\\Projects\\Lui\\AntlrGrammar\\Grammar.g4"
 	parse -> "Lui`Parse`"
 	ui -> "Lui`UI`"
 	util|wutil|wutils -> "WUtils`WUtils`"

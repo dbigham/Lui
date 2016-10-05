@@ -225,4 +225,12 @@ public class TestAntlrParsing
 		assertEquals(1, rules.size());
 		assertEquals("$start:\n    (dbca|{my (webpage|website)})\n        null", rules.get(0).toString());
 	}
+	
+	@Test
+	public void test23()
+	{
+		List<GrammarRule> rules = parseGrammar("start: testing 1 2 3 123");
+		assertEquals(1, rules.size());
+		assertEquals("$start:\n    {testing 1 2 3 123}\n        null", rules.get(0).toString());
+	}
 }

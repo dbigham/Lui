@@ -192,6 +192,18 @@ public interface GrammarListener extends ParseTreeListener {
 	 */
 	void exitEInteger(GrammarParser.EIntegerContext ctx);
 	/**
+	 * Enter a parse tree produced by the {@code EAssociation}
+	 * labeled alternative in {@link GrammarParser#expr}.
+	 * @param ctx the parse tree
+	 */
+	void enterEAssociation(GrammarParser.EAssociationContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code EAssociation}
+	 * labeled alternative in {@link GrammarParser#expr}.
+	 * @param ctx the parse tree
+	 */
+	void exitEAssociation(GrammarParser.EAssociationContext ctx);
+	/**
 	 * Enter a parse tree produced by the {@code ERule}
 	 * labeled alternative in {@link GrammarParser#expr}.
 	 * @param ctx the parse tree
@@ -276,18 +288,6 @@ public interface GrammarListener extends ParseTreeListener {
 	 */
 	void exitEPlus(GrammarParser.EPlusContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code EDivide}
-	 * labeled alternative in {@link GrammarParser#expr}.
-	 * @param ctx the parse tree
-	 */
-	void enterEDivide(GrammarParser.EDivideContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code EDivide}
-	 * labeled alternative in {@link GrammarParser#expr}.
-	 * @param ctx the parse tree
-	 */
-	void exitEDivide(GrammarParser.EDivideContext ctx);
-	/**
 	 * Enter a parse tree produced by the {@code ESameQ}
 	 * labeled alternative in {@link GrammarParser#expr}.
 	 * @param ctx the parse tree
@@ -299,6 +299,18 @@ public interface GrammarListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitESameQ(GrammarParser.ESameQContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code EDivide}
+	 * labeled alternative in {@link GrammarParser#expr}.
+	 * @param ctx the parse tree
+	 */
+	void enterEDivide(GrammarParser.EDivideContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code EDivide}
+	 * labeled alternative in {@link GrammarParser#expr}.
+	 * @param ctx the parse tree
+	 */
+	void exitEDivide(GrammarParser.EDivideContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code ESymbol}
 	 * labeled alternative in {@link GrammarParser#expr}.

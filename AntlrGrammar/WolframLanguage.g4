@@ -9,6 +9,7 @@ expr:	string												# EString
 	|	expr wsn* ARROW wsn* expr							# ERule
 	|	'{' wsn* expr wsn* (',' wsn* expr wsn*)* '}'		# EList
 	|	'{' wsn* '}'										# EList
+	|	'<|' wsn* expr wsn* (',' wsn* expr wsn*)* '|>'		# EAssociation
 	|	expr wsn* '[' wsn* expr wsn* (',' wsn* expr wsn*)* ']' wsn*	# EHeadedExpr
 	|	expr '[' wsn* ']' wsn*								# EHeadedExpr
 	|	expr wsn* '^' wsn* expr								# EPower
@@ -38,8 +39,5 @@ real : REAL ;
 INTEGER : '-'? DIGITS ;
 
 REAL : '-'? DIGITS '.' DIGITS? ;
-
-fragment
-DIGITS : ('0'..'9')+ ;
 
 ARROW : '->' | '\u2192' ;

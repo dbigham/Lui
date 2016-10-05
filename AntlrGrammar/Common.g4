@@ -10,6 +10,8 @@ EQUALS : '=' ;
 
 ID : LETTER (LETTER|'0'..'9')* ;
 
+ID2 : '0'..'9' (LETTER|'0'..'9')+ ;
+
 fragment
 LETTER : [a-zA-Z\u0080-\u00FF_] ;
 
@@ -35,3 +37,5 @@ STRING : '"' (~["] | '\\"')+ '"' ;
 
 // Ignore whitespace
 WS : [ \t] -> skip ;
+
+DIGITS : ('0'..'9')+ ;

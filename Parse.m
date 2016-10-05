@@ -837,7 +837,8 @@ EditGrammar[] :=
 
 	\maintainer danielb
 *)
-ChooseParse[parses_] := First[Reverse[SortBy[parses, Score[#] &]]]
+ChooseParse[parses_] :=
+	First[Reverse[SortBy[parses, Score[#] &]]]
 
 (*!
 	\function Score

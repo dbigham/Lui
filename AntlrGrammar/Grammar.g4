@@ -48,7 +48,9 @@ rulePart2:
 	;
 
 basicRulePart:
-    ID |
+	ID |
+    ID2 |
+    integer |
     symbol |
     STRING
     ;

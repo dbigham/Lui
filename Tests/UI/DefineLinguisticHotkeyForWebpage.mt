@@ -12,7 +12,7 @@ Test[
 	<|
 		"Linguistic" -> "daniel bigham.ca",
 		"Symbol" -> "webpage",
-		"Expression" -> "\"http://danielbigham.ca\"",
+		"Expression" -> "http://danielbigham.ca",
 		"UILabel" -> "http://danielbigham.ca"
 	|>
 	,

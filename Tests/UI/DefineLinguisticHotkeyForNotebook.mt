@@ -12,7 +12,7 @@ Test[
 	<|
 		"File" -> "ai.nb",
 		"Symbol" -> "notebook",
-		"Expression" -> "\"ai.nb\"",
+		"Expression" -> "ai.nb",
 		"UILabel" -> "ai.nb"
 	|>
 	,

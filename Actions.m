@@ -82,7 +82,7 @@ DefineLinguistic[OptionsPattern[]] :=
 						]},
 					$Grammar["JavaObject"]@setLinguistic[
 						symbol /. None -> "start",
-						expression,
+						ToString[expression, InputForm],
 						input
 					];
 					If [!failureFlag,

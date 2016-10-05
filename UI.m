@@ -147,7 +147,16 @@ HandleInput[input_, interpHeldVar_, actionResHeldVar_] :=
 		
 		SetHeldVar[interpHeldVar, interpretation];
 		
-		actionResult = ReleaseHold[interpretation /. HeldHead[h_] :> h];
+		actionResult =
+			Replace[
+				interpretation,
+				Scored[h_, _] :> h,
+				{0, Infinity}
+			];
+		
+		actionResult =
+			ReleaseHold[actionResult /. HeldHead[h_] :> h];
+		
 		SetHeldVar[actionResHeldVar, actionResult];
 		
 		(*
@@ -794,7 +803,7 @@ DefineLinguisticHotkeyForNotebook[title_, selected_] :=
 		<|
 			"File" -> file,
 			"Symbol" -> "notebook",
-			"Expression" -> ToString[file, InputForm],
+			"Expression" -> file,
 			"UILabel" -> file
 		|>
 	];
@@ -836,7 +845,7 @@ DefineLinguisticHotkeyForWebpage[title_, selected_] :=
 		<|
 			"Linguistic" -> title2,
 			"Symbol" -> "webpage",
-			"Expression" -> ToString[selected, InputForm],
+			"Expression" -> selected,
 			"UILabel" -> selected
 		|>
 	];
@@ -871,7 +880,7 @@ DefineLinguisticHotkeyForFile[title_, selected_] :=
 		<|
 			"Linguistic" -> ToLowerCase[FileNameTake[selected, -1]],
 			"Symbol" -> If [DirectoryQ[selected], "directory", "file"],
-			"Expression" -> ToString[selected, InputForm],
+			"Expression" -> selected,
 			"UILabel" -> selected
 		|>
 	];
