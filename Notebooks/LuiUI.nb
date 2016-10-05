@@ -10,10 +10,10 @@
 NotebookFileLineBreakTest
 NotebookFileLineBreakTest
 NotebookDataPosition[       158,          7]
-NotebookDataLength[      2875,         83]
-NotebookOptionsPosition[      2567,         67]
-NotebookOutlinePosition[      2908,         82]
-CellTagsIndexPosition[      2865,         79]
+NotebookDataLength[      3393,         90]
+NotebookOptionsPosition[      3085,         74]
+NotebookOutlinePosition[      3426,         89]
+CellTagsIndexPosition[      3383,         86]
 WindowFrame->Normal*)
 
 (* Beginning of Notebook Content *)
@@ -24,10 +24,11 @@ Cell[BoxData[
  RowBox[{
   RowBox[{"Get", "[", "\"\<Lui`\>\"", "]"}], ";", " ", 
   RowBox[{"ReloadFiles", "[", "]"}], ";", " ", 
-  RowBox[{"Lui`UI`Lui", "[", "]"}]}]], "Input"],
+  RowBox[{"Lui`UI`Lui", "[", "]"}]}]], "Input",
+ CellChangeTimes->{{3.684661185127596*^9, 3.684661187975943*^9}}],
 
 Cell[BoxData[
- DynamicModuleBox[{Lui`UI`Private`input$$ = ""}, 
+ DynamicModuleBox[{Lui`UI`Private`input$$ = "gcs"}, 
   DynamicBox[ToBoxes[
     ReplaceAll[Lui`UI`Private`$interpHeldVar, HoldComplete[
        Pattern[Lui`UI`Private`interp$, 
@@ -38,7 +39,7 @@ Cell[BoxData[
            InputField[
             Dynamic[Lui`UI`Private`input$$], String, 
             ImageSize -> {450, Automatic}, FrameMargins -> Medium, BoxID -> 
-            "LuiInputFieldBoxID44"], {
+            "LuiInputFieldBoxID7"], {
            "ReturnKeyDown" :> 
             Lui`UI`Private`HandleInput[
              Lui`UI`Private`input$$, Lui`UI`Private`$interpHeldVar, 
@@ -55,14 +56,20 @@ Cell[BoxData[
                Blank[NotebookObject]]]], 
             Lui`UI`Private`displayIfNotNull[Lui`UI`Private`actionResult$], 
             Apply[Sequence, {}]]]}]]], StandardForm],
-   ImageSizeCache->{452., {11., 18.}}],
+   ImageSizeCache->{452., {27., 34.}}],
   DynamicModuleValues:>{}]], "Output",
  CellChangeTimes->{
   3.6845289669536233`*^9, 3.684529276809664*^9, 3.6845299348678217`*^9, 
    3.6845302468736515`*^9, 3.6845318564764338`*^9, {3.6845322625133696`*^9, 
    3.6845323033659463`*^9}, 3.6845323575886583`*^9, 3.68453277315744*^9, {
    3.68453280445919*^9, 3.684532814493379*^9}, 3.6845337936567307`*^9, 
-   3.6845338507031384`*^9, 3.6845339266587296`*^9, 3.684533972925894*^9}]
+   3.6845338507031384`*^9, 3.6845339266587296`*^9, 3.684533972925894*^9, {
+   3.684535126759325*^9, 3.6845351404482036`*^9}, 3.6845351760076437`*^9, {
+   3.6845352598586717`*^9, 3.6845352944312696`*^9}, 3.6845353623797293`*^9, 
+   3.68453543955641*^9, {3.684535545355647*^9, 3.6845355852319813`*^9}, {
+   3.684535641888051*^9, 3.6845357162493362`*^9}, 3.68453591585435*^9, 
+   3.6845741836994247`*^9, {3.6846611854435415`*^9, 3.684661188317878*^9}, 
+   3.6846612826417103`*^9, 3.684661602294913*^9, 3.6846640751904445`*^9}]
 }, Open  ]]
 },
 WindowSize->{780, 390},
@@ -82,8 +89,8 @@ CellTagsIndex->{}
 (*NotebookFileOutline
 Notebook[{
 Cell[CellGroupData[{
-Cell[580, 22, 175, 4, 30, "Input"],
-Cell[758, 28, 1793, 36, 46, "Output"]
+Cell[580, 22, 241, 5, 30, "Input"],
+Cell[824, 29, 2245, 42, 78, "Output"]
 }, Open  ]]
 }
 ]

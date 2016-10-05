@@ -19,7 +19,7 @@ import com.danielbigham.lui.pattern.IPattern;
  */
 public class TestRuleExplosion
 {
-	private static final boolean debugFlag = true;
+	private static final boolean debugFlag = false;
 	
 	@Test
 	public void test1()

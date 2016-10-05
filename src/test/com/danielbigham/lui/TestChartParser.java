@@ -17,7 +17,7 @@ import com.danielbigham.lui.patternmatch.IPatternMatch;
 
 public class TestChartParser
 {
-	private static final boolean debugFlag = true;
+	private static final boolean debugFlag = false;
 	
 	// Test matching a simple grammar rule, only literals.
 	// The trigger will be 'testing', since it is the most rare literal,

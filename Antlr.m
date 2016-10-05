@@ -55,6 +55,7 @@ GenerateAntlrGrammar[OptionsPattern[]] :=
 		If [grammarDir == Automatic,
 			grammarDir = $grammarSourceDir;
 		];
+		Print[OptionValue["UseNamespace"]];
 		grammarFile = FileNameJoin[{grammarDir, grammarName <> ".g4"}];
 		If [!FileExistsQ[grammarFile],
 			Print["Missing grammar file: ", grammarFile];
@@ -140,23 +141,30 @@ UpdateAntlrGrammar::fcg = "Failed to compile grammar."
 Options[UpdateAntlrGrammar] =
 {
 	"GrammarName" -> "Grammar",		(*< The name of the grammar (correspond to grammar file) *)
-	"OnlyIfFilesModified" -> True	(* Only update the grammar if its source files have changed? *)
+	"OnlyIfFilesModified" -> True,	(* Only update the grammar if its source files have changed? *)
+	"UseNamespace" -> True			(*< Use package 'com.danielbigham.lui.antlr'? *)
 };
-UpdateAntlrGrammar[OptionsPattern[]] :=
+UpdateAntlrGrammar[opts:OptionsPattern[]] :=
 	Block[{res, grammarName = OptionValue["GrammarName"], files, fileDates},
 		If [TrueQ[OptionValue["OnlyIfFilesModified"]],
 			files = FileNames["*.g4", grammarDir, Infinity];
 			fileDates = FileDate /@ files;
-			If [fileDates =!= prevFileDates[grammarName],
-				handleRes[GenerateAntlrGrammar[]];
-				handleRes[CompileAntlrGrammar[]];
+			If [fileDates =!= prevFileDates[grammarName, $grammarOutputDir, $grammarBinOutputDir],
+				handleRes[GenerateAntlrGrammar[
+					Sequence @@ FilterRules[opts, Options[GenerateAntlrGrammar]]]];
+				handleRes[CompileAntlrGrammar[
+					Sequence @@ FilterRules[opts, Options[CompileAntlrGrammar]]]];
 			];
 			,
-			handleRes[GenerateAntlrGrammar[]];
-			handleRes[CompileAntlrGrammar[]];
+			handleRes[GenerateAntlrGrammar[
+				Sequence @@ FilterRules[opts, Options[GenerateAntlrGrammar]]]];
+			handleRes[CompileAntlrGrammar[
+				Sequence @@ FilterRules[opts, Options[CompileAntlrGrammar]]]];
 		];
-		prevFileDates[grammarName] = fileDates;
+		prevFileDates[grammarName, $grammarOutputDir, $grammarBinOutputDir] = fileDates;
 	];
+	
+updateAntlrGrammarHelper
 
 Clear[ParseUsingAntlrGrammar];
 Attributes[ParseExprUsingAntlrGrammar] = {HoldAllComplete};
@@ -170,7 +178,7 @@ ParseExprUsingAntlrGrammar[grammarName_String, grammarSymbol_String, expr_] :=
 Options[ParseUsingAntlrGrammar] =
 {
 	"GrammarName" -> "Grammar",			(*< The name of the grammar (correspond to grammar file) *)
-	"GrammarSymbol" -> "grammarRule",	(*< The resultant grammar symbol of the parse. *)
+	"GrammarSymbol" -> "grammarRules",	(*< The resultant grammar symbol of the parse. *)
 	"Temporary" -> True					(*< Generate/compile the grammar into a temporary dir? *) 
 };
 ParseUsingAntlrGrammar[str_, OptionsPattern[]] :=
@@ -191,8 +199,7 @@ ParseUsingAntlrGrammar[str_, OptionsPattern[]] :=
 				$grammarBinOutputDir
 			]
 		},
-		
-		If [FailureQ[UpdateAntlrGrammar[]],
+		If [FailureQ[UpdateAntlrGrammar["UseNamespace" -> !OptionValue["Temporary"]]],
 			Return[$Failed];
 		];
 		Print["String: ", str];
@@ -217,8 +224,7 @@ ParseUsingAntlrGrammar[str_, OptionsPattern[]] :=
 				NotebookDirectory[],
 			"CLASSPATH" -> 
 				FileNameJoin[{$LuiDir, "Jars", "antlr-4.5.3-complete.jar"}] <> ";" <> 
-				$grammarBinOutputDir <> ";" <>
-				FileNameJoin[{$LuiDir, "bin"}]
+				$grammarBinOutputDir
 			|>
 		];
 		DeleteFile[file];
