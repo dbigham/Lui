@@ -150,15 +150,15 @@ UpdateAntlrGrammar[opts:OptionsPattern[]] :=
 			fileDates = FileDate /@ files;
 			If [fileDates =!= prevFileDates[grammarName, $grammarOutputDir, $grammarBinOutputDir],
 				handleRes[GenerateAntlrGrammar[
-					Sequence @@ FilterRules[opts, Options[GenerateAntlrGrammar]]]];
+					Sequence @@ FilterRules[{opts}, Options[GenerateAntlrGrammar]]]];
 				handleRes[CompileAntlrGrammar[
-					Sequence @@ FilterRules[opts, Options[CompileAntlrGrammar]]]];
+					Sequence @@ FilterRules[{opts}, Options[CompileAntlrGrammar]]]];
 			];
 			,
 			handleRes[GenerateAntlrGrammar[
-				Sequence @@ FilterRules[opts, Options[GenerateAntlrGrammar]]]];
+				Sequence @@ FilterRules[{opts}, Options[GenerateAntlrGrammar]]]];
 			handleRes[CompileAntlrGrammar[
-				Sequence @@ FilterRules[opts, Options[CompileAntlrGrammar]]]];
+				Sequence @@ FilterRules[{opts}, Options[CompileAntlrGrammar]]]];
 		];
 		prevFileDates[grammarName, $grammarOutputDir, $grammarBinOutputDir] = fileDates;
 	];
