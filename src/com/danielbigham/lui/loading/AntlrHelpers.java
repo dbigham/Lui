@@ -306,7 +306,7 @@ public class AntlrHelpers
 	{
 		return
 			new OrPattern(
-				convert3(rulePart.basicRulePart(), grammar),
+				convert2(rulePart.rulePart(), grammar),
 				Pattern.NO_LHS
 			);
 	}

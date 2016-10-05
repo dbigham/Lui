@@ -215,4 +215,14 @@ public class TestAntlrParsing
 			assertEquals("Syntax error at line 1, column 0.", e.getMessage());
 		}
 	}
+	
+	
+	// Top level OR has composite sub-patterns, and isn't surrounded by parens
+	@Test
+	public void test22()
+	{
+		List<GrammarRule> rules = parseGrammar("start: dbca | (my (webpage|website))");
+		assertEquals(1, rules.size());
+		assertEquals("$start:\n    (dbca|{my (webpage|website)})\n        null", rules.get(0).toString());
+	}
 }

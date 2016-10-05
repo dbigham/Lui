@@ -43,7 +43,8 @@ rulePart:		'(' ws* rulePart ws* (ws* '|' ws* rulePart)+ ')'	# OrRulePart
 // That is all done in the 'rulePart: ...' rules above, but it would be
 // too unfortunate to loose all ability for OR patterns without parens,
 // so we use this additional rule to allow that.
-rulePart2:		basicRulePart (ws* '|' ws* basicRulePart)+
+rulePart2:
+				rulePart (ws* '|' ws* rulePart)+
 	;
 
 basicRulePart:

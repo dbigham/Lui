@@ -162,8 +162,6 @@ UpdateAntlrGrammar[opts:OptionsPattern[]] :=
 		];
 		prevFileDates[grammarName, $grammarOutputDir, $grammarBinOutputDir] = fileDates;
 	];
-	
-updateAntlrGrammarHelper
 
 Clear[ParseUsingAntlrGrammar];
 Attributes[ParseExprUsingAntlrGrammar] = {HoldAllComplete};
