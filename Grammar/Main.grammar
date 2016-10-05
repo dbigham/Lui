@@ -16,7 +16,7 @@ start:
 	name=$notebook -> OpenNotebook[name]
 	
 	dir=$directory ~dir -> SystemOpen[dir]
-	dir=$directory -> SystemOpen[dir]
+	dir=$directory -> Scored[SystemOpen[dir], 0.7]
 	
 	~edit grammar -> EditGrammar[]
 	
@@ -54,6 +54,8 @@ start:
 		]
 		
 	work on $function -> WorkOn["Function", function]
+	
+	delete ~nb -> DeleteCurrentNotebook[]
 
 funcArgs:
 	$id -> {id}

@@ -4,7 +4,7 @@ sourceFile:
 	util|wutil|wutils -> "WUtils`WUtils`"
 	lutil -> "Lui`Util`"
 	old defs -> FileNameJoin[{$PersonalGrammarDir, "Defs.m"}]
-	old rules -> FileNameJoin[{$PersonalGrammarDir, "Rules.m"}]
+	old rules|linguistics|grammar -> FileNameJoin[{$PersonalGrammarDir, "Rules.m"}]
 	init -> $InitFile
 	play -> "Daniel`Play`"
 	antlr -> "Lui`Antlr`"

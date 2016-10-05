@@ -38,6 +38,12 @@ $ParserState::usage = "$ParserState  "
 
 HeldHead::usage = "HeldHead  "
 
+ChooseParse::usage = "ChooseParse  "
+
+Scored::usage = "Scored  "
+
+Score::usage = "Score  "
+
 Begin["`Private`"]
 
 $GrammarDir = FileNameJoin[{$LuiDir, "Grammar"}];
@@ -74,8 +80,12 @@ LuiParse[input_String, opts:OptionsPattern[]] :=
 		
 		parse = LuiParse[$Grammar, input, opts];
 		
-		If [Length[parse] > 0,
-			Return[First[parse]];
+		Which[
+			Length[parse] > 1,
+			Return[ChooseParse[parse]];
+			,
+			Length[parse] == 1,
+			Return[First[parse] /. Score[e_, _] :> e];
 		];
 		
 		ConsiderFileInterpretation[input]
@@ -806,6 +816,50 @@ EditGrammar[] :=
 		OpenFileInWorkbench[$GrammarFile]
 	];
 
+
+(*!
+	\function ChooseParse
+	
+	\calltable
+		ChooseParse[parses] '' if there is more than one possible interpretation, chooses and returns one of them. Makes use of the Scored[...] annotation.
+
+	Examples:
+	
+	ChooseParse[{HoldComplete[Scored["C", 0.7]], HoldComplete["A"], HoldComplete[Scored["B", 0.9]]}]
+
+	===
+
+	HoldComplete["A"]
+
+	Unit tests:
+
+	RunUnitTests[Lui`Parse`ChooseParse]
+
+	\maintainer danielb
+*)
+ChooseParse[parses_] := First[Reverse[SortBy[parses, Score[#] &]]]
+
+(*!
+	\function Score
+	
+	\calltable
+		Score[expr] '' given an expr, what is its score? Pays attention to any Scored[...] annotations.
+
+	Examples:
+	
+	Score[Scored["expr", 0.8]] === 0.8
+
+	Unit tests:
+
+	RunUnitTests[Lui`Parse`Score]
+
+	\maintainer danielb
+*)
+Score[expr_] :=
+	Block[{scores},
+		scores = Max[Cases[expr, Scored[e_, score_] :> score, {0, Infinity}]];
+		scores /. DirectedInfinity[-1] -> 1
+	];
 
 End[]
 
