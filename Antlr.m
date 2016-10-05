@@ -55,7 +55,6 @@ GenerateAntlrGrammar[OptionsPattern[]] :=
 		If [grammarDir == Automatic,
 			grammarDir = $grammarSourceDir;
 		];
-		Print[OptionValue["UseNamespace"]];
 		grammarFile = FileNameJoin[{grammarDir, grammarName <> ".g4"}];
 		If [!FileExistsQ[grammarFile],
 			Print["Missing grammar file: ", grammarFile];
@@ -147,7 +146,7 @@ Options[UpdateAntlrGrammar] =
 UpdateAntlrGrammar[opts:OptionsPattern[]] :=
 	Block[{res, grammarName = OptionValue["GrammarName"], files, fileDates},
 		If [TrueQ[OptionValue["OnlyIfFilesModified"]],
-			files = FileNames["*.g4", grammarDir, Infinity];
+			files = FileNames["*.g4", $grammarSourceDir, Infinity];
 			fileDates = FileDate /@ files;
 			If [fileDates =!= prevFileDates[grammarName, $grammarOutputDir, $grammarBinOutputDir],
 				handleRes[GenerateAntlrGrammar[
@@ -202,8 +201,9 @@ ParseUsingAntlrGrammar[str_, OptionsPattern[]] :=
 		If [FailureQ[UpdateAntlrGrammar["UseNamespace" -> !OptionValue["Temporary"]]],
 			Return[$Failed];
 		];
+		Print[Style["Input", "Subsection"]];
 		Print["String: ", str];
-		Print["InputForm: ", ToString[str, InputForm]];
+		XPrint["InputForm: ", ToString[str, InputForm]];
 		file = OpenWrite[][[1]];
 		Close[file];
 		Export[file, str, "Text"];
@@ -228,6 +228,7 @@ ParseUsingAntlrGrammar[str_, OptionsPattern[]] :=
 			|>
 		];
 		DeleteFile[file];
+		Print[Style["Result", "Subsection"]];
 		handleRes2[res]
 	]
 	
