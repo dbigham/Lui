@@ -1,2 +1,3 @@
 app:
+	sourcetree | st -> "E:\\Program Files (x86)\\Atlassian\\SourceTree\\SourceTree.exe"
 	"project manager" | projman -> "E:\\Users\\Daniel\\Dropbox\\Apps\\Project Manager.exe"

@@ -8,6 +8,7 @@ import java.util.Map;
 import java.util.Set;
 
 import com.danielbigham.FilePositionSpan;
+import com.danielbigham.Util;
 import com.danielbigham.io.Out;
 import com.danielbigham.lui.grammarrule.GrammarRule;
 import com.danielbigham.lui.loading.AntlrHelpers;
@@ -63,6 +64,7 @@ public class Grammar
 	static
 	{
 		symbolsSupportingDynamicRuleCreation = new HashSet<String>();
+		symbolsSupportingDynamicRuleCreation.add("start");
 		symbolsSupportingDynamicRuleCreation.add("notebook");
 		symbolsSupportingDynamicRuleCreation.add("sourceFile");
 		symbolsSupportingDynamicRuleCreation.add("webpage");
@@ -548,7 +550,16 @@ public class Grammar
 		
 		//Out.print("setLinguistic: " + symbol + ", " + expression);
 		
-		String newRule = linguistic + " -> " + expression;
+		String newRule;
+		
+		if (expression != null && !expression.equals("Null"))
+		{
+			newRule = linguistic + " -> " + expression;
+		}
+		else
+		{
+			newRule = linguistic;
+		}
 		
 		if (!AntlrHelpers.isSimpleRule(newRule))
 		{
@@ -562,15 +573,27 @@ public class Grammar
 			FilePositionSpan grammarSymbolSpan =
 				grammarSymbolFileSpan.get(symbol);
 			
+			String ling = symbol + ":\n\t" + newRule;
+			
 			if (grammarSymbolSpan != null)
 			{
-				grammarSymbolSpan.replace(symbol + ":\n\t" + newRule, 1);
+				grammarSymbolSpan.replace(ling, 1);
 			}
 			else
 			{
 				// We don't even have a section yet for this grammar
 				// symbol.
-				throw new Exception("No section yet defined for grammar symbol: " + symbol);
+				//throw new Exception("No section yet defined for grammar symbol: " + symbol);
+				
+				FilePositionSpan startSpan =
+						grammarSymbolFileSpan.get("start");
+				
+				if (startSpan == null)
+				{
+					throw new Exception("No section yet defined for $start symbol; we therefore don't know what grammar file is the 'main' file.");
+				}
+				
+				Util.fileAppend(startSpan.getFile(), ling);
 			}
 		}
 		else

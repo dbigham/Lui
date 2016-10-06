@@ -1,4 +1,5 @@
 sourceFile:
+	jutil | "jit util" -> "JitLang`Util`"
 	"grammar.java" | "g.java" -> "E:\\Users\\Daniel\\Dropbox\\Projects\\Lui\\src\\com\\danielbigham\\lui\\Grammar.java"
 	"nl tools" | "nlt" | "nltool" | "nltools" -> "NLTools`NLTools`"
 	grammar loader -> "E:\\Users\\Daniel\\Dropbox\\Projects\\Lui\\src\\com\\danielbigham\\lui\\loading\\GrammarFiles.java"

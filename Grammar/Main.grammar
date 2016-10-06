@@ -70,7 +70,7 @@ start:
 			"Description" -> quotedString
 		]
 		
-	work on $function -> WorkOn["Function", function]
+	"work on"|wo|w $function -> WorkOn["Function", function]
 	
 	delete ~nb -> DeleteCurrentNotebook[]
 	
@@ -94,6 +94,13 @@ start:
 	
 	$app
 		SystemOpen[app]
+	
+	~new ~syn $id
+		DefineLinguistic[
+			"Linguistic" -> id,
+			"Symbol" -> StringJoin["~", id],
+			"Expression" -> Null
+		]
 
 name: $id|$quotedString
 
@@ -133,6 +140,11 @@ function:
 ~webpage: webpage|website
 
 ~spacex: spacex|spx|"space x"
+~spx: spacex|spx|"space x"
 
 ~project: proj|project
 ~proj: proj|project
+
+~jlang: "jit language" | jlang | jlanguage | jitlang
+
+~syn: synonym | syn
