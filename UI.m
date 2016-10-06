@@ -879,7 +879,7 @@ DefineLinguisticHotkeyForFile[title_, selected_] :=
 	Block[{},
 		<|
 			"Linguistic" -> ToLowerCase[FileNameTake[selected, -1]],
-			"Symbol" -> If [DirectoryQ[selected], "directory", "file"],
+			"Symbol" -> If [DirectoryQ[selected], "directory", "sourceFile"],
 			"Expression" -> selected,
 			"UILabel" -> selected
 		|>

@@ -1,5 +1,6 @@
 package com.danielbigham.lui.loading;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.FileSystems;
 import java.nio.file.FileVisitResult;
@@ -32,12 +33,14 @@ public class FileLoaderAndReloader extends Thread
 	private IFileLoader fileLoader;
 	private final WatchService watchService;
 	private final Map<WatchKey, Path> keys;
+	private final Map<String, Long> fileTimestamps;
 	
 	public FileLoaderAndReloader(Path dir, IFileLoader fileLoader) throws IOException
 	{
 		this.fileLoader = fileLoader;
 		this.watchService = FileSystems.getDefault().newWatchService();
 		this.keys = new HashMap<WatchKey, Path>();
+		this.fileTimestamps = new HashMap<String, Long>();
 		
 		loadFiles(dir);
 		
@@ -190,10 +193,23 @@ public class FileLoaderAndReloader extends Thread
 				{
 					if (!Files.isDirectory(path, LinkOption.NOFOLLOW_LINKS))
 					{
-						// File modfiied
+						// File modified
 						try
 						{
-							fileLoader.fileModified(path);
+							long fileLastModified = new File(path.toString()).lastModified();
+							Long lastKnownModified = fileTimestamps.get(path.toString());
+							// The Java WatcherService seems to see two file modifications in
+							// rapid succession (ex. 10 milliseconds apart). We don't want to
+							// reload the grammar twice, so we'll make sure the timestamp changes
+							// enough.
+							if (lastKnownModified == null || lastKnownModified < fileLastModified - 100)
+							{
+								//Out.print("File modified: " + path + " (" + Thread.currentThread().getId() + ")");
+								//Out.print("  File last modified:  " + fileLastModified + " (" + Thread.currentThread().getId() + ")");
+								//Out.print("  Last known modified: " + lastKnownModified + " (" + Thread.currentThread().getId() + ")");
+								fileTimestamps.put(path.toString(), fileLastModified);
+								fileLoader.fileModified(path);
+							}
 						}
 						catch (IOException e)
 						{
@@ -203,16 +219,16 @@ public class FileLoaderAndReloader extends Thread
 				}
 			}
 			
-            boolean valid = key.reset();
-            if (!valid)
-            {
-                keys.remove(key);
-
-                if (keys.isEmpty())
-                {
-                    break;
-                }
-            }
+			boolean valid = key.reset();
+			if (!valid)
+			{
+				keys.remove(key);
+				
+				if (keys.isEmpty())
+				{
+					break;
+				}
+			}
 		}
 	}
 }

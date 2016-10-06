@@ -7,13 +7,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.danielbigham.Util;
-import com.danielbigham.io.Out;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import com.sun.net.httpserver.HttpServer;
-import com.wolfram.jlink.KernelLink;
-import com.wolfram.jlink.MathLinkException;
-import com.wolfram.jlink.StdLink;
 //import com.wolfram.jlink.KernelLink;
 //import com.wolfram.jlink.MathLinkException;
 //import com.wolfram.jlink.StdLink;
@@ -84,7 +80,7 @@ public class LuiHttpServer
 			String title = parms.get("title");
 			String selected = parms.get("selected");
 			String process = parms.get("process");
-			callWL(
+			Util.callWL(
 				"Lui`UI`DefineLinguisticHotkey["  +
 					"\"Title\" -> " + Util.createDoubleQuotedString(title) + "," +
 					"\"Selected\" -> " + Util.createDoubleQuotedString(selected) + "," +
@@ -106,7 +102,7 @@ public class LuiHttpServer
 		{
 			Map<String, String> parms = LuiHttpServer.queryToMap(t.getRequestURI().getQuery());			
 			String text = parms.get("text");
-			callWL(
+			Util.callWL(
 				"CreateLuiLink["  +
 					Util.createDoubleQuotedString(text) +
 				"]");
@@ -124,7 +120,7 @@ public class LuiHttpServer
 		@Override
 		public void handle(HttpExchange t) throws IOException
 		{			
-			callWL(
+			Util.callWL(
 				"EvaluateEvaluationTarget[]");
 			LuiHttpServer.defaultResponse(t);
 		}
@@ -140,7 +136,7 @@ public class LuiHttpServer
 		@Override
 		public void handle(HttpExchange t) throws IOException
 		{			
-			callWL(
+			Util.callWL(
 				"SetEvaluationTarget[]");
 			LuiHttpServer.defaultResponse(t);
 		}
@@ -158,7 +154,7 @@ public class LuiHttpServer
 		{
 			Map<String, String> parms = LuiHttpServer.queryToMap(t.getRequestURI().getQuery());			
 			String name = parms.get("name");
-			callWL(
+			Util.callWL(
 				"CreateIssueNotebook["  +
 					"\"Name\" -> " + Util.createDoubleQuotedString(name) +
 				"]");
@@ -196,32 +192,6 @@ public class LuiHttpServer
 		os.write(response.getBytes());
 		os.close();
 	}
-	
-	/**
-	 * Make a call to Wolfram Language and execute a command.
-	 * 
-	 * @param command		the command to execute.
-	 */
-	public static void callWL(String command)
-	{
-		final KernelLink link = StdLink.getLink();
-		if (link != null)
-		{
-			try
-			{
-				link.evaluate(command);
-				link.discardAnswer();
-			}
-			catch (MathLinkException e2)
-			{
-				link.print("Unexpected problem calling WL: " + e2.toString());
-			}
-		}
-		else
-		{
-			Out.print("ERROR: Couldn't find KernelLink via JLink");
-		}
-	}	
 	
 	/**
 	 * Call Wolfram Language code via JLink to tell Lui to display its user interface.

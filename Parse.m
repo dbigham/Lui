@@ -163,7 +163,8 @@ CreateGrammar[name_String, obj_ /; JavaObjectQ[obj]] :=
 CreateGrammar[name_String, Dir[dir_String]] :=
 	Block[{grammar},
 		grammar = JavaNew["com.danielbigham.lui.Grammar"];
-		JavaNew["com.danielbigham.lui.loading.GrammarFiles", dir, grammar];
+		LoadJavaClass["com.danielbigham.lui.loading.GrammarFiles"];
+		GrammarFiles`create[dir, grammar];
 		CreateGrammar[name, grammar]
 	]
 
@@ -762,7 +763,9 @@ evaluateRule[type_, action_, children_List] :=
 *)
 InitializeParser[] :=
 	Block[{},
-		$Grammar = CreateGrammar["Lui", Dir[$GrammarDir]]
+		If [!ValueQ[$Grammar],
+			$Grammar = CreateGrammar["Lui", Dir[$GrammarDir]]
+		];
 	];
 
 (*!

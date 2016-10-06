@@ -74,6 +74,18 @@ start:
 			name,
 			sourceCodeDirectory
 		]
+	
+	~new ~project $name
+		CreateProject[
+			{
+				"Directory" -> $ProjectsDir,
+				"ParentPackage" -> "",
+				"Linguistic" -> "not supported yet"
+			},
+			name
+		]
+
+name: $id|$quotedString
 
 funcArgs:
 	$id -> {id}
@@ -111,3 +123,6 @@ function:
 ~webpage: webpage|website
 
 ~spacex: spacex|spx|"space x"
+
+~project: proj|project
+~proj: proj|project

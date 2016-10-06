@@ -4,11 +4,15 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import com.danielbigham.Util;
 import com.danielbigham.io.Out;
 import com.danielbigham.lui.Grammar;
 import com.danielbigham.lui.antlr.GrammarParser.GrammarRulesContext;
+import com.danielbigham.lui.antlr.GrammarRuleSyntaxError;
 import com.danielbigham.lui.grammarrule.GrammarRule;
 
 
@@ -24,8 +28,37 @@ public class GrammarFiles implements IFileLoader
 	private FileLoaderAndReloader fileWatcherThread;
 	private Grammar grammar;
 	private final List<Path> allFiles;
+	private static final Map<String, GrammarFiles> objs;
 	
-	public GrammarFiles(Path baseDir, Grammar grammar) throws IOException
+	static
+	{
+		objs = new HashMap<String, GrammarFiles>();
+	}
+	
+	/**
+	 * Create a GrammarFiles object.
+	 * 
+	 * Ensure that duplicates don't get created for the same directory.
+	 * 
+	 * @param dir		The directory to watch.
+	 * @return			The FileLoaderAndReloader object.
+	 */
+	public static GrammarFiles create(String dir, Grammar grammar) throws IOException
+	{
+		GrammarFiles existing = objs.get(dir);
+		if (existing != null)
+		{
+			return existing;
+		}
+		else
+		{
+			GrammarFiles obj = new GrammarFiles(dir, grammar);
+			objs.put(dir, obj);
+			return obj;
+		}
+	}
+	
+	private GrammarFiles(Path baseDir, Grammar grammar) throws IOException
 	{
 		this.grammar = grammar;
 		this.allFiles = new ArrayList<Path>();
@@ -33,12 +66,34 @@ public class GrammarFiles implements IFileLoader
 		fileWatcherThread.run();
 	}
 	
-	public GrammarFiles(String baseDir, Grammar grammar) throws IOException
+	private GrammarFiles(String baseDir, Grammar grammar) throws IOException
 	{
 		this.grammar = grammar;
 		this.allFiles = new ArrayList<Path>();
 		fileWatcherThread = new FileLoaderAndReloader(Paths.get(baseDir), this);
 		fileWatcherThread.start();
+	}
+	
+	/**
+	 * Handles grammar syntax errors upon loading.
+	 */
+	private void handleGrammarRuleSyntaxError(Exception e)
+	{
+		if (e instanceof GrammarRuleSyntaxError)
+		{
+			Out.print(e);
+			GrammarRuleSyntaxError e2 = (GrammarRuleSyntaxError)e;
+			Util.callWL(
+				"OpenFileInWorkbench[" +
+					Util.createDoubleQuotedString(e2.getSourceName()) + "," +
+					"\"Line\" -> " + e2.getLine() +
+				"]"
+			);
+		}
+		else
+		{
+			Out.print("TODO");
+		}
 	}
 	
 	/**
@@ -67,7 +122,14 @@ public class GrammarFiles implements IFileLoader
 				}
 			}
 			
-			AntlrHelpers.loadGrammarFile(path, new RuleHandler());
+			try
+			{
+				AntlrHelpers.loadGrammarFile(path, new RuleHandler());
+			}
+			catch (Exception e)
+			{
+				handleGrammarRuleSyntaxError(e);
+			}
 		}
 		
 		grammar.processRules();
@@ -101,7 +163,14 @@ public class GrammarFiles implements IFileLoader
 				}
 			}
 			
-			AntlrHelpers.loadGrammarFile(path, new RuleHandler());
+			try
+			{
+				AntlrHelpers.loadGrammarFile(path, new RuleHandler());
+			}
+			catch (Exception e)
+			{
+				handleGrammarRuleSyntaxError(e);
+			}
 		}
 	}
 
@@ -112,7 +181,6 @@ public class GrammarFiles implements IFileLoader
 		{
 			//Out.print("--------------------------------------------------------------------------------");
 			//Out.print("File modified: " + path);
-			
 			reloadAll();
 		}
 	}
