@@ -28,6 +28,13 @@ start:
 			,
 			HeldHead[EditFile][FindFile[file]]
 		]
+	
+	~edit file=$sourceFile substring=$quotedString
+		If [StringFreeQ[file, "`"],
+			HeldHead[EditFile][file, "Substring" -> substring]
+			,
+			HeldHead[EditFile][FindFile[file], "Substring" -> substring]
+		]
 		
 	file=$sourceFile
 		Scored[
@@ -84,6 +91,9 @@ start:
 			},
 			name
 		]
+	
+	$app
+		SystemOpen[app]
 
 name: $id|$quotedString
 

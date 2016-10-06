@@ -1,4 +1,5 @@
 notebook:
+	wl parsing -> "WLParsing.nb"
 	grammar reload|reloading -> "GrammarReload.nb"
 	"syntax errors" | "syntax error handling" -> "SyntaxErrorHandling.nb"
 	meredith | mer -> "meredith.nb"

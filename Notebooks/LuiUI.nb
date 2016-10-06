@@ -10,22 +10,62 @@
 NotebookFileLineBreakTest
 NotebookFileLineBreakTest
 NotebookDataPosition[       158,          7]
-NotebookDataLength[      1039,         40]
-NotebookOptionsPosition[       803,         27]
-NotebookOutlinePosition[      1144,         42]
-CellTagsIndexPosition[      1101,         39]
+NotebookDataLength[      2871,         83]
+NotebookOptionsPosition[      2563,         67]
+NotebookOutlinePosition[      2904,         82]
+CellTagsIndexPosition[      2861,         79]
 WindowFrame->Normal*)
 
 (* Beginning of Notebook Content *)
 Notebook[{
+
+Cell[CellGroupData[{
 Cell[BoxData[
  RowBox[{
   RowBox[{"Get", "[", "\"\<Lui`\>\"", "]"}], ";", " ", 
   RowBox[{"ReloadFiles", "[", "]"}], ";", " ", 
   RowBox[{"Lui`UI`Lui", "[", "]"}]}]], "Input",
- CellChangeTimes->{{3.684661185127596*^9, 3.684661187975943*^9}}]
+ CellChangeTimes->{{3.684661185127596*^9, 3.684661187975943*^9}}],
+
+Cell[BoxData[
+ DynamicModuleBox[{Lui`UI`Private`input$$ = ""}, 
+  DynamicBox[ToBoxes[
+    ReplaceAll[Lui`UI`Private`$interpHeldVar, HoldComplete[
+       Pattern[Lui`UI`Private`interp$, 
+        Blank[]]] :> ReplaceAll[Lui`UI`Private`$actionResHeldVar, HoldComplete[
+         Pattern[Lui`UI`Private`actionResult$, 
+          Blank[]]] :> Column[{
+          EventHandler[
+           InputField[
+            Dynamic[Lui`UI`Private`input$$], String, 
+            ImageSize -> {450, Automatic}, FrameMargins -> Medium, BoxID -> 
+            "LuiInputFieldBoxID48"], {
+           "ReturnKeyDown" :> 
+            Lui`UI`Private`HandleInput[
+             Lui`UI`Private`input$$, Lui`UI`Private`$interpHeldVar, 
+              Lui`UI`Private`$actionResHeldVar]}], 
+          Lui`UI`Private`displayIfNotNull[
+          Lui`UI`Private`interp$, Lui`UI`Private`formatInterpretation], 
+          With[{Lui`UI`Private`actionResult2$ = Lui`UI`Private`actionResult$}, 
+           If[
+            And[
+            HoldComplete[Lui`UI`Private`actionResult2$] =!= 
+             Lui`UI`Private`interp$, 
+             Not[
+              MatchQ[Lui`UI`Private`actionResult$, 
+               Blank[NotebookObject]]]], 
+            Lui`UI`Private`displayIfNotNull[Lui`UI`Private`actionResult$], 
+            Apply[Sequence, {}]]]}]]], StandardForm],
+   ImageSizeCache->{452., {11., 18.}}],
+  DynamicModuleValues:>{}]], "Output",
+ CellChangeTimes->{{3.6847007174777093`*^9, 3.6847007261116343`*^9}, 
+   3.6847007923567495`*^9, {3.6847009718424644`*^9, 3.6847010083035583`*^9}, 
+   3.684701043876955*^9, 3.684701147563895*^9, {3.6847017270471115`*^9, 
+   3.684701733215992*^9}, 3.6847017891395197`*^9, 3.68470190690586*^9, 
+   3.6847020783172054`*^9}]
+}, Open  ]]
 },
-WindowSize->{780, 390},
+WindowSize->{836, 390},
 WindowMargins->{{Automatic, -7}, {Automatic, 1}},
 FrontEndVersion->"11.0 for Microsoft Windows (64-bit) (July 28, 2016)",
 StyleDefinitions->"Default.nb"
@@ -41,7 +81,10 @@ CellTagsIndex->{}
 *)
 (*NotebookFileOutline
 Notebook[{
-Cell[558, 20, 241, 5, 30, "Input"]
+Cell[CellGroupData[{
+Cell[580, 22, 241, 5, 30, "Input"],
+Cell[824, 29, 1723, 35, 46, "Output"]
+}, Open  ]]
 }
 ]
 *)

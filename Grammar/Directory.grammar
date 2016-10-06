@@ -1,4 +1,5 @@
 directory:
+	lui java -> "E:\\Users\\Daniel\\Dropbox\\Projects\\Lui\\src\\com\\danielbigham\\lui"
 	documents | docs -> "E:\\Users\\Daniel\\Documents"
 	projects|project|proj -> "E:\\Users\\Daniel\\Dropbox\\Projects"
 	lui -> $LuiDir

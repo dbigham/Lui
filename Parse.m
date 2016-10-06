@@ -414,6 +414,8 @@ GetParserState[grammar_, input_] :=
 			state2 = ToExpression[wlString];
 			If [FailureQ[state2],
 				Message[LuiParse::te];
+				Print["Expression returned from Java was:"];
+				Print[wlString];
 				Return[$Failed]
 			];
 			(* What's the best way to deal with this? Should it be done

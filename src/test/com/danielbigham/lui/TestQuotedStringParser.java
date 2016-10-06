@@ -34,6 +34,18 @@ public class TestQuotedStringParser extends TestRegexParser
 	@Test
 	public void test4()
 	{
-		doTest("'quoted string'");
+		testExpression("'quoted string'", "\"quoted string\"");
+	}
+	
+	@Test
+	public void test5()
+	{
+		testExpression("'quoted \"string\"'", "\"quoted \\\"string\\\"\"");
+	}
+	
+	@Test
+	public void test6()
+	{
+		testExpression("'quoted \\'string\\''", "\"quoted 'string'\"");
 	}
 }

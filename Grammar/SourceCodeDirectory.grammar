@@ -1,4 +1,5 @@
 sourceCodeDirectory:
+	"nl tools" | "nlt" | "nltool" | "nltools" -> <|"Directory" -> "E:\\Users\\Daniel\\Dropbox\\Projects\\NLTools", "Package" -> "NLTools`", "Linguistic" -> "TODO"|>
 	project 1 -> <|"Directory" -> "E:\\Users\\Daniel\\Dropbox\\Projects\\Project1", "Package" -> "Project1`", "Linguistic" -> "TODO"|>
 	lui -> <|"Directory" -> $LuiDir, "Package" -> "Lui`", "Linguistic" -> "TODO"|>
 	personal -> <|"Directory" -> FileNameJoin[{$PersonalCvsDir, "Daniel"}], "Package" -> "Daniel`", "Linguistic" -> "TODO"|>
