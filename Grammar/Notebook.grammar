@@ -1,4 +1,8 @@
 notebook:
+	~jlang documentation|docs -> "JLangDocumentation.nb"
+	about ~jlang -> "AboutJITLanguage.nb"
+	(~jlang chunk types) | "chunk types" -> "ChunkTypes.nb"
+	"user interface" | ui -> "UserInterface.nb"
 	~jlang design -> "JITLanguageDesign.nb"
 	"jit language" | jlang | jitlang -> "JITLanguage.nb"
 	~nb log -> "NotebookLog.nb"

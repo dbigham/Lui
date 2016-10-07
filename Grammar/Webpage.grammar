@@ -1,4 +1,5 @@
 webpage:
+	manulife -> "https://client.manulifebank.com/MBCClientUI/"
 	diep | "diep.io" -> "http://diep.io/"
 	weather radar -> "https://weather.gc.ca/radar/index_e.html?id"
 	letters to self -> "https://drive.google.com/drive/u/0/folders/0B1m9lIRgFVMRVkNIeFh4NFBtTWs"

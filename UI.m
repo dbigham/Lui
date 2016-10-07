@@ -64,15 +64,7 @@ Lui[] :=
 		SetHeldVar[$interpHeldVar, Null];
 		SetHeldVar[$actionResHeldVar, Null];
 		
-		StartScheduledTask[
-			CreateScheduledTask[
-				FrontEnd`MoveCursorToInputField[
-					InputNotebook[],
-					$luiInputFieldBoxId
-				],
-				{0.3}
-			]
-		];
+		FocusInputFieldDelayed[$luiInputFieldBoxId];
 		
 		With[{boxId = $luiInputFieldBoxId},
 			Dynamic[

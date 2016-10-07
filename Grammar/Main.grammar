@@ -1,4 +1,20 @@
 start:
+	key mappings
+		OpenFileInWorkbench[
+			FindFile["JitLang`UI`"],
+			"Substring" -> "LetterToChunkType[letter_"
+		]
+
+	~jlang input=$quotedString
+		JLang[input]
+	
+	word=$id "->" type=$id
+		ChunkSet[word, "Type" -> type]
+	
+	(~jlang reinit) | (reload ~jlang) -> JLangReinit[]
+
+	bullet -> NotebookWrite[SelectedNotebook[], Cell["", "Item"]]
+
 	email $person -> ComposeEmail["To" -> person]
 	email $person subject=$quotedString
 		ComposeEmail["To" -> person, "Subject" -> subject]
@@ -17,6 +33,8 @@ start:
 	
 	dir=$directory ~dir -> SystemOpen[dir]
 	dir=$directory -> Scored[SystemOpen[dir], 0.7]
+	dir=$sourceCodeDirectory ~dir
+		HeldHead[SystemOpen][dir["Directory"]]
 	
 	~edit grammar -> EditGrammar[]
 	
@@ -55,6 +73,8 @@ start:
 	$url -> URL[url]
 	
 	run tests -> Print[RunUnitTests[FileNameDrop[FindFile["Lui`"], -2]]]
+	
+	run $id tests -> Print[RunUnitTests[FileNameDrop[FindFile[StringJoin[id, "`"]], -2]]]
 	
 	~new $sourceFile ~function name=$id "[" $funcArgs "]" $quotedString
 		HeldHead[CreateFunctionInFile][
@@ -145,6 +165,6 @@ function:
 ~project: proj|project
 ~proj: proj|project
 
-~jlang: "jit language" | jlang | jlanguage | jitlang
+~jlang: "jit language" | jlang | jlanguage | jitlang | jit
 
 ~syn: synonym | syn

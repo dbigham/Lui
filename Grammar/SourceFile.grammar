@@ -1,5 +1,8 @@
 sourceFile:
+	chunks | "chunks.m" -> "E:\\Users\\Daniel\\Dropbox\\Projects\\JitLang\\Data\\Chunks.m"
+	jui | (~jlang ui) -> "JitLang`UI`"
 	jutil | "jit util" -> "JitLang`Util`"
+	~jlang -> "JitLang`JitLang`"
 	"grammar.java" | "g.java" -> "E:\\Users\\Daniel\\Dropbox\\Projects\\Lui\\src\\com\\danielbigham\\lui\\Grammar.java"
 	"nl tools" | "nlt" | "nltool" | "nltools" -> "NLTools`NLTools`"
 	grammar loader -> "E:\\Users\\Daniel\\Dropbox\\Projects\\Lui\\src\\com\\danielbigham\\lui\\loading\\GrammarFiles.java"
