@@ -6,6 +6,10 @@ Needs["WUtils`WUtils`"]
 
 DefineLinguistic::usage = "DefineLinguistic  "
 
+SearchNotebooks::usage = "SearchNotebooks  "
+
+IndexNotebooks::usage = "IndexNotebooks  "
+
 Begin["`Private`"]
 
 (*!
@@ -91,6 +95,46 @@ DefineLinguistic[OptionsPattern[]] :=
 				]
 			]
 			}
+		]
+	];
+
+(*!
+	\function SearchNotebooks
+	
+	\calltable
+		SearchNotebooks[search] '' searches the notebooks directory.
+
+	Examples:
+	
+	SearchNotebooks[search] === TODO
+	
+	\related '
+	
+	\maintainer danielb
+*)
+SearchNotebooks[search_] :=
+	Block[{},
+		TextSearchReport[SearchIndexObject["Notebooks"], SearchQueryString[search]]
+	];
+
+(*!
+	\function IndexNotebooks
+	
+	\calltable
+		IndexNotebooks[] '' creates or updates a search index for the notebooks directory.
+	
+	\related '
+	
+	\maintainer danielb
+*)
+IndexNotebooks[] :=
+	Block[{obj},
+		obj = Quiet[SearchIndexObject["Notebooks"]];
+		If [MatchQ[obj, _SearchIndexObject],
+			UpdateSearchIndex[obj];
+			obj
+			,
+			CreateSearchIndex[Global`$NotebookDirectory, "Notebooks"]
 		]
 	];
 

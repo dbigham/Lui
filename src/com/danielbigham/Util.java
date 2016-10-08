@@ -1,5 +1,9 @@
 package com.danielbigham;
 
+import java.awt.HeadlessException;
+import java.awt.Toolkit;
+import java.awt.datatransfer.DataFlavor;
+import java.awt.datatransfer.UnsupportedFlavorException;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -66,5 +70,19 @@ public class Util
 		{
 			out.println("\n" + str);
 		}
-	}	
+	}
+	
+	/**
+	 * Gets the clipboard as text.
+	 * 
+	 * @return the contents of the clipboard.
+	 * 
+	 * @throws HeadlessException
+	 * @throws UnsupportedFlavorException
+	 * @throws IOException
+	 */
+	public static String getClipboard() throws HeadlessException, UnsupportedFlavorException, IOException
+	{
+		return (String)Toolkit.getDefaultToolkit().getSystemClipboard().getData(DataFlavor.stringFlavor);
+	}
 }

@@ -1,4 +1,7 @@
 webpage:
+	(new post) | (new blog post) -> "http://www.danielbigham.ca/cgi-bin/blog.pl?mode=New"
+	set cookies -> "http://www.danielbigham.ca/cgi-bin/blog.pl?mode=SetCookies&password=grrrfight"
+	fb | facebook -> "https://www.facebook.com/"
 	manulife -> "https://client.manulifebank.com/MBCClientUI/"
 	diep | "diep.io" -> "http://diep.io/"
 	weather radar -> "https://weather.gc.ca/radar/index_e.html?id"
@@ -8,7 +11,7 @@ webpage:
 	google docs|drive -> "https://drive.google.com/drive/u/0/my-drive"
 	"2016" ~dir -> "https://drive.google.com/drive/u/0/folders/0B1m9lIRgFVMRUzhFYUY4Wno5VTA"
 	future docs -> "https://drive.google.com/drive/u/0/folders/0B1m9lIRgFVMRflRaeXFTSGtIM0prMmctV3hJSDFSamxXRGtpZDlmU2k2VmViN0o2WkpYV1E"
-	tesla -> "https://www.reddit.com/r/teslamotors/"
+	tesla web -> "https://www.reddit.com/r/teslamotors/"
 	futurism -> "http://futurism.com/"
 	futurology | futureology | future -> "https://www.reddit.com/r/Futurology"
 	the verge | verge -> "http://www.theverge.com/"

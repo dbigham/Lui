@@ -1,4 +1,6 @@
 sourceFile:
+	action|actions -> "Lui`Actions`"
+	~jlang inputs -> "E:\\Users\\Daniel\\Dropbox\\Projects\\JitLang\\Data\\Inputs.m"
 	chunks | "chunks.m" -> "E:\\Users\\Daniel\\Dropbox\\Projects\\JitLang\\Data\\Chunks.m"
 	jui | (~jlang ui) -> "JitLang`UI`"
 	jutil | "jit util" -> "JitLang`Util`"
@@ -18,6 +20,7 @@ sourceFile:
 	ui -> "Lui`UI`"
 	util|wutil|wutils -> "WUtils`WUtils`"
 	lutil -> "Lui`Util`"
+	lui ui -> "Lui`UI`"
 	old defs -> FileNameJoin[{$PersonalGrammarDir, "Defs.m"}]
 	old rules|linguistics|grammar -> FileNameJoin[{$PersonalGrammarDir, "Rules.m"}]
 	init -> $InitFile

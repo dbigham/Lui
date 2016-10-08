@@ -1,4 +1,10 @@
 start:
+	add opts|options
+		AddOptions[GetClipboard[]]
+	
+	(search ~nbs for $name) | (search ~nbs $name) | (~nbs search $name)
+		SearchNotebooks[name]
+	
 	key mappings
 		OpenFileInWorkbench[
 			FindFile["JitLang`UI`"],
@@ -150,6 +156,8 @@ function:
 ~new: create|new
 
 ~nb: notebook|nb
+
+~nbs: notebooks|nbs|notebook|nb
 
 ~dir: directory|dir
 
