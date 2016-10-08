@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import com.danielbigham.io.Out;
 import com.danielbigham.lui.Grammar;
 import com.danielbigham.lui.pattern.SymbolPattern;
 import com.danielbigham.lui.patternmatch.IPatternMatch;

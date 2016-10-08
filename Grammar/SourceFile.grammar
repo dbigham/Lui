@@ -1,4 +1,5 @@
 sourceFile:
+	(seq|"sequence patt"|pattern|patterns) | seqpatt | seqpat | seq -> "JitLang`SeqPatt`"
 	action|actions -> "Lui`Actions`"
 	~jlang inputs -> "E:\\Users\\Daniel\\Dropbox\\Projects\\JitLang\\Data\\Inputs.m"
 	chunks | "chunks.m" -> "E:\\Users\\Daniel\\Dropbox\\Projects\\JitLang\\Data\\Chunks.m"

@@ -1,4 +1,7 @@
 start:
+	replace from=$quotedString with to=$quotedString in $dir
+		StringReplaceInDir[dir, from, to]
+	
 	add opts|options
 		AddOptions[GetClipboard[]]
 	
@@ -37,10 +40,8 @@ start:
 	
 	name=$notebook -> OpenNotebook[name]
 	
-	dir=$directory ~dir -> SystemOpen[dir]
-	dir=$directory -> Scored[SystemOpen[dir], 0.7]
-	dir=$sourceCodeDirectory ~dir
-		HeldHead[SystemOpen][dir["Directory"]]
+	dir=$dir ~dir -> SystemOpen[dir]
+	dir=$dir -> Scored[SystemOpen[dir], 0.7]
 	
 	~edit grammar -> EditGrammar[]
 	

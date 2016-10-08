@@ -1,4 +1,5 @@
-directory:
+dir:
+	dir=$sourceCodeDirectory -> dir["Directory"]
 	~jlang data -> "E:\\Users\\Daniel\\Dropbox\\Projects\\JitLang\\Data"
 	lui java -> "E:\\Users\\Daniel\\Dropbox\\Projects\\Lui\\src\\com\\danielbigham\\lui"
 	documents | docs -> "E:\\Users\\Daniel\\Documents"
