@@ -1,4 +1,5 @@
 sourceFile:
+	(chunk type (sequence|seq) model) | ((sequence|seq) model) -> "E:\\Users\\Daniel\\Dropbox\\Projects\\JitLang\\Data\\ChunkTypeSequenceModel.m"
 	(seq|"sequence patt"|pattern|patterns) | seqpatt | seqpat | seq -> "JitLang`SeqPatt`"
 	action|actions -> "Lui`Actions`"
 	~jlang inputs -> "E:\\Users\\Daniel\\Dropbox\\Projects\\JitLang\\Data\\Inputs.m"

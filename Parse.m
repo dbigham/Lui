@@ -56,7 +56,7 @@ b: TWO -> 2
 ";
 
 (* The start symbol. *)
-START = -1;
+STARTSYM = -1;
 
 Attributes[HeldHead] = {HoldAllComplete};
 
@@ -296,8 +296,8 @@ ProcessParseForest[state_] :=
 		forest = Most[state["Forest"]];
 		
 		(* Select the parse forest nodes that span the entire input string
-		   and who's result symbol is the START symbol. *)
-		topLevelNodes = Select[forest, First[#] === {START, 0, endPos} &];
+		   and who's result symbol is the STARTSYM symbol. *)
+		topLevelNodes = Select[forest, First[#] === {STARTSYM, 0, endPos} &];
 		
 		res =
 		Lui`Parse`Private`blockParseForestLookup[

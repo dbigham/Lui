@@ -1,4 +1,6 @@
 start:
+	search for $name -> FileSearch[name]
+	
 	replace from=$quotedString with to=$quotedString in $dir
 		StringReplaceInDir[dir, from, to]
 	

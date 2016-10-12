@@ -736,7 +736,7 @@ DefineLinguisticHotkey[OptionsPattern[]] :=
 			existingLinguistic =
 				$Grammar["JavaObject"]@getLinguistic[
 					res["Symbol"],
-					res["Expression"]
+					ToString[res["Expression"], InputForm]
 				];
 			If [existingLinguistic === Null,
 				Which[

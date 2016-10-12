@@ -1,4 +1,11 @@
 notebook:
+	homegroup | "home group" | "sharing files" | "share files" | "copying files between computers" -> "Homegroup.nb"
+	"autonomous cars" | acars | "driverless cars" | "autonomous vehicles" -> "autonomouscars.nb"
+	edit linguistic -> "EditLinguistic.nb"
+	"existing linguistic" | ((lookup|get|find) linguistic) | ((lookup|get|find) existing linguistic) -> "ExistingLinguistic.nb"
+	"formula finder" | "finding formulas" | "find a formula" -> "FormulaFinder.nb"
+	"web games" | games -> "WebGames.nb"
+	~jlang findings -> "JLangFindings.nb"
 	~jlang inference -> "JLangInference.nb"
 	accomplishments | accomplish | celebrate | acc -> "accomplishments.nb"
 	(tech|"technology journal") | tjournal -> "TechJournal.nb"
