@@ -1,4 +1,7 @@
 webpage:
+	"new kijiji" | "new kijiji add" | "post ad" | "post kijiji ad" -> "https://www.kijiji.ca/p-select-category.html"
+	"kijiji.ca" -> "http://www.kijiji.ca/"
+	switchfoot -> "https://open.spotify.com/album/0mu1FtVZK5mUrYT9FmxtIo"
 	(new post) | (new blog post) -> "http://www.danielbigham.ca/cgi-bin/blog.pl?mode=New"
 	set cookies -> "http://www.danielbigham.ca/cgi-bin/blog.pl?mode=SetCookies&password=grrrfight"
 	fb | facebook -> "https://www.facebook.com/"

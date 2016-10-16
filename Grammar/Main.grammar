@@ -1,4 +1,6 @@
 start:
+	training report -> ReplayTrainingReport[]
+
 	search for $name -> FileSearch[name]
 	
 	replace from=$quotedString with to=$quotedString in $dir
@@ -45,7 +47,7 @@ start:
 	dir=$dir ~dir -> SystemOpen[dir]
 	dir=$dir -> Scored[SystemOpen[dir], 0.7]
 	
-	~edit grammar -> EditGrammar[]
+	~edit grammar|rules -> EditGrammar[]
 	
 	~edit $file -> EditFile[file]
 	
@@ -179,3 +181,6 @@ function:
 ~jlang: "jit language" | jlang | jlanguage | jitlang | jit
 
 ~syn: synonym | syn
+
+directory:
+	downloads -> "E:\\Users\\Daniel\\Downloads"

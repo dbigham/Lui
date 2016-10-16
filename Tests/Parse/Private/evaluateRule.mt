@@ -82,3 +82,29 @@ Test[
 	,
 	TestID -> "evaluateRule-20160911-QT15L3"
 ]
+
+Test[
+	Lui`Parse`Private`blockParseForestLookup[
+		{
+			{
+				{-1, 0, 5},
+				"E",
+				HoldComplete[HoldComplete[X]],
+				{{{5, 0, 1}, "D", Null}, {{2, 2, 3}, "L", Null}, {{6, 4, 5}, "D", Null}}
+			},
+			{{5, 0, 1}, "D", HoldComplete[auto], {{{0, 0, 1}, "L", HoldComplete[auto]}}},
+			{{6, 4, 5}, "D", HoldComplete[auto], {{{3, 4, 5}, "L", HoldComplete[auto]}}}
+		},
+		Lui`Parse`Private`evaluateRule[
+			{
+				"E",
+				HoldComplete[HoldComplete[X]],
+				{{{5, 0, 1}, "D", Null}, {{2, 2, 3}, "L", Null}, {{6, 4, 5}, "D", Null}}
+			}
+		]
+	]
+	,
+	{HoldComplete[X], <||>}
+	,
+	TestID -> "evaluateRule-20161015-MQEOB4"
+]

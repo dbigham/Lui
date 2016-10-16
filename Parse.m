@@ -728,16 +728,23 @@ evaluateRule[ruleMatch_List] :=
 	evaluateRule[Sequence @@ ruleMatch]
 
 evaluateRule[type_, action_, children_List] :=
-	Block[{evaluatedChildren, mergedVariables, permutedVariableValues, res},
-		XPrint["evaluateRule: ", {type, action, children}];
+	Block[
+		{
+			evaluatedChildren,
+			mergedVariables,
+			permutedVariableValues,
+			res,
+			debugFlag = False
+		},
+		If [debugFlag, Print["evaluateRule: ", {type, action, children}]];
 		evaluatedChildren = evaluateChild /@ children;
-		XPrint["evaluatedChildren: ", evaluatedChildren];
+		If [debugFlag, Print["evaluatedChildren: ", evaluatedChildren]];
 		mergedVariables =
 			Merge[
 				evaluatedChildren[[All, 2]],
-				Flatten[Join[#], 1] &
+				DeleteDuplicates[Flatten[Join[#], 1]] &
 			];
-		XPrint["mergedVariables: ", Normal[mergedVariables]];
+		If [debugFlag, Print["mergedVariables: ", Normal[mergedVariables]]];
 		If [type === "E",
 			res =
 			{
@@ -751,7 +758,7 @@ evaluateRule[type_, action_, children_List] :=
 				mergedVariables
 			};
 		];
-		XPrint["res: ", type, ": ", res];
+		If [debugFlag, Print["res: ", type, ": ", res]];
 		res
 	];
 
