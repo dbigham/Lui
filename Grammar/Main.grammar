@@ -1,7 +1,11 @@
 start:
+	google query=$quotedString
+		HeldHead[SystemOpen][StringJoin["https://www.google.ca/search?sourceid=chrome-psyapi2&ion=1&espv=2&ie=UTF-8&q=", query]]
+
 	training report -> ReplayTrainingReport[]
 
-	search for $name -> FileSearch[name]
+	search for $name -> SearchFiles[name]
+	search $dir for $name -> SearchFiles[name, "Directories" -> {dir}]
 	
 	replace from=$quotedString with to=$quotedString in $dir
 		StringReplaceInDir[dir, from, to]

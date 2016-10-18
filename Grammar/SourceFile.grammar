@@ -10,7 +10,7 @@ sourceFile:
 	"grammar.java" | "g.java" -> "E:\\Users\\Daniel\\Dropbox\\Projects\\Lui\\src\\com\\danielbigham\\lui\\Grammar.java"
 	"nl tools" | "nlt" | "nltool" | "nltools" -> "NLTools`NLTools`"
 	grammar loader -> "E:\\Users\\Daniel\\Dropbox\\Projects\\Lui\\src\\com\\danielbigham\\lui\\loading\\GrammarFiles.java"
-	webpages | (web pages) -> "E:\\Users\\Daniel\\Dropbox\\Projects\\Lui\\Grammar\\Webpage.grammar"
+	webpages | (web pages) | websites | "web sites" -> "E:\\Users\\Daniel\\Dropbox\\Projects\\Lui\\Grammar\\Webpage.grammar"
 	src|source files -> "E:\\Users\\Daniel\\Dropbox\\Projects\\Lui\\Grammar\\SourceFile.grammar"
 	src|source dirs|directories -> "E:\\Users\\Daniel\\Dropbox\\Projects\\Lui\\Grammar\\SourceCodeDirectory.grammar"
 	people -> "E:\\Users\\Daniel\\Dropbox\\Projects\\Lui\\Grammar\\Person.grammar"

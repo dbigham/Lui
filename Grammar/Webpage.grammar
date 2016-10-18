@@ -1,4 +1,9 @@
 webpage:
+	download westworld -> "https://thepiratebay.org/search/westworld/0/99/0"
+	gmail | gm -> "http://www.gmail.com"
+	"aws instances" | instances -> "https://us-west-2.console.aws.amazon.com/ec2/v2/home?region=us-west-2#Instances:"
+	aws getting started -> "https://aws.amazon.com/documentation/gettingstarted/"
+	aws (console|"control panel") -> "https://www.amazon.com/gp/r.html?C=1ERR80HQHECJW&R=UXT78ZYIITVI&T=C&U=https%3A%2F%2Fconsole.aws.amazon.com%2Fconsole%2Fhome%3Fsc_channel%3Dem%26sc_campaign%3Dwlcm%26sc_publisher%3Daws%26sc_medium%3Dem_wlcm_2%26sc_detail%3Dwlcm_2%26sc_content%3Dother%26sc_country%3Dglobal%26sc_geo%3Dglobal%26sc_category%3Dmult%26ref_%3Dpe_1679150_132208650&A=IXZCW58MFBX4K5IHQDATOAFWYXOA&H=S3Y2BIUQKTEMIQDNIKOAMPQM4C4A&ref_=pe_1679150_132208650"
 	"new kijiji" | "new kijiji add" | "post ad" | "post kijiji ad" -> "https://www.kijiji.ca/p-select-category.html"
 	"kijiji.ca" -> "http://www.kijiji.ca/"
 	switchfoot -> "https://open.spotify.com/album/0mu1FtVZK5mUrYT9FmxtIo"

@@ -244,6 +244,10 @@ public abstract class BasicPattern implements IPattern, IPatternMatch
 		{
 			str = str + "=" + expr;
 		}
+		if (isOptional)
+		{
+			str = str + "?";
+		}
 		return str;
 	}
 	
@@ -304,5 +308,16 @@ public abstract class BasicPattern implements IPattern, IPatternMatch
 	public void setExpr(String expr)
 	{
 		this.expr = expr;
+	}
+	
+	private boolean isOptional;
+	public boolean isOptional()
+	{
+		return isOptional;
+	}
+	
+	public void setOptional(boolean value)
+	{
+		isOptional = value;
 	}
 }

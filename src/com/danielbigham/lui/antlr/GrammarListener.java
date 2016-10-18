@@ -90,17 +90,17 @@ public interface GrammarListener extends ParseTreeListener {
 	 */
 	void exitOrRulePart(GrammarParser.OrRulePartContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code SeqRulePart}
+	 * Enter a parse tree produced by the {@code OptionalRulePart}
 	 * labeled alternative in {@link GrammarParser#rulePart}.
 	 * @param ctx the parse tree
 	 */
-	void enterSeqRulePart(GrammarParser.SeqRulePartContext ctx);
+	void enterOptionalRulePart(GrammarParser.OptionalRulePartContext ctx);
 	/**
-	 * Exit a parse tree produced by the {@code SeqRulePart}
+	 * Exit a parse tree produced by the {@code OptionalRulePart}
 	 * labeled alternative in {@link GrammarParser#rulePart}.
 	 * @param ctx the parse tree
 	 */
-	void exitSeqRulePart(GrammarParser.SeqRulePartContext ctx);
+	void exitOptionalRulePart(GrammarParser.OptionalRulePartContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code BasicRulePart2}
 	 * labeled alternative in {@link GrammarParser#rulePart}.
@@ -113,6 +113,18 @@ public interface GrammarListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitBasicRulePart2(GrammarParser.BasicRulePart2Context ctx);
+	/**
+	 * Enter a parse tree produced by the {@code SeqRulePart}
+	 * labeled alternative in {@link GrammarParser#rulePart}.
+	 * @param ctx the parse tree
+	 */
+	void enterSeqRulePart(GrammarParser.SeqRulePartContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code SeqRulePart}
+	 * labeled alternative in {@link GrammarParser#rulePart}.
+	 * @param ctx the parse tree
+	 */
+	void exitSeqRulePart(GrammarParser.SeqRulePartContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code OrRulePart2}
 	 * labeled alternative in {@link GrammarParser#rulePart}.

@@ -20,6 +20,7 @@ import com.danielbigham.lui.antlr.GrammarParser.BasicRulePartContext;
 import com.danielbigham.lui.antlr.GrammarParser.BindingContext;
 import com.danielbigham.lui.antlr.GrammarParser.GrammarRuleContext;
 import com.danielbigham.lui.antlr.GrammarParser.GrammarRulesContext;
+import com.danielbigham.lui.antlr.GrammarParser.OptionalRulePartContext;
 import com.danielbigham.lui.antlr.GrammarParser.OrRulePartContext;
 import com.danielbigham.lui.antlr.GrammarParser.RulePart2Context;
 import com.danielbigham.lui.antlr.GrammarParser.RulePart3Context;
@@ -360,6 +361,12 @@ public class AntlrHelpers
 		{
 			IPattern pattern = convert(((BindingContext) rulePart).rulePart(), grammar);
 			pattern.setBinding(((BindingContext) rulePart).ID().getText());
+			return pattern;
+		}
+		else if (rulePart instanceof OptionalRulePartContext)
+		{
+			IPattern pattern = convert(((OptionalRulePartContext) rulePart).rulePart(), grammar);
+			pattern.setOptional(true);
 			return pattern;
 		}
 		else

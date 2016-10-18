@@ -31,6 +31,7 @@ import com.danielbigham.lui.antlr.GrammarParser.GrammarRuleContext;
 import com.danielbigham.lui.antlr.GrammarParser.GrammarRulesContext;
 import com.danielbigham.lui.antlr.GrammarParser.IntegerContext;
 import com.danielbigham.lui.antlr.GrammarParser.LhsContext;
+import com.danielbigham.lui.antlr.GrammarParser.OptionalRulePartContext;
 import com.danielbigham.lui.antlr.GrammarParser.OrRulePart2Context;
 import com.danielbigham.lui.antlr.GrammarParser.OrRulePartContext;
 import com.danielbigham.lui.antlr.GrammarParser.RealContext;
@@ -589,6 +590,20 @@ public class GrammarRulesListener implements GrammarListener
 
 	@Override
 	public void exitEAssociation(EAssociationContext ctx)
+	{
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void enterOptionalRulePart(OptionalRulePartContext ctx)
+	{
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void exitOptionalRulePart(OptionalRulePartContext ctx)
 	{
 		// TODO Auto-generated method stub
 		

@@ -233,4 +233,11 @@ public class TestAntlrParsing
 		assertEquals(1, rules.size());
 		assertEquals("$start:\n    {testing 1 2 3 123}\n        null", rules.get(0).toString());
 	}
+	
+	@Test
+	public void test24()
+	{
+		List<GrammarRule> rules = parseGrammar(" \n start:\n\ta b? c");
+		assertEquals(1, rules.size());
+	}
 }

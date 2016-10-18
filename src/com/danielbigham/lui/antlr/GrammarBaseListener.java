@@ -112,13 +112,13 @@ public class GrammarBaseListener implements GrammarListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterSeqRulePart(GrammarParser.SeqRulePartContext ctx) { }
+	@Override public void enterOptionalRulePart(GrammarParser.OptionalRulePartContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitSeqRulePart(GrammarParser.SeqRulePartContext ctx) { }
+	@Override public void exitOptionalRulePart(GrammarParser.OptionalRulePartContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -131,6 +131,18 @@ public class GrammarBaseListener implements GrammarListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitBasicRulePart2(GrammarParser.BasicRulePart2Context ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterSeqRulePart(GrammarParser.SeqRulePartContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitSeqRulePart(GrammarParser.SeqRulePartContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

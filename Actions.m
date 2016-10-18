@@ -10,7 +10,7 @@ SearchNotebooks::usage = "SearchNotebooks  "
 
 IndexNotebooks::usage = "IndexNotebooks  "
 
-FileSearch::usage = "FileSearch  "
+SearchFiles::usage = "SearchFiles  "
 
 Begin["`Private`"]
 
@@ -141,24 +141,34 @@ IndexNotebooks[] :=
 	];
 
 (*!
-	\function FileSearch
+	\function SearchFiles
 	
 	\calltable
-		FileSearch[search] '' perform a search on $SearchDirectories and display buttons to edit matching files.
+		SearchFiles[search] '' perform a search on $SearchDirectories and display buttons to edit matching files.
 
 	Examples:
 	
-	FileSearch[search] === TODO
+	SearchFiles[search] === TODO
 	
 	\related '
 	
 	\maintainer danielb
 *)
-FileSearch[search_] :=
-	Block[{files},
+Options[SearchFiles] =
+{
+	"Directories" -> Automatic			(*< The directories to search. *)
+};
+SearchFiles[search_, OptionsPattern[]] :=
+	Block[{files, dirs, dirsOption = OptionValue["Directories"], res},
+		
+		dirs = Global`$SearchDirectories;
+		If [dirsOption =!= Automatic,
+			dirs = dirsOption;
+		];
+		
 		res =
 			TextSearch[
-				Global`$SearchDirectories,
+				dirs,
 				search
 			];
 		files = res[All, "Location"];

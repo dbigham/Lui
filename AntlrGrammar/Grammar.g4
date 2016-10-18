@@ -34,6 +34,7 @@ rulePart:		'(' ws* rulePart ws* (ws* '|' ws* rulePart)+ ')'	# OrRulePart
 				// up into multiple rules, I get 'mutual left recursion'
 				// which apparently isn't allowed.
 	|			ID ws* EQUALS ws* rulePart							# Binding
+	|			rulePart '?'										# OptionalRulePart
 	;
 
 // Since OR patterns cause problems when they both:

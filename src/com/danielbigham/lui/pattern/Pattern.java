@@ -425,12 +425,13 @@ public abstract class Pattern implements IPattern
 	{
 		if (binding != null)
 		{
-			return binding + "=" + str;
+			str = binding + "=" + str;
 		}
-		else
+		if (isOptional)
 		{
-			return str;
+			str = str + "?";
 		}
+		return str;
 	}
 	
 	public String getAction()
@@ -446,5 +447,16 @@ public abstract class Pattern implements IPattern
 	public void setType(String type)
 	{
 		this.type = type;
+	}
+	
+	private boolean isOptional;
+	public boolean isOptional()
+	{
+		return isOptional;
+	}
+	
+	public void setOptional(boolean value)
+	{
+		isOptional = value;
 	}
 }

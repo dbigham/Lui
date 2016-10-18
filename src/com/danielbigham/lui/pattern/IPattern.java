@@ -137,4 +137,14 @@ public interface IPattern
 	 * The token's type.
 	 */
 	public void setType(String type);
+	
+	/**
+	 * Is matching this pattern optional?
+	 */
+	public boolean isOptional();
+	
+	/**
+	 * Sets whether this pattern is optional.
+	 */
+	public void setOptional(boolean value);
 }
