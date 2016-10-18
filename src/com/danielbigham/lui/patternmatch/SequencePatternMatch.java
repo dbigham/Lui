@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Set;
 
 
+import com.danielbigham.io.Out;
 import com.danielbigham.lui.Chart;
 import com.danielbigham.lui.ParserState;
 import com.danielbigham.lui.pattern.BasicPattern;
@@ -70,8 +71,11 @@ public class SequencePatternMatch extends PatternMatch
 		if (matchComplete) { throw new UnsupportedOperationException(); }
 		
 		List<IPatternMatch> newMatches = null;
+		List<IPatternMatch> newMatches2 = null;
 		
 		Chart chart = state.chart();
+		
+		boolean theMatchWereExtendingIsAlreadyInPartialsChart = (extensionPositions != null);
 		
 		BasicPattern nextPattern;
 		if (dir == 1)
@@ -81,7 +85,6 @@ public class SequencePatternMatch extends PatternMatch
 			// Add this partial match to the partials chart.
 			if (!pattern.subPatternsAreAllLiterals())
 			{
-				boolean theMatchWereExtendingIsAlreadyInPartialsChart = extensionPositions != null;
 				if (!theMatchWereExtendingIsAlreadyInPartialsChart)
 				{
 					chart.addStartPosPartial(this, endPos + 1, nextPattern.resultSymbol(), state.iterationCounter());
@@ -95,7 +98,27 @@ public class SequencePatternMatch extends PatternMatch
 			
 			if (extensionPositions != null)
 			{
-				newMatches = extendRight(extensionPositions);
+				newMatches = extendRight(extensionPositions, rightDot + 1);
+			}
+			
+			if (nextPattern.isOptional() && !theMatchWereExtendingIsAlreadyInPartialsChart)
+			{
+				// Also try extending the match by skipping the optional.
+				int offset = 2;
+				nextPattern = (BasicPattern)pattern.subPattern(rightDot + offset);
+				extensionPositions = nextPattern.getMatchExtensionPositionsToRight(chart, endPos + 1);
+				if (extensionPositions != null)
+				{
+					newMatches2 = extendRight(extensionPositions, rightDot + offset);
+					if (newMatches == null)
+					{
+						newMatches = newMatches2;
+					}
+					else
+					{
+						newMatches.addAll(newMatches2);
+					}
+				}
 			}
 		}
 		else
@@ -103,9 +126,8 @@ public class SequencePatternMatch extends PatternMatch
 			nextPattern = (BasicPattern)pattern.subPattern(leftDot - 1);
 			
 			// Add this partial match to the partials chart.
-			if (!pattern.subPatternsAreAllLiterals() && extensionPositions == null)
+			if (!pattern.subPatternsAreAllLiterals())
 			{
-				boolean theMatchWereExtendingIsAlreadyInPartialsChart = extensionPositions != null;
 				if (!theMatchWereExtendingIsAlreadyInPartialsChart)
 				{
 					chart.addEndPosPartial(this, startPos - 1, nextPattern.resultSymbol(), state.iterationCounter());
@@ -119,7 +141,27 @@ public class SequencePatternMatch extends PatternMatch
 			
 			if (extensionPositions != null)
 			{
-				newMatches = extendLeft(state, extensionPositions);
+				newMatches = extendLeft(state, extensionPositions, leftDot - 1);
+			}
+			
+			if (nextPattern.isOptional() && !theMatchWereExtendingIsAlreadyInPartialsChart)
+			{
+				// Also try extending the match by skipping the optional.
+				int offset = 2;
+				nextPattern = (BasicPattern)pattern.subPattern(leftDot - offset);
+				extensionPositions = nextPattern.getMatchExtensionPositionsToLeft(chart, startPos - 1);
+				if (extensionPositions != null)
+				{
+					newMatches2 = extendLeft(state, extensionPositions, leftDot - offset);
+					if (newMatches == null)
+					{
+						newMatches = newMatches2;
+					}
+					else
+					{
+						newMatches.addAll(newMatches2);
+					}
+				}
 			}
 		}
 		
@@ -129,13 +171,12 @@ public class SequencePatternMatch extends PatternMatch
 	/**
 	 * Create a new pattern match by extending this one to the right.
 	 */
-	private List<IPatternMatch> extendRight(Set<Integer> extensionPositions)
+	private List<IPatternMatch> extendRight(Set<Integer> extensionPositions, int newRightDot)
 	{
 		List<IPatternMatch> res = new ArrayList<IPatternMatch>();
 		
 		for (Integer newEndPos : extensionPositions)
 		{
-			int newRightDot = rightDot + 1;
 			int newDir;
 			if (newRightDot == pattern.length() - 1)
 			{
@@ -168,14 +209,12 @@ public class SequencePatternMatch extends PatternMatch
 	/**
 	 * Create a new pattern match by extending this one to the left.
 	 */
-	private List<IPatternMatch> extendLeft(ParserState state, Set<Integer> extensionPositions)
+	private List<IPatternMatch> extendLeft(ParserState state, Set<Integer> extensionPositions, int newLeftDot)
 	{
 		List<IPatternMatch> res = new ArrayList<IPatternMatch>();
 		
 		for (Integer newStartPos : extensionPositions)
 		{
-			int newLeftDot = leftDot - 1;
-			
 			int[] newSubPatternStartPositions = subPatternStartPositions.clone();
 			newSubPatternStartPositions[newLeftDot] = newStartPos;
 			

@@ -114,7 +114,7 @@ public abstract class Pattern implements IPattern
 		int patternIndex = 0;
 		for(IPattern subPattern : patterns)
 		{
-			if (subPattern instanceof BasicPattern)
+			if (subPattern instanceof BasicPattern && !subPattern.isOptional())
 			{
 				int tokenId = ((BasicPattern)subPattern).getTokenId();
 				Integer count = tokenCounts.get(tokenId);
