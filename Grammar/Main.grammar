@@ -188,3 +188,68 @@ function:
 
 directory:
 	downloads -> "E:\\Users\\Daniel\\Downloads"
+
+~curt:
+	(curt | curtis) | ((curt | curtis) beattie)
+		"CurtisBeattie"
+~login:
+	login | username | "user name" | password | account
+		None
+~bb:
+	bb | blackberry | "black berry" -> "BlackBerry"
+~bb10:
+	~bb 10 -> "BlackBerry10"
+~ps:
+	photostar | "photo star" | ps -> "PhotoStar"
+~bb10:
+	~bb | ~bb10 -> "BlackBerry"
+~sb:
+	sabbatical | sb -> "Sabbatical"
+~its:
+	(its | iTunesSync | "iTunes Sync") "sync for itunes"
+		None
+~ml:
+	"machine learning" | ml -> "MachineLearning"
+~markov:
+	markov | (markov (model | models)) -> "MarkovModels"
+~kn:
+	kn | "kneser ney" | "kneser-ney" -> "KneserNey"
+~lang:
+	language | lang
+~impl:
+	implementation | imp | impl
+~fb:
+	(fb | facebook | "face book") page?
+~lm:
+	lm | (~lang (model | modelling | modeling))
+~nlu:
+	nlu | nlp | "natural language understanding" | "natural language processing"
+~wl:
+	wl | "wolfram language" -> "WolframLanguage"
+~libri:
+	librispeech | "libri speech" | libri
+~ling:
+	linguistics | linguistic | ling | xxxxx
+~spacex:
+	spacex | "space x" | sx | spx | spcx
+~classify:
+	classify | classifier | classification
+~bp:
+	"back propagation" | backpropagation | "back propogation" | backpropogation
+		"BackPropagation"
+~nn:
+	"neural nets" | "neural net" | NN | NNs -> "NeuralNetwork"
+~wdocs:
+	"wolfram docs" | wdocs | wdoc | ((wl | m | mathematica | wolfram) (docs | doc | documentation | help | "help pages"))
+		"WolframDocumentation"
+~multilang:
+	"cross-lingual" | "cross lingual" | "multi-lingual" | "multi lingual" | "multi language" | "multi-language"
+~nn:
+	nn | "neural networks" | "neural network"
+~bot:
+	bot | bots | chatbots | chatbot | "chat bot" | "chat bots"
+~mye:
+	mye
+	enitites
+	entity
+	"my entities"

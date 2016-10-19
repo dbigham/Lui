@@ -21,7 +21,7 @@ sourceFile:
 	parse -> "Lui`Parse`"
 	ui -> "Lui`UI`"
 	util|wutil|wutils -> "WUtils`WUtils`"
-	lutil -> "Lui`Util`"
+	lutil | "lui util" -> "Lui`Util`"
 	lui ui -> "Lui`UI`"
 	old defs -> FileNameJoin[{$PersonalGrammarDir, "Defs.m"}]
 	old rules|linguistics|grammar -> FileNameJoin[{$PersonalGrammarDir, "Rules.m"}]
