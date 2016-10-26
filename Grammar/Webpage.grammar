@@ -1,4 +1,5 @@
 webpage:
+	"check bandwidth" | "bandwidth usage" -> "https://myaccount.teksavvy.com/"
 	download westworld -> "https://thepiratebay.org/search/westworld/0/99/0"
 	gmail | gm -> "http://www.gmail.com"
 	"aws instances" | instances -> "https://us-west-2.console.aws.amazon.com/ec2/v2/home?region=us-west-2#Instances:"

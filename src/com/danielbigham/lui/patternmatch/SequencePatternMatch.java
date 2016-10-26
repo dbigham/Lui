@@ -1,6 +1,7 @@
 package com.danielbigham.lui.patternmatch;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -96,8 +97,10 @@ public class SequencePatternMatch extends PatternMatch
 				extensionPositions = nextPattern.getMatchExtensionPositionsToRight(chart, endPos + 1);
 			}
 			
+			boolean extendedAlready = false;
 			if (extensionPositions != null)
 			{
+				extendedAlready = true;
 				newMatches = extendRight(extensionPositions, rightDot + 1);
 			}
 			
@@ -105,8 +108,20 @@ public class SequencePatternMatch extends PatternMatch
 			{
 				// Also try extending the match by skipping the optional.
 				int offset = 2;
-				nextPattern = (BasicPattern)pattern.subPattern(rightDot + offset);
-				extensionPositions = nextPattern.getMatchExtensionPositionsToRight(chart, endPos + 1);
+				extensionPositions = null;
+				if (rightDot + offset < pattern.length())
+				{
+					nextPattern = (BasicPattern)pattern.subPattern(rightDot + offset);
+					extensionPositions = nextPattern.getMatchExtensionPositionsToRight(chart, endPos + 1);
+				}
+				else if (!extendedAlready)
+				{
+					// A complete match then, since the last pattern is optional.
+					extensionPositions = new HashSet<Integer>();
+					offset = 1;
+					extensionPositions.add(endPos);
+				}
+					
 				if (extensionPositions != null)
 				{
 					newMatches2 = extendRight(extensionPositions, rightDot + offset);
@@ -139,8 +154,11 @@ public class SequencePatternMatch extends PatternMatch
 				extensionPositions = nextPattern.getMatchExtensionPositionsToLeft(chart, startPos - 1);
 			}
 			
+			boolean extendedAlready = false;
+			
 			if (extensionPositions != null)
 			{
+				extendedAlready = true;
 				newMatches = extendLeft(state, extensionPositions, leftDot - 1);
 			}
 			
@@ -148,8 +166,20 @@ public class SequencePatternMatch extends PatternMatch
 			{
 				// Also try extending the match by skipping the optional.
 				int offset = 2;
-				nextPattern = (BasicPattern)pattern.subPattern(leftDot - offset);
-				extensionPositions = nextPattern.getMatchExtensionPositionsToLeft(chart, startPos - 1);
+				extensionPositions = null;
+				if (leftDot - offset >= 0)
+				{
+					nextPattern = (BasicPattern)pattern.subPattern(leftDot - offset);
+					extensionPositions = nextPattern.getMatchExtensionPositionsToLeft(chart, startPos - 1);
+				}
+				else if (!extendedAlready)
+				{
+					// A complete match then, since the last pattern is optional.
+					extensionPositions = new HashSet<Integer>();
+					offset = 1;
+					extensionPositions.add(0);
+				}
+				
 				if (extensionPositions != null)
 				{
 					newMatches2 = extendLeft(state, extensionPositions, leftDot - offset);

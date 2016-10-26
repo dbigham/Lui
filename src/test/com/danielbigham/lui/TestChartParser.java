@@ -295,6 +295,56 @@ public class TestChartParser
 		);
 	}
 	
+	// Far right optional
+	@Test
+	public void test16()
+	{
+		assertEquals(
+			1,
+			parses(
+				"start: one two two?",
+				"one two two"
+			)
+		);
+	}
+	
+	@Test
+	public void test17()
+	{
+		assertEquals(
+			1,
+			parses(
+				"start: one two two?",
+				"one two"
+			)
+		);
+	}
+	
+	// Far left optional
+	@Test
+	public void test18()
+	{
+		assertEquals(
+			1,
+			parses(
+				"start: one? one two",
+				"one one two"
+			)
+		);
+	}
+	
+	@Test
+	public void test19()
+	{
+		assertEquals(
+			1,
+			parses(
+				"start: one? one two",
+				"one two"
+			)
+		);
+	}
+	
 	/**
 	 * Returns the number of times the given input parses to a spanning START result for the
 	 * given grammar.

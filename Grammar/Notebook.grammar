@@ -1,4 +1,6 @@
 notebook:
+	bash -> "Bash.nb"
+	dykstra for? nlu -> "DykstraForNLU.nb"
 	dirichlet -> "Dirichlet.nb"
 	
 	dirichlet distribution
@@ -1016,7 +1018,7 @@ notebook:
 	"watch movie" | (netflix ("match rank" | matchrank | movies | list | pairings))
 		"E:\\Users\\Daniel\\Documents\\NetflixMatchRank.nb"
 	civilization | civ | freeciv -> "Civilization.nb"
-	optionals | opt | "optional linguistics" | "optional support" | "optionals support" -> "Optionals.nb"
+	optionals | opt | "optional linguistics" | "optional support" | "optionals support" | optional -> "Optionals.nb"
 	((copy|copying) (file|files) between computers) | ((copy|copying) (file|files) to (laptop|computer|(another computer))) | ((copy|copying) to (laptop|computer|(another computer))) -> "CopyingFilesBetweenComputers.nb"
 	apple car -> "AppleCar.nb"
 	"node.js" | node -> "Node.js.nb"

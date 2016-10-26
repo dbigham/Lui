@@ -1,5 +1,5 @@
 dir:
-	downloads -> "E:\\Users\Daniel\Downloads"
+	downloads -> "E:\\Users\\Daniel\\Downloads"
 	dir=$sourceCodeDirectory -> dir["Directory"]
 	~jlang data -> "E:\\Users\\Daniel\\Dropbox\\Projects\\JitLang\\Data"
 	lui java -> "E:\\Users\\Daniel\\Dropbox\\Projects\\Lui\\src\\com\\danielbigham\\lui"
