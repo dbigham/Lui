@@ -1,7 +1,11 @@
 package com.danielbigham.lui;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import com.danielbigham.io.Out;
 import com.danielbigham.lui.patternmatch.IPatternMatch;
@@ -212,5 +216,106 @@ public class ParserState
 		wl.append("\n|>");
 		
 		return wl.toString();
+	}
+	
+	/**
+	 * Evaluate the parse forest at this span and for this grammar
+	 * symbol.
+	 * 
+	 * - The system is either a dynamic symbol.
+	 * - If it's a non dynamic symbol, we don't want to pass along
+	 *   any variable bindings.
+	 * 
+	 * @param startPos		the starting position.
+	 * @param endPos		the ending position.
+	 * @param tokenId		the grammar symbol ID.
+	 * @return				the evaluation result.
+	 */
+	public EvaluationResult evaluate(int startPos, int endPos, int tokenId)
+	{
+		List<IPatternMatch> matches =
+			chart().getMatchesForSpan(tokenId, startPos, endPos);
+		
+		if (matches == null) { return null; }
+		
+		List<String> exprs = new ArrayList<String>();
+		Map<String, Set<String>> variables;
+		
+		List<Map<String, Set<String>>> variableSets = new ArrayList<Map<String, Set<String>>>();
+		
+		for (IPatternMatch match : matches)
+		{
+			EvaluationResult res = match.evaluate(this);
+			
+			if (res != null)
+			{
+				exprs.addAll(res.getExprs());
+				
+				if ("D".equals(match.pattern().getType()))
+				{
+					variableSets.add(res.getVariables());
+				}
+			}
+		}
+		
+		if (variableSets.size() > 0)
+		{
+			variables = combineVariableMaps(variableSets);
+		}
+		else
+		{
+			variables = new HashMap<String, Set<String>>();
+		}
+		
+		return new EvaluationResult(exprs, variables);
+	}
+
+	/**
+	 * Given multiple mappings from variables to possible values, combine them
+	 * into a single map.
+	 * 
+	 * @param variableSets		sets of mappings from variables to possible values.
+	 * 
+	 * @return					a combined mapping from varaibles to possible values.
+	 */
+	public static Map<String, Set<String>> combineVariableMaps(
+			List<Map<String, Set<String>>> variableSets)
+	{
+		Map<String, Set<String>> combinedVariableMap =
+				new HashMap<String, Set<String>>();
+		
+		Set<String> variables = getVariableNames(variableSets);
+		for (String variable : variables)
+		{
+			Set<String> values = new HashSet<String>();
+			for (Map<String, Set<String>> variableSet : variableSets)
+			{
+				Set<String> theseValues = variableSet.get(variable);
+				if (theseValues != null)
+				{
+					values.addAll(theseValues);
+				}
+			}
+			combinedVariableMap.put(variable, values);
+		}
+		
+		return combinedVariableMap;
+	}
+	
+	/**
+	 * Given sets of variable->value mappings, return the set of variables.
+	 * 
+	 * @param variableSets	sets of variable->value.
+	 * 
+	 * @return				the unique variable list.
+	 */
+	public static Set<String> getVariableNames(List<Map<String, Set<String>>> variableSets)
+	{
+		Set<String> keys = new HashSet<String>();
+		for (Map<String, Set<String>> variableSet : variableSets)
+		{
+			keys.addAll(variableSet.keySet());
+		}
+		return keys;
 	}
 }

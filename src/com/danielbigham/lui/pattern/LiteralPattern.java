@@ -1,6 +1,11 @@
 package com.danielbigham.lui.pattern;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import com.danielbigham.lui.EvaluationResult;
 import com.danielbigham.lui.Grammar;
+import com.danielbigham.lui.ParserState;
 
 /**
  * Represents a literal string that may be found in an input.
@@ -79,5 +84,26 @@ public class LiteralPattern extends BasicPattern
 	public boolean subPatternsAreAllLiterals()
 	{
 		return true;
+	}
+
+	@Override
+	public EvaluationResult evaluate(ParserState state, int subMatchStartPos, int subMatchEndPos)
+	{
+		if (binding != null)
+		{
+			List<String> exprs = new ArrayList<String>();
+			exprs.add(literal);
+			EvaluationResult res = new EvaluationResult(exprs);
+			// Populate the variable
+			res.populateVariable(binding);
+			return res;
+		}
+		else
+		{
+			// If there isn't any binding, then this sub-pattern
+			// can't affect the final expression, so just return
+			// null.
+			return null;
+		}
 	}
 }

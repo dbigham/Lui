@@ -27,4 +27,5 @@ sourceFile:
 	old rules|linguistics|grammar -> FileNameJoin[{$PersonalGrammarDir, "Rules.m"}]
 	init -> $InitFile
 	play -> "Daniel`Play`"
+	personal -> "Daniel`Tools`"
 	antlr -> "Lui`Antlr`"

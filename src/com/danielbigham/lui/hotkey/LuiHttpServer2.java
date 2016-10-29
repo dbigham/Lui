@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.danielbigham.Util;
+import com.danielbigham.Util2;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import com.sun.net.httpserver.HttpServer;
@@ -21,11 +22,11 @@ import com.sun.net.httpserver.HttpServer;
  *  
  * @author danielb
  */
-public class LuiHttpServer
+public class LuiHttpServer2
 {
 	private HttpServer server;
 	
-	public LuiHttpServer() throws IOException
+	public LuiHttpServer2() throws IOException
 	{
 		server = HttpServer.create(new InetSocketAddress(7899), 0);
 		server.createContext("/hotkey", new MyHandler());
@@ -61,7 +62,7 @@ public class LuiHttpServer
 		public void handle(HttpExchange t) throws IOException
 		{
 			wlShowLuiUI();
-			LuiHttpServer.defaultResponse(t);
+			LuiHttpServer2.defaultResponse(t);
 		}
 	}
 	
@@ -76,17 +77,17 @@ public class LuiHttpServer
 		@Override
 		public void handle(HttpExchange t) throws IOException
 		{
-			Map<String, String> parms = LuiHttpServer.queryToMap(t.getRequestURI().getQuery());			
+			Map<String, String> parms = LuiHttpServer2.queryToMap(t.getRequestURI().getQuery());			
 			String title = parms.get("title");
 			String selected = parms.get("selected");
 			String process = parms.get("process");
-			Util.callWL(
+			Util2.callWL(
 				"Lui`UI`DefineLinguisticHotkey["  +
 					"\"Title\" -> " + Util.createDoubleQuotedString(title) + "," +
 					"\"Selected\" -> " + Util.createDoubleQuotedString(selected) + "," +
 					"\"Process\" -> " + Util.createDoubleQuotedString(process) +
 				"]");
-			LuiHttpServer.defaultResponse(t);
+			LuiHttpServer2.defaultResponse(t);
 		}
 	}
 	
@@ -100,13 +101,13 @@ public class LuiHttpServer
 		@Override
 		public void handle(HttpExchange t) throws IOException
 		{
-			Map<String, String> parms = LuiHttpServer.queryToMap(t.getRequestURI().getQuery());			
+			Map<String, String> parms = LuiHttpServer2.queryToMap(t.getRequestURI().getQuery());			
 			String text = parms.get("text");
-			Util.callWL(
+			Util2.callWL(
 				"CreateLuiLink["  +
 					Util.createDoubleQuotedString(text) +
 				"]");
-			LuiHttpServer.defaultResponse(t);
+			LuiHttpServer2.defaultResponse(t);
 		}
 	}
 	
@@ -120,9 +121,9 @@ public class LuiHttpServer
 		@Override
 		public void handle(HttpExchange t) throws IOException
 		{			
-			Util.callWL(
+			Util2.callWL(
 				"EvaluateEvaluationTarget[]");
-			LuiHttpServer.defaultResponse(t);
+			LuiHttpServer2.defaultResponse(t);
 		}
 	}
 	
@@ -136,9 +137,9 @@ public class LuiHttpServer
 		@Override
 		public void handle(HttpExchange t) throws IOException
 		{			
-			Util.callWL(
+			Util2.callWL(
 				"SetEvaluationTarget[]");
-			LuiHttpServer.defaultResponse(t);
+			LuiHttpServer2.defaultResponse(t);
 		}
 	}
 	
@@ -152,13 +153,13 @@ public class LuiHttpServer
 		@Override
 		public void handle(HttpExchange t) throws IOException
 		{
-			Map<String, String> parms = LuiHttpServer.queryToMap(t.getRequestURI().getQuery());			
+			Map<String, String> parms = LuiHttpServer2.queryToMap(t.getRequestURI().getQuery());			
 			String name = parms.get("name");
-			Util.callWL(
+			Util2.callWL(
 				"CreateIssueNotebook["  +
 					"\"Name\" -> " + Util.createDoubleQuotedString(name) +
 				"]");
-			LuiHttpServer.defaultResponse(t);
+			LuiHttpServer2.defaultResponse(t);
 		}
 	}
 	

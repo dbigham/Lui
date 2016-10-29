@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.danielbigham.Util;
+import com.danielbigham.Util2;
 import com.danielbigham.io.Out;
 import com.danielbigham.lui.Grammar;
 import com.danielbigham.lui.antlr.GrammarParser.GrammarRulesContext;
@@ -83,7 +84,7 @@ public class GrammarFiles implements IFileLoader
 		{
 			Out.print(e);
 			GrammarRuleSyntaxError e2 = (GrammarRuleSyntaxError)e;
-			Util.callWL(
+			Util2.callWL(
 				"OpenFileInWorkbench[" +
 					Util.createDoubleQuotedString(e2.getSourceName()) + "," +
 					"\"Line\" -> " + e2.getLine() +

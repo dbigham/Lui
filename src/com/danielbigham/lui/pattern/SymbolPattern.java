@@ -1,7 +1,9 @@
 package com.danielbigham.lui.pattern;
 
 
+import com.danielbigham.lui.EvaluationResult;
 import com.danielbigham.lui.Grammar;
+import com.danielbigham.lui.ParserState;
 import com.danielbigham.lui.patternmatch.IPatternMatch;
 
 public class SymbolPattern extends BasicPattern implements IPatternMatch
@@ -95,6 +97,25 @@ public class SymbolPattern extends BasicPattern implements IPatternMatch
 		else
 		{
 			return symbol;
+		}
+	}
+
+	@Override
+	public EvaluationResult evaluate(ParserState state, int subMatchStartPos, int subMatchEndPos)
+	{
+		if (binding != null)
+		{
+			EvaluationResult res = state.evaluate(subMatchStartPos, subMatchEndPos, tokenId);
+			// Populate the variable
+			res.populateVariable(binding);
+			return res;
+		}
+		else
+		{
+			// If there isn't any binding, then this sub-pattern
+			// can't affect the final expression, so just return
+			// null.
+			return null;
 		}
 	}
 }

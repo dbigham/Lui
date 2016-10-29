@@ -9,6 +9,7 @@ import java.util.Map;
 import java.util.Set;
 
 import com.danielbigham.io.Out;
+import com.danielbigham.lui.evaluation.ParseForestEvaluation;
 import com.danielbigham.lui.patternmatch.IPatternMatch;
 import com.danielbigham.lui.patternmatch.PatternMatchWrapper;
 import com.danielbigham.lui.regex.IdParser;
@@ -55,6 +56,23 @@ public class ChartParser
 		mainLoop(state);
 
 		return state;
+	}
+	
+	/**
+	 * Given a grammar and an input string, returns the parsed expression,
+	 * or null if none.
+	 * 
+	 * Currently this is not a full implementation, since we can't evaluate
+	 * grammar actions in Java.
+	 * 
+	 * @param grammar	the grammar.
+	 * @param str		the input string.
+	 * @return			the parsed expression, or null if none.
+	 */
+	public static String parseToExpression(Grammar grammar, String str)
+	{
+		ParserState state = parse(grammar, str);
+		return ParseForestEvaluation.evaluate(state);
 	}
 	
 	/**

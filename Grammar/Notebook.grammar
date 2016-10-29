@@ -1,4 +1,9 @@
 notebook:
+	sleep mode? -> "Sleep.nb"
+	(internet|wifi)? router -> "Router.nb"
+	modem -> "Modem.nb"
+	lui ("command line" | cmd | main) -> "LuiCommandLine.nb"
+	LetterToSelfForOct262016 -> "LetterToSelfForOct262018.nb"
 	bash -> "Bash.nb"
 	dykstra for? nlu -> "DykstraForNLU.nb"
 	dirichlet -> "Dirichlet.nb"
@@ -237,8 +242,7 @@ notebook:
 	
 	cgel (ch | chapter) 3 notes -> "CgelCh3Notes.nb"
 	
-	internet (problem | problems)?
-		"InternetProblems.nb"
+	internet (problem | problems)? -> "InternetProblems.nb"
 	
 	fusion -> "Fusion.nb"
 	

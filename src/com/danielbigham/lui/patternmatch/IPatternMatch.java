@@ -3,7 +3,7 @@ package com.danielbigham.lui.patternmatch;
 import java.util.List;
 import java.util.Set;
 
-
+import com.danielbigham.lui.EvaluationResult;
 import com.danielbigham.lui.Grammar;
 import com.danielbigham.lui.ParserState;
 import com.danielbigham.lui.pattern.IPattern;
@@ -127,4 +127,14 @@ public interface IPatternMatch
 	 * applicable. (null otherwise)
 	 */
 	public String expr();
+
+	/**
+	 * Evaluate the pattern match and return the resultant expression.
+	 * 
+	 * For now we do this in a very hacky way.
+	 * 
+	 * @param state		the parser state.
+	 * @return			the evaluation result.
+	 */
+	public EvaluationResult evaluate(ParserState state);
 }

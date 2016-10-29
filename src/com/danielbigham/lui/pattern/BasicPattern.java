@@ -4,7 +4,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
+
 import com.danielbigham.lui.Chart;
+import com.danielbigham.lui.EvaluationResult;
 import com.danielbigham.lui.Grammar;
 import com.danielbigham.lui.ParserState;
 import com.danielbigham.lui.patternmatch.IPatternMatch;
@@ -319,5 +322,15 @@ public abstract class BasicPattern implements IPattern, IPatternMatch
 	public void setOptional(boolean value)
 	{
 		isOptional = value;
+	}
+	
+	public EvaluationResult evaluate(ParserState state)
+	{
+		throw new NotImplementedException();
+	}
+
+	public EvaluationResult evaluate(ParserState state, int subMatchStartPos, int subMatchEndPos)
+	{
+		throw new NotImplementedException();
 	}
 }

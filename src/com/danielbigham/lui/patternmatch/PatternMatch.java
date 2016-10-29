@@ -1,12 +1,18 @@
 package com.danielbigham.lui.patternmatch;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import com.danielbigham.lui.Chart;
+import com.danielbigham.lui.EvaluationResult;
 import com.danielbigham.lui.Grammar;
 import com.danielbigham.lui.ParserState;
+import com.danielbigham.lui.evaluation.ParseForestEvaluation;
+import com.danielbigham.lui.pattern.BasicPattern;
 import com.danielbigham.lui.pattern.IPattern;
 import com.danielbigham.lui.pattern.SymbolPattern;
 
@@ -205,5 +211,79 @@ public abstract class PatternMatch implements IPatternMatch
 	{
 		this.startPos = newStart;
 		this.endPos = newEnd;
+	}
+	
+
+	@Override
+	public EvaluationResult evaluate(ParserState state)
+	{
+		Map<String, Set<String>> variables;
+		List<Map<String, Set<String>>> variableSets = new ArrayList<Map<String, Set<String>>>();
+		
+		int[] subMatchPos = subPatternStartPositions();
+		int i = 0;
+		for (IPattern subPattern : getMatchedSubPatterns())
+		{
+			if (subPattern instanceof BasicPattern)
+			{
+				int subMatchStartPos = subMatchPos[i];
+				int subMatchEndPos = subMatchPos[i+1] - 1;
+				
+				EvaluationResult res =
+						((BasicPattern)subPattern).evaluate(state, subMatchStartPos, subMatchEndPos);
+				
+				if (res != null)
+				{
+					if (!"E".equals(subPattern.getType()))
+					{
+						variableSets.add(res.getVariables());
+					}
+				}
+			}
+			else
+			{
+				throw new UnsupportedOperationException("Sequence patterns expected to have basic sub-patterns: " + toString());
+			}
+			
+			++i;
+		}
+		
+		List<String> exprs = new ArrayList<String>();
+		
+		if (variableSets.size() > 0)
+		{
+			variables = ParserState.combineVariableMaps(variableSets);
+		}
+		else
+		{
+			variables = new HashMap<String, Set<String>>();
+		}
+		
+		if ("D".equals(pattern.getType()))
+		{
+			return new EvaluationResult(exprs, variables);
+		}
+		else
+		{
+			String action = pattern.getAction();
+			//System.out.println("Variable substitution:");
+			//System.out.println("  " + action);
+			//System.out.println("  " + variables);
+			List<Map<String, String>> flattenedVariableSets =
+					ParseForestEvaluation.flattenVariables(variables);
+			if (flattenedVariableSets.size() == 0)
+			{
+				exprs.add(action);
+			}
+			else
+			{
+				for (Map<String, String> variableSet : flattenedVariableSets)
+				{
+					action = ParseForestEvaluation.substituteVariables(action, variableSet);
+					exprs.add(action);
+				}
+			}
+			return new EvaluationResult(exprs);
+		}
 	}
 }
