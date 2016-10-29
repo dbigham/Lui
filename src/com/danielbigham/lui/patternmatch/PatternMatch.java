@@ -217,6 +217,7 @@ public abstract class PatternMatch implements IPatternMatch
 	@Override
 	public EvaluationResult evaluate(ParserState state)
 	{
+		List<String> exprs = new ArrayList<String>();
 		Map<String, Set<String>> variables;
 		List<Map<String, Set<String>>> variableSets = new ArrayList<Map<String, Set<String>>>();
 		
@@ -239,6 +240,12 @@ public abstract class PatternMatch implements IPatternMatch
 						variableSets.add(res.getVariables());
 					}
 				}
+				
+				if (this instanceof OrPatternMatch && "D".equals(pattern.getType()))
+				{
+					// Required, for example, if there is a binding on a nested OR pattern.
+					exprs.addAll(res.getExprs());
+				}
 			}
 			else
 			{
@@ -247,8 +254,6 @@ public abstract class PatternMatch implements IPatternMatch
 			
 			++i;
 		}
-		
-		List<String> exprs = new ArrayList<String>();
 		
 		if (variableSets.size() > 0)
 		{

@@ -97,6 +97,60 @@ public class TestParserState
 		);
 	}
 	
+	@Test
+	public void testEvaluate5()
+	{
+		assertEquals(
+			"Wrapper[open, SPACEX_REDDIT]",
+			parse(
+				"start: (a=open | \"go to\") b=$website -> Wrapper[a, b]\n" +
+				"website: spacex reddit -> SPACEX_REDDIT",
+				"open spacex reddit"
+			)
+		);
+	}
+	
+	@Test
+	public void testEvaluate6()
+	{
+		assertEquals(
+			"Wrapper[a, SPACEX_REDDIT]",
+			parse(
+				"start: (open | a=\"go to\") b=$website -> Wrapper[a, b]\n" +
+				"website: spacex reddit -> SPACEX_REDDIT",
+				"open spacex reddit"
+			)
+		);
+	}
+	
+	// Not currently supported because "go to" gets turned into a SequencePattern (I think)
+	// without bindings on any of the inner parts. Would require more thought.
+//	@Test
+//	public void testEvaluate7()
+//	{
+//		assertEquals(
+//			"Wrapper[go to, SPACEX_REDDIT]",
+//			parse(
+//				"start: (open | a=\"go to\") b=$website -> Wrapper[a, b]\n" +
+//				"website: spacex reddit -> SPACEX_REDDIT",
+//				"go to spacex reddit"
+//			)
+//		);
+//	}
+	
+	@Test
+	public void testEvaluate8()
+	{
+		assertEquals(
+			"Wrapper[SPACEX_REDDIT]",
+			parse(
+				"start: open a=($website|$file) -> Wrapper[a]\n" +
+				"website: spacex reddit -> SPACEX_REDDIT",
+				"open spacex reddit"
+			)
+		);
+	}
+	
 	/**
 	 * Returns the parsed expression.
 	 * 

@@ -1,4 +1,6 @@
 notebook:
+	parse forest pruning|evaluation -> "ParseForestPruning.nb"
+	anderson|andersen m? -> "AndersonM.nb"
 	sleep mode? -> "Sleep.nb"
 	(internet|wifi)? router -> "Router.nb"
 	modem -> "Modem.nb"

@@ -57,12 +57,15 @@ public class EvaluationResult
 	 */
 	public void populateVariable(String variable)
 	{
-		Set<String> values = variables.get(variable);
-		if (values == null)
+		if (exprs.size() > 0)
 		{
-			values = new HashSet<String>();
-			variables.put(variable, values);
+			Set<String> values = variables.get(variable);
+			if (values == null)
+			{
+				values = new HashSet<String>();
+				variables.put(variable, values);
+			}
+			values.addAll(exprs);
 		}
-		values.addAll(exprs);
 	}
 }

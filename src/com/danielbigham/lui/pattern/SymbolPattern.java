@@ -103,19 +103,12 @@ public class SymbolPattern extends BasicPattern implements IPatternMatch
 	@Override
 	public EvaluationResult evaluate(ParserState state, int subMatchStartPos, int subMatchEndPos)
 	{
+		EvaluationResult res = state.evaluate(subMatchStartPos, subMatchEndPos, tokenId);
+		// Populate the variable
 		if (binding != null)
 		{
-			EvaluationResult res = state.evaluate(subMatchStartPos, subMatchEndPos, tokenId);
-			// Populate the variable
 			res.populateVariable(binding);
-			return res;
 		}
-		else
-		{
-			// If there isn't any binding, then this sub-pattern
-			// can't affect the final expression, so just return
-			// null.
-			return null;
-		}
+		return res;
 	}
 }
