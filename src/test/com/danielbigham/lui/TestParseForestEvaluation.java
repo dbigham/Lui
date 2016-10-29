@@ -64,6 +64,40 @@ public class TestParseForestEvaluation
 		);
 	}
 	
+	// Don't do variable substitution in strings.
+	@Test
+	public void testSubstituteVariables4()
+	{
+		Map<String, String> variables = new HashMap<String, String>();
+		
+		variables.put("a", "1");
+		
+		assertEquals(
+			"Wrapper[1, \"a b c\", 'a b c']",
+			ParseForestEvaluation.substituteVariables(
+				"Wrapper[a, \"a b c\", 'a b c']",
+				variables
+			)
+		);
+	}
+	
+	// Remove newlines
+	@Test
+	public void testSubstituteVariables5()
+	{
+		Map<String, String> variables = new HashMap<String, String>();
+		
+		variables.put("a", "1");
+		
+		assertEquals(
+			"Wrapper[1, \"a b c\", 'a b c']",
+			ParseForestEvaluation.substituteVariables(
+				"\nWrapper[\n    a,\n    \"a b c\",\n    'a b c'\n]\n",
+				variables
+			)
+		);
+	}
+	
 	@Test
 	public void testFlattenVariables()
 	{

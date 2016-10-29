@@ -77,16 +77,35 @@ public class ParseForestEvaluation
 	{
 		LETTER,
 		DIGIT,
-		OTHER
+		OTHER,
+		DOUBLE_QUOTE,
+		SINGLE_QUOTE,
+		BACKSLASH,
+		NEWLINE,
+		SPACE_OR_TAB
 	};
 	
 	enum VarSubState
 	{
 		START,
 		ID,
-		DIGITS
+		DIGITS,
+		SINGLE_QUOTED_STRING,
+		DOUBLE_QUOTED_STRING
 	};
 
+	/**
+	 * Process the given string, substituting in variable values.
+	 * 
+	 * - Don't perform substitutions inside of strings.
+	 * - We also remove newlines outside of strings to work around the fact that our expr
+	 *   parsing doesn't remove newlines that are only present in exprs for formatting
+	 *   or indentation purposes in the grammar file.
+	 * 
+	 * @param action
+	 * @param variables
+	 * @return
+	 */
 	public static String substituteVariables(String action,
 			Map<String, String> variables)
 	{
@@ -95,12 +114,25 @@ public class ParseForestEvaluation
 		StringBuilder str = new StringBuilder(action.length());
 		StringBuilder item = new StringBuilder(20);
 		
+		boolean dropChar;
+		
 		VarSubState state = VarSubState.START;
+		
+		char c = ' ';
+		char prevChar;
+		
+		CharType charType = CharType.OTHER;
+		CharType prevCharType;
+		
+		int escapeLevel = 0;
 		
 		for (int i = 0; i < action.length(); ++i)
 		{
-			char c = action.charAt(i);
-			CharType charType;
+			dropChar = false;
+			
+			prevChar = c;
+			c = action.charAt(i);
+			prevCharType = charType;
 			if (Character.isLetter(c))
 			{
 				charType = CharType.LETTER;
@@ -108,6 +140,26 @@ public class ParseForestEvaluation
 			else if (Character.isDigit(c))
 			{
 				charType = CharType.DIGIT;
+			}
+			else if (c == '"')
+			{
+				charType = CharType.DOUBLE_QUOTE;
+			}
+			else if (c == '\'')
+			{
+				charType = CharType.SINGLE_QUOTE;
+			}
+			else if (c == '\\')
+			{
+				charType = CharType.BACKSLASH;
+			}
+			else if (c == '\n' || c == '\r')
+			{
+				charType = CharType.NEWLINE;
+			}
+			else if (c == ' ' || c == '\t')
+			{
+				charType = CharType.SPACE_OR_TAB;
 			}
 			else
 			{
@@ -117,6 +169,64 @@ public class ParseForestEvaluation
 			if (debugFlag)
 			{
 				System.out.println(c + ":" + charType + ":" + state);
+			}
+			
+			if (c == ']' || c == ')')
+			{
+				if (str.length() > 0 &&
+					str.charAt(str.length() - 1) == ' ' &&
+					item.length() == 0)
+				{
+					// Remove unwanted space.
+					str.setLength(str.length() - 1);
+				}
+			}
+			
+			if (charType == CharType.BACKSLASH)
+			{
+				++escapeLevel;
+				if (escapeLevel == 2)
+				{
+					escapeLevel = 0;
+				}
+			}
+			else
+			{
+				escapeLevel = 0;
+			}
+			
+			if (state != VarSubState.DOUBLE_QUOTED_STRING &&
+				state != VarSubState.SINGLE_QUOTED_STRING)
+			{
+				if (charType == CharType.DOUBLE_QUOTE && escapeLevel == 0)
+				{
+					state = VarSubState.DOUBLE_QUOTED_STRING;
+					str.append(c);
+					continue;
+				}
+				else if (charType == CharType.SINGLE_QUOTE && escapeLevel == 0)
+				{
+					state = VarSubState.SINGLE_QUOTED_STRING;
+					str.append(c);
+					continue;
+				}
+				else if (charType == CharType.NEWLINE || charType == CharType.SPACE_OR_TAB)
+				{
+					//if (prevCharType != CharType.NEWLINE && prevCharType != CharType.SPACE_OR_TAB)
+					if (prevCharType == CharType.LETTER ||
+						prevCharType == CharType.DIGIT ||
+						prevCharType == CharType.DOUBLE_QUOTE ||
+						prevCharType == CharType.SINGLE_QUOTE ||
+						prevChar == ',')
+					{
+						dropChar = false;
+						c = ' ';
+					}
+					else
+					{
+						dropChar = true;
+					}
+				}
 			}
 			
 			if (state == VarSubState.START)
@@ -133,7 +243,7 @@ public class ParseForestEvaluation
 				}
 				else
 				{
-					str.append(c);
+					if (!dropChar) { str.append(c); }
 				}
 			}
 			else if (state == VarSubState.ID)
@@ -147,7 +257,7 @@ public class ParseForestEvaluation
 					state = VarSubState.ID;
 					item.append(c);
 				}
-				else if (charType == CharType.OTHER)
+				else
 				{
 					// Found ID
 					String variable = item.toString();
@@ -168,12 +278,8 @@ public class ParseForestEvaluation
 						str.append(item);
 					}
 					item = new StringBuilder(20);
-					str.append(c);
+					if (!dropChar) { str.append(c); }
 					state = VarSubState.START;
-				}
-				else
-				{
-					throw new IllegalArgumentException("Unexpected char type: " + charType);
 				}
 			}
 			else if (state == VarSubState.DIGITS)
@@ -183,7 +289,23 @@ public class ParseForestEvaluation
 					state = VarSubState.START;
 				}
 				
-				str.append(c);
+				if (!dropChar) { str.append(c); }
+			}
+			else if (state == VarSubState.DOUBLE_QUOTED_STRING)
+			{
+				if (charType == CharType.DOUBLE_QUOTE && escapeLevel == 0)
+				{
+					state = VarSubState.START;
+				}
+				if (!dropChar) { str.append(c); }
+			}
+			else if (state == VarSubState.SINGLE_QUOTED_STRING)
+			{
+				if (charType == CharType.SINGLE_QUOTE && escapeLevel == 0)
+				{
+					state = VarSubState.START;
+				}
+				if (!dropChar) { str.append(c); }
 			}
 		}
 		
@@ -209,7 +331,7 @@ public class ParseForestEvaluation
 			}
 		}
 		
-		return str.toString();
+		return str.toString().trim();
 	}
 	
 	/**

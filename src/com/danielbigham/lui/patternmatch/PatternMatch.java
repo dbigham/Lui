@@ -244,7 +244,10 @@ public abstract class PatternMatch implements IPatternMatch
 				if (this instanceof OrPatternMatch && "D".equals(pattern.getType()))
 				{
 					// Required, for example, if there is a binding on a nested OR pattern.
-					exprs.addAll(res.getExprs());
+					if (res != null)
+					{
+						exprs.addAll(res.getExprs());
+					}
 				}
 			}
 			else
