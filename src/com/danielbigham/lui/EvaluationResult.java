@@ -1,5 +1,6 @@
 package com.danielbigham.lui;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -32,6 +33,16 @@ public class EvaluationResult
 	public EvaluationResult(List<String> exprs)
 	{
 		this.exprs = exprs;
+		this.variables = new HashMap<String, Set<String>>();
+	}
+	
+	/**
+	 * @param expr			the resultant expression.
+	 */
+	public EvaluationResult(String expr)
+	{
+		this.exprs = new ArrayList<String>();
+		this.exprs.add(expr);
 		this.variables = new HashMap<String, Set<String>>();
 	}
 

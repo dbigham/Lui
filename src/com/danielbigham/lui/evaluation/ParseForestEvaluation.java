@@ -32,8 +32,6 @@ public class ParseForestEvaluation
 		if (results != null)
 		{
 			IPatternMatch match = results.get(0);
-			// TODO
-			//return match.pattern().getAction();
 			EvaluationResult res = match.evaluate(state);
 			
 			if (res.getExprs().size() > 0)

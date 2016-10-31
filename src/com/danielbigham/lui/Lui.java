@@ -3,6 +3,7 @@ package com.danielbigham.lui;
 import java.io.IOException;
 
 import com.danielbigham.lui.hotkey.LuiHttpServer2;
+import com.danielbigham.lui.loading.GrammarFiles;
 
 public class Lui
 {
@@ -26,8 +27,11 @@ public class Lui
 	{
 		String dir = args[0];
 		httpServer = new LuiHttpServer(dir);
-		//ParserState state = ChartParser.parse(grammar, args[1]);
-		//System.out.println(state.toWL());
-		//System.exit(0);
+		
+//		Grammar grammar = new Grammar();
+//		GrammarFiles grammarFiles = GrammarFiles.create(dir, grammar);
+//		ParserState state = ChartParser.parse(grammar, args[1]);
+//		System.out.println(state.toWL());
+//		System.exit(0);
 	}
 }

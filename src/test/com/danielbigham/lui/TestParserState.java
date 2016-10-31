@@ -151,6 +151,19 @@ public class TestParserState
 		);
 	}
 	
+	// Regression test: Stack overflow
+	@Test
+	public void testEvaluate9()
+	{
+		assertEquals(
+			"Wrapper[]",
+			parse(
+				"start: create $id -> Wrapper[]",
+				"create page"
+			)
+		);
+	}
+	
 	/**
 	 * Returns the parsed expression.
 	 * 

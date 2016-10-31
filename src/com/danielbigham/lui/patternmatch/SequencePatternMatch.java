@@ -269,11 +269,18 @@ public class SequencePatternMatch extends PatternMatch
 		int patternIndex = 0;
 		for(IPattern subPattern : pattern.patterns())
 		{
+			if (patternIndex > 0)
+			{
+				str.append(' ');
+			}
+			
 			if (patternIndex == leftDot)
 			{
 				str.append(".");
 			}
+			
 			str.append(subPattern.toString());
+			
 			if (patternIndex == rightDot)
 			{
 				str.append(".");

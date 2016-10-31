@@ -8,6 +8,7 @@ import java.util.Map;
 import java.util.Set;
 
 import com.danielbigham.io.Out;
+import com.danielbigham.lui.pattern.BasicPattern;
 import com.danielbigham.lui.patternmatch.IPatternMatch;
 
 /**
@@ -245,7 +246,16 @@ public class ParserState
 		
 		for (IPatternMatch match : matches)
 		{
-			EvaluationResult res = match.evaluate(this);
+			EvaluationResult res;
+			
+			if (match instanceof BasicPattern)
+			{
+				res = ((BasicPattern)match).evaluate(this, startPos, endPos);
+			}
+			else
+			{
+				res = match.evaluate(this);
+			}
 			
 			if (res != null)
 			{

@@ -2,6 +2,8 @@ package com.danielbigham.lui;
 
 import java.io.IOException;
 import java.io.OutputStream;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.net.InetSocketAddress;
 import java.util.HashMap;
 import java.util.Map;
@@ -64,7 +66,21 @@ public class LuiHttpServer
 		{
 			Map<String, String> parms = LuiHttpServer.queryToMap(t.getRequestURI().getQuery());
 			String input = parms.get("input");
-			String response = ChartParser.parseToExpression(grammar, input);
+			String response;
+			
+			try
+			{
+				response = ChartParser.parseToExpression(grammar, input);
+			}
+			catch (Exception e)
+			{
+				StringWriter sw = new StringWriter();
+				PrintWriter pw = new PrintWriter(sw);
+				e.printStackTrace(pw);
+				response = sw.toString();
+			}
+			
+			if (response == null) { response = ""; }
 			LuiHttpServer.response(t, response);
 		}
 	}
