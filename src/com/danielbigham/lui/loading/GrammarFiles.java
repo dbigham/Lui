@@ -203,7 +203,7 @@ public class GrammarFiles implements IFileLoader
 		if (isGrammarFile(path))
 		{
 			allFiles.remove(path);
-			Out.print("File removed: " + path);
+			//Out.print("File removed: " + path);
 			reloadAll();
 		}
 	}

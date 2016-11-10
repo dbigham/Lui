@@ -33,6 +33,10 @@ public class Tokenizer
 		{
 			//Out.print("Tokenizer match: " + matcher.start() + " to " + matcher.end());
 			String substring = str.substring(matcher.start(), matcher.end());
+			
+			// For now we want to be case insensitive.
+			substring = substring.toLowerCase();
+			
 			tokens.add(new LiteralPattern(grammar, substring, matcher.start(), matcher.end() - 1, createTokenIds));
 		}
 		

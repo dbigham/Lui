@@ -1,14 +1,5 @@
 package com.danielbigham;
 
-import java.awt.HeadlessException;
-import java.awt.Toolkit;
-import java.awt.datatransfer.DataFlavor;
-import java.awt.datatransfer.UnsupportedFlavorException;
-import java.io.BufferedWriter;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.PrintWriter;
-
 import com.danielbigham.io.Out;
 import com.wolfram.jlink.KernelLink;
 import com.wolfram.jlink.MathLinkException;

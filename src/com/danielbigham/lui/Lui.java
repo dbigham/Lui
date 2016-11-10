@@ -3,11 +3,11 @@ package com.danielbigham.lui;
 import java.io.IOException;
 
 import com.danielbigham.lui.hotkey.LuiHttpServer2;
-import com.danielbigham.lui.loading.GrammarFiles;
 
 public class Lui
 {
 	private LuiHttpServer2 hotkeyHttpServer;
+	private static LuiHttpServer httpServer;
 	
 	public Lui() throws IOException
 	{
@@ -20,9 +20,9 @@ public class Lui
 	public void stop()
 	{
 		hotkeyHttpServer.stop();
+		httpServer.stop();
 	}
 	
-	private static LuiHttpServer httpServer;
 	public static void main(String[] args) throws IOException, InterruptedException
 	{
 		String dir = args[0];

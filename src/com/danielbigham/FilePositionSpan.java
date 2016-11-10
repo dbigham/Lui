@@ -5,7 +5,6 @@ import java.io.PrintWriter;
 import java.nio.file.Paths;
 
 import com.danielbigham.io.IOHelpers;
-import com.danielbigham.io.Out;
 
 /**
  * Denotes a span within a file that may pertain to some object, etc.

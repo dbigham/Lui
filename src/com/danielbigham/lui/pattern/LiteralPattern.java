@@ -31,6 +31,9 @@ public class LiteralPattern extends BasicPattern
 	{
 		super(pos, pos, "L");
 		
+		literal = literal.toLowerCase();
+		
+		// For now we want to be case insensitive.
 		this.literal = literal;
 		
 		if (createTokenIds)

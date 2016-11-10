@@ -345,6 +345,19 @@ public class TestChartParser
 		);
 	}
 	
+	// Should be case insensitive.
+	@Test
+	public void test20()
+	{
+		assertEquals(
+			1,
+			parses(
+				"start: ONE TWO",
+				"one two"
+			)
+		);
+	}
+	
 	/**
 	 * Returns the number of times the given input parses to a spanning START result for the
 	 * given grammar.

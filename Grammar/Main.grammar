@@ -1,4 +1,7 @@
 start:
+	to|create multiline? java string
+		CopyToClipboard[CreateMultiLineJavaString[GetClipboard[]]]
+
 	google query=$quotedString
 		HeldHead[SystemOpen][StringJoin["https://www.google.ca/search?sourceid=chrome-psyapi2&ion=1&espv=2&ie=UTF-8&q=", query]]
 
@@ -48,7 +51,6 @@ start:
 	
 	name=$notebook -> OpenNotebook[name]
 	
-	dir=$dir ~dir -> SystemOpen[dir]
 	dir=$dir -> Scored[SystemOpen[dir], 0.7]
 	
 	~edit grammar|rules -> EditGrammar[]
@@ -136,6 +138,12 @@ start:
 			"Symbol" -> StringJoin["~", id],
 			"Expression" -> Null
 		]
+	
+	ftp
+		HeldHead[RunProcess][{"E:\\Program Files (x86)\\FileZilla FTP Client\\filezilla.exe", "--site=\"0/CWH\""}]
+
+dir:
+	dir=$dir ~dir -> dir
 
 name: $id|$quotedString
 
@@ -187,6 +195,8 @@ function:
 ~syn: synonym | syn
 
 directory:
+	how -> "E:\\Users\\Daniel\\Dropbox\\Projects\\How"
+	ace download -> "E:\\ace-builds-master"
 	downloads -> "E:\\Users\\Daniel\\Downloads"
 
 ~curt:
@@ -253,3 +263,6 @@ directory:
 	enitites
 	entity
 	"my entities"
+
+~chandler:
+	chandler | ch | mowat | "chandler mowat"

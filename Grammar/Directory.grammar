@@ -1,4 +1,7 @@
 dir:
+	q | question | questions -> "E:\\Users\\Daniel\\Dropbox\\Projects\\How\\questions"
+	how -> "E:\\Users\\Daniel\\Dropbox\\Projects\\How"
+	old ling|linguistics -> $OldLinguisticsDir
 	downloads -> "E:\\Users\\Daniel\\Downloads"
 	dir=$sourceCodeDirectory -> dir["Directory"]
 	~jlang data -> "E:\\Users\\Daniel\\Dropbox\\Projects\\JitLang\\Data"

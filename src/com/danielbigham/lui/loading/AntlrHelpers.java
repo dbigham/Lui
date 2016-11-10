@@ -513,4 +513,23 @@ public class AntlrHelpers
 		AntlrHelpers.parseGrammar(grammarRules, ruleHandler);
 		return ruleHandler.getRules();
 	}
+	
+	/**
+	 * Parse a rule pattern.
+	 * 
+	 * @param str		the string to parse.
+	 */
+	public static void parseRulePattern(String str)
+	{
+		GrammarLexer lexer = new GrammarLexer(new ANTLRInputStream(str));
+		
+		lexer.addErrorListener(DescriptiveErrorListener.INSTANCE);
+		
+		CommonTokenStream tokens = new CommonTokenStream(lexer);
+		GrammarParser parser = new GrammarParser(tokens);
+		
+		parser.addErrorListener(DescriptiveErrorListener.INSTANCE);
+		
+		GrammarParser.RulePatternContext tree = parser.rulePattern();
+	}
 }

@@ -240,4 +240,16 @@ public class TestAntlrParsing
 		List<GrammarRule> rules = parseGrammar(" \n start:\n\ta b? c");
 		assertEquals(1, rules.size());
 	}
+	
+	@Test
+	public void testRulePattern()
+	{
+		AntlrHelpers.parseRulePattern("just testing");
+	}
+	
+	@Test(expected=GrammarRuleSyntaxError.class)
+	public void testRulePattern2()
+	{
+		AntlrHelpers.parseRulePattern("!?");
+	}
 }

@@ -1,4 +1,28 @@
 notebook:
+	hugo larochelle? -> "HugoLarochelle.nb"
+	hierarchical output layer -> "HierarchicalOutputLayer.nb"
+	repl -> "REPL.nb"
+	nice design|designs -> "NiceDesign.nb"
+	mkyong | "mkyong.com" -> "Mkyong.nb"
+	vi | vim -> "vim.nb"
+	free photos -> "FreePhotos.nb"
+	~chandler people -> "ChandlerMowatPeople.nb"
+	how brainstorming -> "HowBrainstorming.nb"
+	((top|"most popular") programming? (languages|language)) | (programming? (languages|language) popularity) -> "TopProgrammingLanguages.nb"
+	wandbox -> "Wandbox.nb"
+	ideone -> "ideone.nb"
+	codepad | "code pad" | "codepad.org" -> "codepad.nb"
+	sandbox -> "Sandbox.nb"
+	how content? ui -> "HowContentUI.nb"
+	how http? server -> "HowHTTPServer.nb"
+	how (text|solution)? file? parsing -> "HowTextFileParsing.nb"
+	how syntax -> "HowSyntax.nb"
+	ace ide? -> "Ace.nb"
+	coliru -> "Coliru.nb"
+	how? syntax highlighting|highlight|highlighter -> "HowSyntaxHighlighting.nb"
+	how search (box|field)? -> "HowSearchBox.nb"
+	how design|ui -> "HowDesign.nb"
+	project|idea impulses -> "Impulses.nb"
 	parse forest pruning|evaluation -> "ParseForestPruning.nb"
 	anderson|andersen m? -> "AndersonM.nb"
 	sleep mode? -> "Sleep.nb"
@@ -730,8 +754,7 @@ notebook:
 	
 	dropout -> "Dropout.nb"
 	
-	accomplishments
-		"Accomplishments.nb"
+	accomplishments | yay | celebrate -> "Accomplishments.nb"
 	
 	compression -> "Compression.nb"
 	
