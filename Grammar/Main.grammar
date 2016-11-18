@@ -1,4 +1,6 @@
 start:
+	js|javascript str|string -> CreateMultilineJavaScriptString[]
+	
 	to|create multiline? java string
 		CopyToClipboard[CreateMultiLineJavaString[GetClipboard[]]]
 

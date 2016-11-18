@@ -1,4 +1,5 @@
 notebook:
+	how? ide -> "HowIDE.nb"
 	how bottom|status bar -> "HowBottomBar.nb"
 	how add? answer ui -> "HowAddAnswerUI.nb"
 	how parts -> "HowParts.nb"

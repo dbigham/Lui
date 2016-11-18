@@ -12,6 +12,10 @@ IndexNotebooks::usage = "IndexNotebooks  "
 
 SearchFiles::usage = "SearchFiles  "
 
+MultilineJavaScriptString::usage = "MultilineJavaScriptString  "
+
+CreateMultilineJavaScriptString::usage = "CreateMultilineJavaScriptString  "
+
 Begin["`Private`"]
 
 (*!
@@ -183,6 +187,49 @@ SearchFiles[search_, OptionsPattern[]] :=
 				" "
 			]
 		]
+	];
+
+(*!
+	\function MultilineJavaScriptString
+	
+	\calltable
+		MultilineJavaScriptString[str] '' generate a multi-line escaped JavaScript string.
+
+	Examples:
+	
+	MultilineJavaScriptString["this is a \"test\"\nof this function."] === "\"this is a \\\"test\\\"\\n\\\nof this function.\""
+
+	Unit tests:
+
+	RunUnitTests[Lui`Actions`MultilineJavaScriptString]
+
+	\maintainer danielb
+*)
+MultilineJavaScriptString[str_] :=
+	Block[{},
+		StringJoin[
+			"\"" <>
+			StringReplace[
+				EscapeString[str],
+				"\n" -> "\\n\\\n"
+			] <>
+			"\""
+		]
+	];
+
+(*!
+	\function CreateMultilineJavaScriptString
+	
+	\calltable
+		CreateMultilineJavaScriptString[] '' take the clipboard, create a multi-line JavaScript string from it, and put the result back in the clipboard.
+	
+	\related '
+	
+	\maintainer danielb
+*)
+CreateMultilineJavaScriptString[] :=
+	Block[{},
+		CopyToClipboard[MultilineJavaScriptString[GetClipboard[]]]
 	];
 
 End[]
