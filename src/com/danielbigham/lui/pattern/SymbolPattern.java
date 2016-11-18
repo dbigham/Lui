@@ -124,4 +124,10 @@ public class SymbolPattern extends BasicPattern implements IPatternMatch
 		
 		return res;
 	}
+	
+	@Override
+	public String toString(boolean decorate)
+	{
+		return toString();
+	}
 }

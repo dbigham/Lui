@@ -107,6 +107,15 @@ public interface IPattern
 	public void setAction(String action);
 
 	/**
+	 * Convert the object to its string representation.
+	 * 
+	 * @param decorate		whether to add syntax to try to improve the readability. If false,
+	 * 						then we try to be faithful to what the input string representation
+	 * 						would be prior to parsing.
+	 */
+	public String toString(boolean decorate);
+	
+	/**
 	 * Like toString() but also include the LHS if present.
 	 * 
 	 * @param grammar	the grammar.

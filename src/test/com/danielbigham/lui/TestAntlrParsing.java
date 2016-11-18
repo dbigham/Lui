@@ -7,9 +7,11 @@ import java.util.List;
 
 import org.junit.Test;
 
+import com.danielbigham.lui.Grammar;
 import com.danielbigham.lui.antlr.GrammarRuleSyntaxError;
 import com.danielbigham.lui.grammarrule.GrammarRule;
 import com.danielbigham.lui.loading.AntlrHelpers;
+import com.danielbigham.lui.loading.PatternHandler;
 
 public class TestAntlrParsing
 {
@@ -244,12 +246,15 @@ public class TestAntlrParsing
 	@Test
 	public void testRulePattern()
 	{
-		AntlrHelpers.parseRulePattern("just testing");
+		Grammar grammar = new Grammar();
+		PatternHandler handler = new PatternHandler(grammar);
+		AntlrHelpers.parseRulePattern("just testing", handler);
+		assertEquals("{just testing}", handler.getPattern().toString());
 	}
 	
 	@Test(expected=GrammarRuleSyntaxError.class)
 	public void testRulePattern2()
 	{
-		AntlrHelpers.parseRulePattern("!?");
+		AntlrHelpers.parseRulePattern("!?", null);
 	}
 }

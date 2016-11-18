@@ -36,8 +36,13 @@ public class SequencePattern extends Pattern implements IPattern
 	
 	public String toString()
 	{
+		return toString(true);
+	}
+	
+	public String toString(boolean decorate)
+	{
 		StringBuilder str = new StringBuilder();
-		str.append("{");
+		if (decorate) { str.append("{"); } else { str.append("("); }
 		int patternIndex = 0;
 		int triggerIndex = -1;
 		if (getTriggerIndices() != null)
@@ -51,16 +56,16 @@ public class SequencePattern extends Pattern implements IPattern
 			{
 				// Double carets denote the sub-pattern
 				// that is playing the role of trigger.
-				str.append("<");
+				if (decorate) { str.append("<"); }
 			}
-			str.append(subPattern.toString());
+			str.append(subPattern.toString(decorate));
 			if (patternIndex == triggerIndex)
 			{
-				str.append(">");
+				if (decorate) { str.append(">"); }
 			}
 			++patternIndex;
 		}
-		str.append("}");
+		if (decorate) { str.append("}"); } else { str.append(")"); }
 		return toStringHelper(str.toString());
 	}
 

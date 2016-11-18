@@ -109,4 +109,10 @@ public class LiteralPattern extends BasicPattern
 			return null;
 		}
 	}
+
+	@Override
+	public String toString(boolean decorate)
+	{
+		return toString();
+	}
 }

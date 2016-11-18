@@ -28,7 +28,7 @@ public class LuiHttpServer
 	public LuiHttpServer(String dir) throws IOException
 	{
 		grammar = new Grammar();
-		grammarFiles = GrammarFiles.create(dir, grammar);
+		grammarFiles = GrammarFiles.create(dir, grammar, false);
 		server = HttpServer.create(new InetSocketAddress(7897), 0);
 		server.createContext("/parse", new MyHandler(grammar));
 		server.setExecutor(null);

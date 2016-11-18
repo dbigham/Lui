@@ -164,7 +164,7 @@ CreateGrammar[name_String, Dir[dir_String]] :=
 	Block[{grammar},
 		grammar = JavaNew["com.danielbigham.lui.Grammar"];
 		LoadJavaClass["com.danielbigham.lui.loading.GrammarFiles"];
-		GrammarFiles`create[dir, grammar];
+		GrammarFiles`create[dir, grammar, True];
 		CreateGrammar[name, grammar]
 	]
 

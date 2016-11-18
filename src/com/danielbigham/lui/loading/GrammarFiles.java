@@ -1,6 +1,7 @@
 package com.danielbigham.lui.loading;
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -30,6 +31,7 @@ public class GrammarFiles implements IFileLoader
 	private Grammar grammar;
 	private final List<Path> allFiles;
 	private static final Map<String, GrammarFiles> objs;
+	private boolean hasWolframLanguageNotebook;
 	
 	static
 	{
@@ -41,10 +43,12 @@ public class GrammarFiles implements IFileLoader
 	 * 
 	 * Ensure that duplicates don't get created for the same directory.
 	 * 
-	 * @param dir		The directory to watch.
-	 * @return			The FileLoaderAndReloader object.
+	 * @param dir							The directory to watch.
+	 * @param grammar						The grammar.
+	 * @param hasWolframLanguageNotebook	are we attached to a Wolfram Language notebook?
+	 * @return								The FileLoaderAndReloader object.
 	 */
-	public static GrammarFiles create(String dir, Grammar grammar) throws IOException
+	public static GrammarFiles create(String dir, Grammar grammar, boolean hasWolframLanguageNotebook) throws IOException
 	{
 		GrammarFiles existing = objs.get(dir);
 		if (existing != null)
@@ -53,24 +57,22 @@ public class GrammarFiles implements IFileLoader
 		}
 		else
 		{
-			GrammarFiles obj = new GrammarFiles(dir, grammar);
+			GrammarFiles obj = new GrammarFiles(dir, grammar, hasWolframLanguageNotebook);
 			objs.put(dir, obj);
 			return obj;
 		}
 	}
 	
-	private GrammarFiles(Path baseDir, Grammar grammar) throws IOException
+	private GrammarFiles(Path baseDir, Grammar grammar, boolean hasWolframLanguageNotebook) throws IOException
 	{
-		this.grammar = grammar;
-		this.allFiles = new ArrayList<Path>();
-		fileWatcherThread = new FileLoaderAndReloader(baseDir, this);
-		fileWatcherThread.run();
+		this(baseDir.toString(), grammar, hasWolframLanguageNotebook);
 	}
 	
-	private GrammarFiles(String baseDir, Grammar grammar) throws IOException
+	private GrammarFiles(String baseDir, Grammar grammar, boolean hasWolframLanguageNotebook) throws IOException
 	{
 		this.grammar = grammar;
 		this.allFiles = new ArrayList<Path>();
+		this.hasWolframLanguageNotebook = hasWolframLanguageNotebook;
 		fileWatcherThread = new FileLoaderAndReloader(Paths.get(baseDir), this);
 		fileWatcherThread.start();
 	}
@@ -84,12 +86,18 @@ public class GrammarFiles implements IFileLoader
 		{
 			Out.print(e);
 			GrammarRuleSyntaxError e2 = (GrammarRuleSyntaxError)e;
-			Util2.callWL(
-				"OpenFileInWorkbench[" +
-					Util.createDoubleQuotedString(e2.getSourceName()) + "," +
-					"\"Line\" -> " + e2.getLine() +
-				"]"
-			);
+			if (hasWolframLanguageNotebook)
+			{
+				Util2.callWL(
+					"OpenFileInWorkbench[" +
+						Util.createDoubleQuotedString(e2.getSourceName()) + "," +
+						"\"Line\" -> " + e2.getLine() +
+					"]");
+			}
+			else
+			{
+				Out.print("Syntax error in grammar:\n  Source: " + e2.getSourceName() + "\n  Line: " + e2.getLine());
+			}
 		}
 		else
 		{
@@ -110,6 +118,7 @@ public class GrammarFiles implements IFileLoader
 	 */
 	private void reloadAll() throws IOException
 	{
+		Out.print("Reloading all grammar files.");
 		grammar.init();
 		for (Path path : allFiles)
 		{
@@ -134,6 +143,8 @@ public class GrammarFiles implements IFileLoader
 		}
 		
 		grammar.processRules();
+		
+		reloadDone();
 	}
 	
 	/**
@@ -175,14 +186,51 @@ public class GrammarFiles implements IFileLoader
 		}
 	}
 
+	private boolean isReloadPending;
+	private synchronized boolean getSetReloadPending()
+	{
+		boolean res = false;
+		if (!isReloadPending)
+		{
+			isReloadPending = true;
+			res = true;
+		}
+		return res;
+	}
+	private synchronized void reloadDone()
+	{
+		isReloadPending = false;
+	}
+	
 	@Override
 	public void fileModified(Path path) throws IOException
 	{
 		if (isGrammarFile(path))
 		{
 			//Out.print("--------------------------------------------------------------------------------");
-			//Out.print("File modified: " + path);
-			reloadAll();
+			Out.print("File modified: " + path);
+			
+			// It seems that if we call act immediately, we sometimes see 0 byte files?
+			// Let's try introducing a delay here to hopefully avoid that.
+			
+			if (getSetReloadPending())
+			{
+				Out.print("Waiting 1 second before reloading...");
+				try
+				{
+					Thread.sleep(1000);
+				}
+				catch (InterruptedException e)
+				{
+					e.printStackTrace();
+				}
+				
+				reloadAll();
+			}
+			else
+			{
+				Out.print("Won't reload since it is already being done.");
+			}
 		}
 	}
 
@@ -192,8 +240,12 @@ public class GrammarFiles implements IFileLoader
 		if (isGrammarFile(path))
 		{
 			allFiles.add(path);
-			//Out.print("File created: " + path);
-			reloadAll();
+			Out.print("Grammar file created: " + path);
+			
+			// We'll try ignoring fileCreated events for now for fear that they are duplicated
+			// by quickly-following fileModified events. (see also: HowFileLoader's methods of
+			// the same names)
+			//reloadAll();
 		}
 	}
 
@@ -231,7 +283,7 @@ public class GrammarFiles implements IFileLoader
     {
         Path dir = Paths.get(args[0]);
         Grammar grammar = new Grammar();
-        new FileLoaderAndReloader(dir, new GrammarFiles(dir, grammar)).run();
+        new FileLoaderAndReloader(dir, new GrammarFiles(dir, grammar, false)).run();
     }
 
 	@Override

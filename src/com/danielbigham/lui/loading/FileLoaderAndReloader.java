@@ -16,6 +16,8 @@ import java.nio.file.attribute.BasicFileAttributes;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.danielbigham.io.Out;
+
 /**
  * This class can be used to explore a directory hierarchy and load all
  * files of a certain type. It also supports watching files for modification
@@ -154,6 +156,7 @@ public class FileLoaderAndReloader extends Thread
 						// New directory
 						try
 						{
+							Out.print("Add directory: " + path);
 							addDirectories(path);
 						}
 						catch (IOException e)

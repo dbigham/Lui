@@ -55,16 +55,24 @@ import com.danielbigham.lui.antlr.GrammarParser.WsnContext;
  */
 public class GrammarRulesListener implements GrammarListener
 {
-	private final IRuleHandler ruleHandler;
-
+	private IRuleHandler ruleHandler;
+	private IPatternHandler patternHandler;
+	
 	/**
 	 * Construct GrammarRulesListener.
-	 * 
-	 * @param ruleHandler		the class that will be called with the ANTLR-parsed rules to actually do something with them.
 	 */
-	public GrammarRulesListener(IRuleHandler ruleHandler)
+	public GrammarRulesListener()
 	{
-		this.ruleHandler = ruleHandler;
+	}
+	
+	public void setRuleHandler(IRuleHandler handler)
+	{
+		this.ruleHandler = handler;
+	}
+	
+	public void setPatternHandler(IPatternHandler handler)
+	{
+		this.patternHandler = handler;
 	}
 	
 	@Override
@@ -535,8 +543,10 @@ public class GrammarRulesListener implements GrammarListener
 	@Override
 	public void exitRulePattern(RulePatternContext ctx)
 	{
-		// TODO Auto-generated method stub
-		
+		if (patternHandler != null)
+		{
+			patternHandler.handle(ctx);
+		}
 	}
 
 	@Override

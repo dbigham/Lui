@@ -171,6 +171,39 @@ public class AntlrHelpers
 	 */
 	static GrammarRule convert(String lhs, List<RulePart3Context> ruleParts, String action, Grammar grammar)
 	{
+		IPattern pattern = convertPattern(ruleParts, grammar);
+		
+		if (action == null)
+		{
+			if (pattern instanceof SequencePattern)
+			{
+				action = defaultAction((SequencePattern)pattern);
+			}
+		}
+		
+		GrammarRule rule =
+			new GrammarRule(
+				grammar,
+				lhs,
+				pattern,
+				action
+			);
+		
+		// Since we're currently also storing and using
+		// the result symbol within the pattern itself,
+		// we need to take care to replace the NO_LHS that
+		// we originally gave the pattern with the LHS
+		// that we now have for it.
+		pattern.setSymbol(rule.getResultSymbolInt());
+		
+		return rule;
+	}
+	
+	/**
+	 * Convert a list of top-level sub-patterns into a single pattern.
+	 */
+	public static IPattern convertPattern(List<RulePart3Context> ruleParts, Grammar grammar)
+	{
 		List<IPattern> subPatterns = convert(ruleParts, grammar);
 		IPattern pattern;
 		
@@ -198,30 +231,7 @@ public class AntlrHelpers
 				);
 		}
 		
-		if (action == null)
-		{
-			if (pattern instanceof SequencePattern)
-			{
-				action = defaultAction((SequencePattern)pattern);
-			}
-		}
-		
-		GrammarRule rule =
-			new GrammarRule(
-				grammar,
-				lhs,
-				pattern,
-				action
-			);
-		
-		// Since we're currently also storing and using
-		// the result symbol within the pattern itself,
-		// we need to take care to replace the NO_LHS that
-		// we originally gave the pattern with the LHS
-		// that we now have for it.
-		pattern.setSymbol(rule.getResultSymbolInt());
-		
-		return rule;
+		return pattern;
 	}
 	
 	/**
@@ -457,7 +467,8 @@ public class AntlrHelpers
 		GrammarParser.GrammarRulesContext tree = parser.grammarRules();	
 		if (ruleHandler != null)
 		{
-			GrammarRulesListener extractor = new GrammarRulesListener(ruleHandler);
+			GrammarRulesListener extractor = new GrammarRulesListener();
+			extractor.setRuleHandler(ruleHandler);
 			ParseTreeWalker.DEFAULT.walk(extractor, tree);		
 		}
 	}
@@ -519,7 +530,7 @@ public class AntlrHelpers
 	 * 
 	 * @param str		the string to parse.
 	 */
-	public static void parseRulePattern(String str)
+	public static void parseRulePattern(String str, IPatternHandler handler)
 	{
 		GrammarLexer lexer = new GrammarLexer(new ANTLRInputStream(str));
 		
@@ -531,5 +542,9 @@ public class AntlrHelpers
 		parser.addErrorListener(DescriptiveErrorListener.INSTANCE);
 		
 		GrammarParser.RulePatternContext tree = parser.rulePattern();
+		
+		GrammarRulesListener extractor = new GrammarRulesListener();
+		extractor.setPatternHandler(handler);
+		ParseTreeWalker.DEFAULT.walk(extractor, tree);		
 	}
 }

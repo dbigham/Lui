@@ -1,4 +1,5 @@
 webpage:
+	vim|vi|vimscript "cheat sheet"|cheatsheet -> "http://ricostacruz.com/cheatsheets/vimscript-functions.html"
 	intercooler -> "https://github.com/LeadDyno/intercooler-js"
 	how local webpage|page -> "file:///E:/Users/Daniel/Dropbox/Projects/How/check-whether-string-contains-substring-cpp.html"
 	ace howto -> "https://ace.c9.io/#nav"

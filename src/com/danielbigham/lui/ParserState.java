@@ -169,7 +169,7 @@ public class ParserState
 	public void incrementIterationCounter()
 	{
 		++iterationCounter;
-		if (ChartParser.debugFlag) { Out.print("Increment iteration counter -> " + iterationCounter); }
+		if (ChartParser.debugIterationCounter) { Out.print("Increment iteration counter -> " + iterationCounter); }
 	}
 	
 	/**

@@ -35,4 +35,10 @@ public class OptionalPattern extends Pattern implements IPattern
 		// TODO
 		throw new UnsupportedOperationException();
 	}
+
+	@Override
+	public String toString(boolean decorate)
+	{
+		return toString();
+	}
 }

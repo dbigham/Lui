@@ -5,7 +5,9 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import com.danielbigham.io.Out;
 import com.danielbigham.lui.Chart;
+import com.danielbigham.lui.ChartParser;
 import com.danielbigham.lui.ParserState;
 import com.danielbigham.lui.pattern.BasicPattern;
 import com.danielbigham.lui.pattern.IPattern;
@@ -102,6 +104,7 @@ public class SequencePatternMatch extends PatternMatch
 				newMatches = extendRight(extensionPositions, rightDot + 1);
 			}
 			
+			// Question: What does the theMatchWereExtendingIsAlreadyInPartialsChart clause do?
 			if (nextPattern.isOptional() && !theMatchWereExtendingIsAlreadyInPartialsChart)
 			{
 				// Also try extending the match by skipping the optional.
@@ -160,34 +163,60 @@ public class SequencePatternMatch extends PatternMatch
 				newMatches = extendLeft(state, extensionPositions, leftDot - 1);
 			}
 			
+			// I wonder: Am I going about this the wrong way here? When implementing the
+			// loop to bypass multiple contiguous optionals, it made me wonder whether
+			// perhaps I should instead just *recurse* here somehow, rather than in a
+			// sense duplicating the implementation of this function above this point but
+			// down below. Also -- is my approach here flawed because I'm not adding partials
+			// as I go along?
 			if (nextPattern.isOptional() && !theMatchWereExtendingIsAlreadyInPartialsChart)
 			{
 				// Also try extending the match by skipping the optional.
-				int offset = 2;
-				extensionPositions = null;
-				if (leftDot - offset >= 0)
+				boolean breakFlag = false;
+				for (int offset = 2; !breakFlag; ++offset)
 				{
-					nextPattern = (BasicPattern)pattern.subPattern(leftDot - offset);
-					extensionPositions = nextPattern.getMatchExtensionPositionsToLeft(chart, startPos - 1);
-				}
-				else if (!extendedAlready)
-				{
-					// A complete match then, since the last pattern is optional.
-					extensionPositions = new HashSet<Integer>();
-					offset = 1;
-					extensionPositions.add(0);
-				}
-				
-				if (extensionPositions != null)
-				{
-					newMatches2 = extendLeft(state, extensionPositions, leftDot - offset);
-					if (newMatches == null)
+					extensionPositions = null;
+					
+					if (leftDot - offset >= 0)
 					{
-						newMatches = newMatches2;
+						nextPattern = (BasicPattern)pattern.subPattern(leftDot - offset);
+						breakFlag = !nextPattern.isOptional();
+						extensionPositions = nextPattern.getMatchExtensionPositionsToLeft(chart, startPos - 1);
+						if (ChartParser.debugOptionals)
+						{
+							Out.print("Try skipping optional on left: " + this);
+							Out.print("  Next pattern on left: " + nextPattern);
+							Out.print("  Extension positions: " + extensionPositions);
+						}
 					}
 					else
 					{
-						newMatches.addAll(newMatches2);
+						breakFlag = true;
+						if (!extendedAlready)
+						{
+							// A complete match then, since the last pattern is optional.
+							if (ChartParser.debugOptionals)
+							{
+								Out.print("Completed match by skipping optional on left.");
+							}
+							extensionPositions = new HashSet<Integer>();
+							offset = 1;
+							extensionPositions.add(0);
+							breakFlag = true;
+						}
+					}
+					
+					if (extensionPositions != null)
+					{
+						newMatches2 = extendLeft(state, extensionPositions, leftDot - offset);
+						if (newMatches == null)
+						{
+							newMatches = newMatches2;
+						}
+						else
+						{
+							newMatches.addAll(newMatches2);
+						}
 					}
 				}
 			}

@@ -61,7 +61,7 @@ public class OrPattern extends Pattern implements IPattern
 		return res;
 	}
 	
-	public String toString()
+	public String toString(boolean decorate)
 	{
 		StringBuilder str = new StringBuilder();
 		int patternIndex = 0;
@@ -69,10 +69,16 @@ public class OrPattern extends Pattern implements IPattern
 		for(IPattern subPattern : patterns)
 		{
 			if (patternIndex > 0) { str.append("|"); }
-			str.append(subPattern.toString());
+			str.append(subPattern.toString(decorate));
 			++patternIndex;
 		}
 		str.append(")");
 		return toStringHelper(str.toString());
+	}
+	
+	@Override
+	public String toString()
+	{
+		return toString(true);
 	}
 }
