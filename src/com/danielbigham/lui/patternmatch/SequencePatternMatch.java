@@ -1,6 +1,7 @@
 package com.danielbigham.lui.patternmatch;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -71,154 +72,126 @@ public class SequencePatternMatch extends PatternMatch
 	{
 		if (matchComplete) { throw new UnsupportedOperationException(); }
 		
-		List<IPatternMatch> newMatches = null;
-		List<IPatternMatch> newMatches2 = null;
+		List<IPatternMatch> newMatches;
 		
-		Chart chart = state.chart();
-		
-		boolean theMatchWereExtendingIsAlreadyInPartialsChart = (extensionPositions != null);
-		
-		BasicPattern nextPattern;
 		if (dir == 1)
 		{
-			nextPattern = (BasicPattern)pattern.subPattern(rightDot + 1);
-			
-			// Add this partial match to the partials chart.
-			if (!pattern.subPatternsAreAllLiterals())
-			{
-				if (!theMatchWereExtendingIsAlreadyInPartialsChart)
-				{
-					chart.addStartPosPartial(this, endPos + 1, nextPattern.resultSymbol(), state.iterationCounter());
-				}
-			}
-			
-			if (extensionPositions == null)
-			{
-				extensionPositions = nextPattern.getMatchExtensionPositionsToRight(chart, endPos + 1);
-			}
-			
-			boolean extendedAlready = false;
-			if (extensionPositions != null)
-			{
-				extendedAlready = true;
-				newMatches = extendRight(extensionPositions, rightDot + 1);
-			}
-			
-			// Question: What does the theMatchWereExtendingIsAlreadyInPartialsChart clause do?
-			if (nextPattern.isOptional() && !theMatchWereExtendingIsAlreadyInPartialsChart)
-			{
-				// Also try extending the match by skipping the optional.
-				int offset = 2;
-				extensionPositions = null;
-				if (rightDot + offset < pattern.length())
-				{
-					nextPattern = (BasicPattern)pattern.subPattern(rightDot + offset);
-					extensionPositions = nextPattern.getMatchExtensionPositionsToRight(chart, endPos + 1);
-				}
-				else if (!extendedAlready)
-				{
-					// A complete match then, since the last pattern is optional.
-					extensionPositions = new HashSet<Integer>();
-					offset = 1;
-					extensionPositions.add(endPos);
-				}
-					
-				if (extensionPositions != null)
-				{
-					newMatches2 = extendRight(extensionPositions, rightDot + offset);
-					if (newMatches == null)
-					{
-						newMatches = newMatches2;
-					}
-					else
-					{
-						newMatches.addAll(newMatches2);
-					}
-				}
-			}
+			newMatches = extendRight(state, extensionPositions);
 		}
 		else
 		{
-			nextPattern = (BasicPattern)pattern.subPattern(leftDot - 1);
-			
-			// Add this partial match to the partials chart.
-			if (!pattern.subPatternsAreAllLiterals())
+			newMatches = extendLeft(state, extensionPositions);
+		}
+		
+		return newMatches;
+	}
+	
+	public List<IPatternMatch> extendRight(ParserState state, Set<Integer> extensionPositions)
+	{
+		if (matchComplete) { throw new UnsupportedOperationException(); }
+		
+		List<IPatternMatch> newMatches = null;
+		Chart chart = state.chart();
+		boolean theMatchWereExtendingIsAlreadyInPartialsChart = (extensionPositions != null);
+		BasicPattern nextPattern;
+		
+		nextPattern = (BasicPattern)pattern.subPattern(rightDot + 1);
+		
+		// Add this partial match to the partials chart.
+		if (!pattern.subPatternsAreAllLiterals())
+		{
+			if (!theMatchWereExtendingIsAlreadyInPartialsChart)
 			{
-				if (!theMatchWereExtendingIsAlreadyInPartialsChart)
-				{
-					chart.addEndPosPartial(this, startPos - 1, nextPattern.resultSymbol(), state.iterationCounter());
-				}
+				chart.addStartPosPartial(this, endPos + 1, nextPattern.resultSymbol(), state.iterationCounter());
 			}
-			
-			if (extensionPositions == null)
+		}
+		
+		if (extensionPositions == null)
+		{
+			extensionPositions = nextPattern.getMatchExtensionPositionsToRight(chart, endPos + 1);
+		}
+		
+		if (extensionPositions == null && nextPattern.isOptional() && rightDot + 2 >= pattern.length() && endPos == state.getEndPos())
+		{
+			if (ChartParser.debugOptionals) { Out.print("Skipping right optional reaches end of input: " + this); }
+			extensionPositions = new HashSet<Integer>(Arrays.asList(endPos));
+		}
+		
+		if (extensionPositions != null)
+		{
+			newMatches = extendRightHelper(extensionPositions, rightDot + 1);
+		}
+		
+		if (nextPattern.isOptional() &&
+			!theMatchWereExtendingIsAlreadyInPartialsChart &&
+			rightDot + 2 < pattern.length())
+		{
+			if (ChartParser.debugOptionals) { Out.print("Skipping right optional: " + this); }
+			extensionPositions = new HashSet<Integer>(Arrays.asList(endPos));
+			List<IPatternMatch> newMatches2 = extendRightHelper(extensionPositions, rightDot + 1);
+			if (newMatches == null)
 			{
-				extensionPositions = nextPattern.getMatchExtensionPositionsToLeft(chart, startPos - 1);
+				newMatches = newMatches2;
 			}
-			
-			boolean extendedAlready = false;
-			
-			if (extensionPositions != null)
+			else
 			{
-				extendedAlready = true;
-				newMatches = extendLeft(state, extensionPositions, leftDot - 1);
+				newMatches.addAll(newMatches2);
 			}
-			
-			// I wonder: Am I going about this the wrong way here? When implementing the
-			// loop to bypass multiple contiguous optionals, it made me wonder whether
-			// perhaps I should instead just *recurse* here somehow, rather than in a
-			// sense duplicating the implementation of this function above this point but
-			// down below. Also -- is my approach here flawed because I'm not adding partials
-			// as I go along?
-			if (nextPattern.isOptional() && !theMatchWereExtendingIsAlreadyInPartialsChart)
+		}
+		
+		return newMatches;
+	}
+	
+	public List<IPatternMatch> extendLeft(ParserState state, Set<Integer> extensionPositions)
+	{
+		if (matchComplete) { throw new UnsupportedOperationException(); }
+		
+		List<IPatternMatch> newMatches = null;
+		Chart chart = state.chart();
+		boolean theMatchWereExtendingIsAlreadyInPartialsChart = (extensionPositions != null);
+		BasicPattern nextPattern;
+	
+		nextPattern = (BasicPattern)pattern.subPattern(leftDot - 1);
+		
+		// Add this partial match to the partials chart.
+		if (!pattern.subPatternsAreAllLiterals())
+		{
+			if (!theMatchWereExtendingIsAlreadyInPartialsChart)
 			{
-				// Also try extending the match by skipping the optional.
-				boolean breakFlag = false;
-				for (int offset = 2; !breakFlag; ++offset)
-				{
-					extensionPositions = null;
-					
-					if (leftDot - offset >= 0)
-					{
-						nextPattern = (BasicPattern)pattern.subPattern(leftDot - offset);
-						breakFlag = !nextPattern.isOptional();
-						extensionPositions = nextPattern.getMatchExtensionPositionsToLeft(chart, startPos - 1);
-						if (ChartParser.debugOptionals)
-						{
-							Out.print("Try skipping optional on left: " + this);
-							Out.print("  Next pattern on left: " + nextPattern);
-							Out.print("  Extension positions: " + extensionPositions);
-						}
-					}
-					else
-					{
-						breakFlag = true;
-						if (!extendedAlready)
-						{
-							// A complete match then, since the last pattern is optional.
-							if (ChartParser.debugOptionals)
-							{
-								Out.print("Completed match by skipping optional on left.");
-							}
-							extensionPositions = new HashSet<Integer>();
-							offset = 1;
-							extensionPositions.add(0);
-							breakFlag = true;
-						}
-					}
-					
-					if (extensionPositions != null)
-					{
-						newMatches2 = extendLeft(state, extensionPositions, leftDot - offset);
-						if (newMatches == null)
-						{
-							newMatches = newMatches2;
-						}
-						else
-						{
-							newMatches.addAll(newMatches2);
-						}
-					}
-				}
+				chart.addEndPosPartial(this, startPos - 1, nextPattern.resultSymbol(), state.iterationCounter());
+			}
+		}
+		
+		if (extensionPositions == null)
+		{
+			extensionPositions = nextPattern.getMatchExtensionPositionsToLeft(chart, startPos - 1);
+		}
+		
+		if (extensionPositions == null && nextPattern.isOptional() && leftDot - 2 < 0 && startPos == 0)
+		{
+			if (ChartParser.debugOptionals) { Out.print("Skipping left optional reaches start of input: " + this); }
+			extensionPositions = new HashSet<Integer>(Arrays.asList(0));
+		}
+		
+		if (extensionPositions != null)
+		{
+			newMatches = extendLeftHelper(state, extensionPositions, leftDot - 1);
+		}
+		
+		if (nextPattern.isOptional() &&
+			!theMatchWereExtendingIsAlreadyInPartialsChart &&
+			leftDot - 2 >= 0)
+		{
+			if (ChartParser.debugOptionals) { Out.print("Skipping left optional: " + this); }
+			extensionPositions = new HashSet<Integer>(Arrays.asList(startPos));
+			List<IPatternMatch> newMatches2 = extendLeftHelper(state, extensionPositions, leftDot - 1);
+			if (newMatches == null)
+			{
+				newMatches = newMatches2;
+			}
+			else
+			{
+				newMatches.addAll(newMatches2);
 			}
 		}
 		
@@ -228,7 +201,7 @@ public class SequencePatternMatch extends PatternMatch
 	/**
 	 * Create a new pattern match by extending this one to the right.
 	 */
-	private List<IPatternMatch> extendRight(Set<Integer> extensionPositions, int newRightDot)
+	private List<IPatternMatch> extendRightHelper(Set<Integer> extensionPositions, int newRightDot)
 	{
 		List<IPatternMatch> res = new ArrayList<IPatternMatch>();
 		
@@ -258,6 +231,8 @@ public class SequencePatternMatch extends PatternMatch
 				newMatch.matchComplete = true;
 			}
 			
+			if (ChartParser.debugMatchExtension) { Out.print("Extended right: " + newMatch); }
+			
 			res.add(newMatch);
 		}
 		return res;
@@ -266,7 +241,7 @@ public class SequencePatternMatch extends PatternMatch
 	/**
 	 * Create a new pattern match by extending this one to the left.
 	 */
-	private List<IPatternMatch> extendLeft(ParserState state, Set<Integer> extensionPositions, int newLeftDot)
+	private List<IPatternMatch> extendLeftHelper(ParserState state, Set<Integer> extensionPositions, int newLeftDot)
 	{
 		List<IPatternMatch> res = new ArrayList<IPatternMatch>();
 		
@@ -284,6 +259,8 @@ public class SequencePatternMatch extends PatternMatch
 				// and to the left, so we have a complete match.
 				newMatch.matchComplete = true;
 			}
+			
+			if (ChartParser.debugMatchExtension) { Out.print("Extended left: " + newMatch); }
 			
 			res.add(newMatch);
 		}
