@@ -1127,7 +1127,7 @@ notebook:
 	wl parsing -> "WLParsing.nb"
 	grammar reload|reloading -> "GrammarReload.nb"
 	"syntax errors" | "syntax error handling" -> "SyntaxErrorHandling.nb"
-	meredith | mer -> "meredith.nb"
+	meredith | mer | ((mer|meredith) phone) -> "meredith.nb"
 	camp schedule|schedules -> "CampSchedule.nb"
 	main -> "Main.nb"
 	"jcsat 14" | "jcsat-14" -> "Jcsat14.nb"

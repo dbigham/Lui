@@ -5,7 +5,7 @@ sourceFile:
 	q | question | questions -> "questions"
 	how css -> "E:\\Users\\Daniel\\Dropbox\\Projects\\How\\style.css"
 	how syntax -> "E:\\Users\\Daniel\\Dropbox\\Projects\\How\\HowSyntax.txt"
-	how js -> "E:\\Users\\Daniel\\Dropbox\\Projects\\How\\page.js"
+	how js -> "E:\\Users\\Daniel\\Dropbox\\Projects\\How\\js\\page.js"
 	(chunk type (sequence|seq) model) | ((sequence|seq) model) -> "E:\\Users\\Daniel\\Dropbox\\Projects\\JitLang\\Data\\ChunkTypeSequenceModel.m"
 	(seq|"sequence patt"|pattern|patterns) | seqpatt | seqpat | seq -> "JitLang`SeqPatt`"
 	action|actions -> "Lui`Actions`"

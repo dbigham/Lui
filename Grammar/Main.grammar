@@ -143,7 +143,8 @@ start:
 		HeldHead[RunProcess][{"E:\\Program Files (x86)\\FileZilla FTP Client\\filezilla.exe", "--site=\"0/CWH\""}]
 
 dir:
-	dir=$dir ~dir -> dir
+	dir=$directory ~dir -> dir
+	$directory
 
 name: $id|$quotedString
 
@@ -193,11 +194,6 @@ function:
 ~jlang: "jit language" | jlang | jlanguage | jitlang | jit
 
 ~syn: synonym | syn
-
-directory:
-	how -> "E:\\Users\\Daniel\\Dropbox\\Projects\\How"
-	ace download -> "E:\\ace-builds-master"
-	downloads -> "E:\\Users\\Daniel\\Downloads"
 
 ~curt:
 	(curt | curtis) | ((curt | curtis) beattie)

@@ -1,7 +1,6 @@
 package com.danielbigham.lui.loading;
 
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -13,6 +12,7 @@ import com.danielbigham.Util;
 import com.danielbigham.Util2;
 import com.danielbigham.io.Out;
 import com.danielbigham.lui.Grammar;
+import com.danielbigham.lui.Lui;
 import com.danielbigham.lui.antlr.GrammarParser.GrammarRulesContext;
 import com.danielbigham.lui.antlr.GrammarRuleSyntaxError;
 import com.danielbigham.lui.grammarrule.GrammarRule;
@@ -118,7 +118,7 @@ public class GrammarFiles implements IFileLoader
 	 */
 	private void reloadAll() throws IOException
 	{
-		Out.print("Reloading all grammar files.");
+		if (Lui.debugReloading) { Out.print("Reloading all grammar files."); }
 		grammar.init();
 		for (Path path : allFiles)
 		{
@@ -208,14 +208,14 @@ public class GrammarFiles implements IFileLoader
 		if (isGrammarFile(path))
 		{
 			//Out.print("--------------------------------------------------------------------------------");
-			Out.print("File modified: " + path);
+			if (Lui.debugReloading) { Out.print("File modified: " + path); }
 			
 			// It seems that if we call act immediately, we sometimes see 0 byte files?
 			// Let's try introducing a delay here to hopefully avoid that.
 			
 			if (getSetReloadPending())
 			{
-				Out.print("Waiting 1 second before reloading...");
+				if (Lui.debugReloading) { Out.print("Waiting 1 second before reloading..."); }
 				try
 				{
 					Thread.sleep(1000);

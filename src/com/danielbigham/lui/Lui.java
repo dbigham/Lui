@@ -8,6 +8,7 @@ public class Lui
 {
 	private LuiHttpServer2 hotkeyHttpServer;
 	private static LuiHttpServer httpServer;
+	public static boolean debugReloading = false;
 	
 	public Lui() throws IOException
 	{

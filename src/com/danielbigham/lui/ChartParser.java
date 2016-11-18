@@ -21,9 +21,9 @@ public class ChartParser
 {
 	public final static int START_SYMBOL = -1;
 
-	public static boolean debugFlag = true;
-	public static boolean debugOptionals = true;
-	public static boolean debugMatchExtension = true;
+	public static boolean debugFlag = false;
+	public static boolean debugOptionals = false;
+	public static boolean debugMatchExtension = false;
 	public static boolean debugPartials = false;
 	public static boolean debugIterationCounter = false;
 	
