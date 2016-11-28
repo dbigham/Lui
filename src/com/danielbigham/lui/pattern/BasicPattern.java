@@ -6,6 +6,7 @@ import java.util.Set;
 
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
+import com.danielbigham.Util;
 import com.danielbigham.lui.Chart;
 import com.danielbigham.lui.EvaluationResult;
 import com.danielbigham.lui.Grammar;
@@ -235,10 +236,15 @@ public abstract class BasicPattern implements IPattern, IPatternMatch
 	
 	/**
 	 * toString implementation common to all pattern types.
-	 * Called from derived classes' toString metohds.
+	 * Called from derived classes' toString methods.
 	 */
 	protected String toStringHelper(String str)
 	{
+		if (str.charAt(0) != '"' && !Util.allLetters(str))
+		{
+			str = Util.createDoubleQuotedString(str);
+		}
+		
 		if (binding != null)
 		{
 			str = binding + "=" + str;

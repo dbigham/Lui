@@ -117,7 +117,7 @@ public class SymbolPattern extends BasicPattern implements IPatternMatch
 		
 		
 		// Populate the variable
-		if (binding != null)
+		if (binding != null && res != null)
 		{
 			res.populateVariable(binding);
 		}

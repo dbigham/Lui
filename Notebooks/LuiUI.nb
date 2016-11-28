@@ -10,10 +10,10 @@
 NotebookFileLineBreakTest
 NotebookFileLineBreakTest
 NotebookDataPosition[       158,          7]
-NotebookDataLength[      4963,        110]
-NotebookOptionsPosition[      4655,         94]
-NotebookOutlinePosition[      4996,        109]
-CellTagsIndexPosition[      4953,        106]
+NotebookDataLength[      6383,        130]
+NotebookOptionsPosition[      6076,        114]
+NotebookOutlinePosition[      6416,        129]
+CellTagsIndexPosition[      6373,        126]
 WindowFrame->Normal*)
 
 (* Beginning of Notebook Content *)
@@ -29,7 +29,7 @@ Cell[BoxData[
    3.6879720030116096`*^9, 3.6879720148996615`*^9}}],
 
 Cell[BoxData[
- DynamicModuleBox[{Lui`UI`Private`input$$ = "how design"}, 
+ DynamicModuleBox[{Lui`UI`Private`input$$ = ""}, 
   DynamicBox[ToBoxes[
     ReplaceAll[Lui`UI`Private`$interpHeldVar, HoldComplete[
        Pattern[Lui`UI`Private`interp$, 
@@ -40,7 +40,7 @@ Cell[BoxData[
            InputField[
             Dynamic[Lui`UI`Private`input$$], String, 
             ImageSize -> {450, Automatic}, FrameMargins -> Medium, BoxID -> 
-            "LuiInputFieldBoxID40"], {
+            "LuiInputFieldBoxID13"], {
            "ReturnKeyDown" :> 
             Lui`UI`Private`HandleInput[
              Lui`UI`Private`input$$, Lui`UI`Private`$interpHeldVar, 
@@ -57,7 +57,7 @@ Cell[BoxData[
                Blank[NotebookObject]]]], 
             Lui`UI`Private`displayIfNotNull[Lui`UI`Private`actionResult$], 
             Apply[Sequence, {}]]]}]]], StandardForm],
-   ImageSizeCache->{452., {27., 34.}}],
+   ImageSizeCache->{452., {11., 18.}}],
   DynamicModuleValues:>{}]], "Output",
  CellChangeTimes->{
   3.6868697050049047`*^9, 3.6868698250159316`*^9, 3.6868752824552402`*^9, 
@@ -89,11 +89,31 @@ Cell[BoxData[
    3.687822167823094*^9, 3.6878224054524217`*^9, 3.687822737168789*^9, 
    3.6879636360884113`*^9, 3.6879685760596714`*^9, 3.687968700472088*^9, {
    3.6879719988467827`*^9, 3.6879720159110947`*^9}, 3.687972356921587*^9, 
-   3.6879746733647547`*^9, 3.6879906790397835`*^9, 3.6880504125732675`*^9}]
+   3.6879746733647547`*^9, 3.6879906790397835`*^9, 3.6880504125732675`*^9, 
+   3.6882508315033274`*^9, 3.688251867905451*^9, 3.6882554093977504`*^9, 
+   3.6882555968949347`*^9, 3.6882564130625243`*^9, 3.688257147802918*^9, {
+   3.6883420321376543`*^9, 3.688342036230152*^9}, 3.688342383917788*^9, 
+   3.6883424288850965`*^9, 3.6883424656073065`*^9, 3.688343452943366*^9, 
+   3.6884159668256035`*^9, 3.688417580169798*^9, 3.6884213577329845`*^9, 
+   3.688423185738571*^9, 3.688424577279582*^9, 3.6884263981759167`*^9, {
+   3.6884300570514717`*^9, 3.6884300802837687`*^9}, 3.688430126078184*^9, 
+   3.6884301796646833`*^9, 3.6884321095954437`*^9, 3.6884729829959188`*^9, 
+   3.6884763493404236`*^9, 3.6884808936213517`*^9, 3.6884809996702633`*^9, 
+   3.688481033024864*^9, 3.6884815521929708`*^9, {3.688481875130616*^9, 
+   3.6884818927869315`*^9}, 3.6884820844536676`*^9, 3.688482143916781*^9, 
+   3.688482193403617*^9, 3.688482270520596*^9, 3.688482423970837*^9, 
+   3.6884824883973455`*^9, 3.688482542963889*^9, 3.688483460126212*^9, 
+   3.6884845332120657`*^9, 3.6884850746625443`*^9, 3.6884851607782946`*^9, 
+   3.688485674126419*^9, 3.6884983786273685`*^9, 3.688501142857897*^9, 
+   3.6885013429342484`*^9, 3.6885113942542157`*^9, 3.6888571656069965`*^9, 
+   3.688864041548358*^9, 3.688936999209479*^9, 3.688940757429521*^9, {
+   3.6889415308587646`*^9, 3.6889415532080936`*^9}, 3.688945434870994*^9, 
+   3.68894725596784*^9, 3.6890361164122744`*^9, 3.6890385966188507`*^9, 
+   3.6890703742364664`*^9}]
 }, Open  ]]
 },
 WindowSize->{860, 388},
-WindowMargins->{{Automatic, -7}, {Automatic, 1}},
+WindowMargins->{{Automatic, 0}, {Automatic, 1}},
 FrontEndVersion->"11.0 for Microsoft Windows (64-bit) (July 28, 2016)",
 StyleDefinitions->"Default.nb"
 ]
@@ -110,7 +130,7 @@ CellTagsIndex->{}
 Notebook[{
 Cell[CellGroupData[{
 Cell[580, 22, 413, 6, 30, "Input"],
-Cell[996, 30, 3643, 61, 78, "Output"]
+Cell[996, 30, 5064, 81, 46, "Output"]
 }, Open  ]]
 }
 ]

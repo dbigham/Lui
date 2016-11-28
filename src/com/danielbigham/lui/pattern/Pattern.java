@@ -130,6 +130,11 @@ public abstract class Pattern implements IPattern
 		// evident.
 		Collections.sort(patternsWithCounts, new PatternWithCountComparator());
 		
+		if (patternsWithCounts.size() == 0)
+		{
+			throw new IllegalArgumentException("All of the pattern's (or sub-pattern's) parts are optional, which is not permitted.");
+		}
+		
 		int indexOfRarestToken = patternsWithCounts.get(0).patternIndex;
 		
 		return indexOfRarestToken;
@@ -259,6 +264,7 @@ public abstract class Pattern implements IPattern
 			else
 			{
 				IPattern explodedSubPattern = subPattern.explode(grammar);
+				explodedSubPattern.setOptional(subPattern.isOptional());
 				explodedSubPattern.setBinding(subPattern.getBinding());
 				explodedSubPattern.setType("D");
 				newSubPatterns.add(explodedSubPattern);

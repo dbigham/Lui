@@ -628,4 +628,14 @@ public class Grammar
 			return null;
 		}
 	}
+	
+	public String toString()
+	{
+		StringBuilder str = new StringBuilder();
+		for (IPattern pattern: finalPatterns)
+		{
+			str.append(pattern.toString2(this)).append('\n');
+		}
+		return str.toString();
+	}
 }

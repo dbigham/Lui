@@ -106,6 +106,14 @@ public class LiteralPattern extends BasicPattern
 			// If there isn't any binding, then this sub-pattern
 			// can't affect the final expression, so just return
 			// null.
+			
+			// But what if there's a rule who's LHS is only a literal, and it doesn't
+			// have an action -- but it's used in a higher up rule that does have
+			// a binding on it's use? TBD.
+//			List<String> exprs = new ArrayList<String>();
+//			exprs.add(literal);
+//			EvaluationResult res = new EvaluationResult(exprs);
+			
 			return null;
 		}
 	}

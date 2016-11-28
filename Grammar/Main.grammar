@@ -1,5 +1,11 @@
 start:
+	createAddAnswerUi -> EditFile["E:\\Users\\Daniel\\Dropbox\\Projects\\How\\js\\add_answer.js", "Substring" -> "function createAddAnswerUi"]
+
+	reset how log -> ResetHowLog[]
+	
 	js|javascript str|string -> CreateMultilineJavaScriptString[]
+	
+	java str|string -> CreateMultilineJavaString[]
 	
 	to|create multiline? java string
 		CopyToClipboard[CreateMultiLineJavaString[GetClipboard[]]]

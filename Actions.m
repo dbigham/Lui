@@ -16,6 +16,18 @@ MultilineJavaScriptString::usage = "MultilineJavaScriptString  "
 
 CreateMultilineJavaScriptString::usage = "CreateMultilineJavaScriptString  "
 
+ResetHowLog::usage = "ResetHowLog  "
+
+$HowLog::usage = "$HowLog  "
+
+TailHowLog::usage = "TailHowLog  "
+
+GetHowLog::usage = "GetHowLog  "
+
+MultilineJavaString::usage = "MultilineJavaString  "
+
+CreateMultilineJavaString::usage = "CreateMultilineJavaString  "
+
 Begin["`Private`"]
 
 (*!
@@ -230,6 +242,102 @@ MultilineJavaScriptString[str_] :=
 CreateMultilineJavaScriptString[] :=
 	Block[{},
 		CopyToClipboard[MultilineJavaScriptString[GetClipboard[]]]
+	];
+
+
+(*!
+	\function MultilineJavaString
+	
+	\calltable
+		MultilineJavaString[str] '' generate a multi-line escaped JavaScript string.
+
+	Examples:
+	
+	MultilineJavaString["this is a \"test\"\nof this function."] === "\"this is a \\\"test\\\"\\n\\\nof this function.\""
+
+	Unit tests:
+
+	RunUnitTests[Lui`Actions`MultilineJavaString]
+
+	\maintainer danielb
+*)
+MultilineJavaString[str_] :=
+	Block[{},
+		StringJoin[
+			"\"" <>
+			StringReplace[
+				EscapeString[str],
+				RepeatedNull["\r", 1] ~~ "\n" -> "\\n"
+			] <>
+			"\""
+		]
+	];
+
+(*!
+	\function CreateMultilineJavaString
+	
+	\calltable
+		CreateMultilineJavaString[] '' take the clipboard, create a multi-line Java string from it, and put the result back in the clipboard.
+	
+	\related '
+	
+	\maintainer danielb
+*)
+CreateMultilineJavaString[] :=
+	Block[{},
+		CopyToClipboard[MultilineJavaString[GetClipboard[]]]
+	];
+
+$HowLog = FileNameJoin[{$TemporaryDirectory, "how.log"}];
+(*!
+	\function ResetHowLog
+	
+	\calltable
+		ResetHowLog[] '' reset the How log.
+	
+	\related '
+	
+	\maintainer danielb
+*)
+ResetHowLog[] :=
+	Block[{},
+		Export[$HowLog, "", "Text"];
+	];
+
+(*!
+	\function TailHowLog
+	
+	\calltable
+		TailHowLog[] '' tail the how log.
+	
+	\related '
+	
+	\maintainer danielb
+*)
+TailHowLog[numLines_:20] :=
+	Block[{},
+		Dynamic[
+			GetLastLines[
+				GetHowLog[],
+				numLines
+			],
+			UpdateInterval -> 1
+		]
+	];
+
+(*!
+	\function GetHowLog
+	
+	\calltable
+		GetHowLog[] '' read the how log.
+	
+	\related '
+	
+	\maintainer danielb
+*)
+GetHowLog[] :=
+	Block[{},
+		Import[$HowLog, "Text"]
 	];
 
 End[]

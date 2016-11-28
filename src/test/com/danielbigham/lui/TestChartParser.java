@@ -7,6 +7,7 @@ import java.util.List;
 
 import org.junit.Test;
 
+import com.danielbigham.io.Out;
 import com.danielbigham.lui.ChartParser;
 import com.danielbigham.lui.Grammar;
 import com.danielbigham.lui.ParserState;
@@ -406,6 +407,32 @@ public class TestChartParser
 		);
 	}
 	
+	// Regression test.
+	@Test
+	public void test25()
+	{
+		assertEquals(
+			1,
+			parses(
+				"start: (one|two)? three",
+				"three"
+			)
+		);
+	}
+
+	@Test
+	public void test26()
+	{
+		ChartParser.debugFlag = true;
+		assertEquals(
+			1,
+			parses(
+				"start: ((one)? (two|three)? four? five (six|seven) eight (nine|ten)? (eleven|twelve)? (thirteen|fourteen)?)",
+				"one three four five six eight eleven thirteen"
+			)
+		);
+	}
+	
 	/**
 	 * Returns the number of times the given input parses to a spanning START result for the
 	 * given grammar.
@@ -416,6 +443,12 @@ public class TestChartParser
 	public static int parses(String grammar, String input)
 	{
 		Grammar grammarObj = new Grammar(grammar, debugFlag);
+		
+		if (false)
+		{
+			Out.print(grammarObj.toString());
+		}
+		
 		ParserState state = ChartParser.parse(grammarObj, input);
 		List<IPatternMatch> matches = state.chart().getMatchesForSpan(ChartParser.START_SYMBOL, 0, state.getEndPos());
 		return matches == null ? 0 : matches.size();
