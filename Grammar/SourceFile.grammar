@@ -1,4 +1,7 @@
 sourceFile:
+	how grammar -> "E:\\Users\\Daniel\\Dropbox\\Projects\\How\\linguistics\\how.grammar"
+	"index.html" | index | (index (htm|html)) -> "E:\\Users\\Daniel\\Dropbox\\Projects\\How\\index.html"
+	"index.js" | index js -> "E:\\Users\\Daniel\\Dropbox\\Projects\\How\\js\\index.js"
 	seq|sequence pattern match|matcher -> "E:\\Users\\Daniel\\Dropbox\\Projects\\Lui\\src\\com\\danielbigham\\lui\\patternmatch\\SequencePatternMatch.java"
 	chart parser -> "E:\\Users\\Daniel\\Dropbox\\Projects\\Lui\\src\\com\\danielbigham\\lui\\ChartParser.java"
 	test chart parser -> "E:\\Users\\Daniel\\Dropbox\\Projects\\Lui\\src\\test\\com\\danielbigham\\lui\\TestChartParser.java"
@@ -19,7 +22,7 @@ sourceFile:
 	q | question | questions -> "questions"
 	how css -> "E:\\Users\\Daniel\\Dropbox\\Projects\\How\\style.css"
 	how syntax -> "E:\\Users\\Daniel\\Dropbox\\Projects\\How\\HowSyntax.txt"
-	how js -> "E:\\Users\\Daniel\\Dropbox\\Projects\\How\\js\\page.js"
+	"page.js" | page | "page js" -> "E:\\Users\\Daniel\\Dropbox\\Projects\\How\\js\\page.js"
 	(chunk type (sequence|seq) model) | ((sequence|seq) model) -> "E:\\Users\\Daniel\\Dropbox\\Projects\\JitLang\\Data\\ChunkTypeSequenceModel.m"
 	(seq|"sequence patt"|pattern|patterns) | seqpatt | seqpat | seq -> "JitLang`SeqPatt`"
 	action|actions -> "Lui`Actions`"

@@ -1,4 +1,6 @@
 notebook:
+	how domain | "howtwo.ca" -> "HowDomain.nb"
+	ssh keys|key -> "SSHKeys.nb"
 	how leftover todos|todo -> "HowLeftoverTodos.nb"
 	how search nb -> "HowSearch.nb"
 	how add? answer? to? (existing|(existing question)) -> "HowAddAnswerToQuestion.nb"

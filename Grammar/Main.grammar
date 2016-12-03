@@ -270,3 +270,9 @@ function:
 
 ~chandler:
 	chandler | ch | mowat | "chandler mowat"
+
+~digitalocean:
+	"digital ocean" | digitalocean | do
+
+~do:
+	~digitalocean

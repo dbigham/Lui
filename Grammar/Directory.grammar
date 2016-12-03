@@ -1,4 +1,5 @@
 directory:
+	ssh -> "E:\\Users\\Daniel\\.ssh"
 	how ahk|autohotkey -> "E:\\Users\\Daniel\\Dropbox\\Projects\\How\\autohotkey"
 	how? gen -> "E:\\Users\\Daniel\\Dropbox\\Projects\\How\\linguistics\\gen"
 	how js -> "E:\\Users\\Daniel\\Dropbox\\Projects\\How\\js"

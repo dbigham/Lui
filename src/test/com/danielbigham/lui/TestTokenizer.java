@@ -40,6 +40,6 @@ public class TestTokenizer
 		// This will initialize the literal-to-integer mapping.
 		Pattern.parse(grammar, "testing ( 123 )");
 		List<IPatternMatch> tokens = new Tokenizer().tokenize(grammar, "testing(123)");
-		assertEquals("[testing, (, 123, )]", tokens.toString());
+		assertEquals("[testing, \"(\", 123, \")\"]", tokens.toString());
 	}
 }

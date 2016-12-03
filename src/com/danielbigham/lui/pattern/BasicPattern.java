@@ -240,11 +240,6 @@ public abstract class BasicPattern implements IPattern, IPatternMatch
 	 */
 	protected String toStringHelper(String str)
 	{
-		if (str.charAt(0) != '"' && !Util.allLetters(str))
-		{
-			str = Util.createDoubleQuotedString(str);
-		}
-		
 		if (binding != null)
 		{
 			str = binding + "=" + str;

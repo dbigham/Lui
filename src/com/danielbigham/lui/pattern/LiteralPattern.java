@@ -3,6 +3,7 @@ package com.danielbigham.lui.pattern;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.danielbigham.Util;
 import com.danielbigham.lui.EvaluationResult;
 import com.danielbigham.lui.Grammar;
 import com.danielbigham.lui.ParserState;
@@ -81,7 +82,12 @@ public class LiteralPattern extends BasicPattern
 	
 	public String toString()
 	{
-		return toStringHelper(literal);
+		String str = literal;
+		if (str.charAt(0) != '"' && !Util.allLetters(str) && !Util.allDigits(str))
+		{
+			str = Util.createDoubleQuotedString(str);
+		}
+		return toStringHelper(str);
 	}
 	
 	public boolean subPatternsAreAllLiterals()

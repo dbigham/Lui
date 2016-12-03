@@ -4,9 +4,7 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import com.danielbigham.Util;
 import com.danielbigham.Util2;
@@ -29,51 +27,27 @@ public class GrammarFiles implements IFileLoader
 {
 	private FileLoaderAndReloader fileWatcherThread;
 	private Grammar grammar;
-	private final List<Path> allFiles;
-	private static final Map<String, GrammarFiles> objs;
+	private List<Path> allFiles;
 	private boolean hasWolframLanguageNotebook;
 	
-	static
+	public GrammarFiles(List<String> dirs, Grammar grammar, boolean hasWolframLanguageNotebook) throws IOException
 	{
-		objs = new HashMap<String, GrammarFiles>();
+		init(dirs, grammar, hasWolframLanguageNotebook);
 	}
 	
-	/**
-	 * Create a GrammarFiles object.
-	 * 
-	 * Ensure that duplicates don't get created for the same directory.
-	 * 
-	 * @param dir							The directory to watch.
-	 * @param grammar						The grammar.
-	 * @param hasWolframLanguageNotebook	are we attached to a Wolfram Language notebook?
-	 * @return								The FileLoaderAndReloader object.
-	 */
-	public static GrammarFiles create(String dir, Grammar grammar, boolean hasWolframLanguageNotebook) throws IOException
+	public GrammarFiles(String dir, Grammar grammar, boolean hasWolframLanguageNotebook) throws IOException
 	{
-		GrammarFiles existing = objs.get(dir);
-		if (existing != null)
-		{
-			return existing;
-		}
-		else
-		{
-			GrammarFiles obj = new GrammarFiles(dir, grammar, hasWolframLanguageNotebook);
-			objs.put(dir, obj);
-			return obj;
-		}
+		List<String> dirs = new ArrayList<String>();
+		dirs.add(dir);
+		init(dirs, grammar, hasWolframLanguageNotebook);
 	}
 	
-	private GrammarFiles(Path baseDir, Grammar grammar, boolean hasWolframLanguageNotebook) throws IOException
-	{
-		this(baseDir.toString(), grammar, hasWolframLanguageNotebook);
-	}
-	
-	private GrammarFiles(String baseDir, Grammar grammar, boolean hasWolframLanguageNotebook) throws IOException
+	private void init(List<String> dirs, Grammar grammar, boolean hasWolframLanguageNotebook) throws IOException
 	{
 		this.grammar = grammar;
 		this.allFiles = new ArrayList<Path>();
 		this.hasWolframLanguageNotebook = hasWolframLanguageNotebook;
-		fileWatcherThread = new FileLoaderAndReloader(Paths.get(baseDir), this);
+		fileWatcherThread = new FileLoaderAndReloader(dirs, this);
 		fileWatcherThread.start();
 	}
 	
@@ -283,7 +257,7 @@ public class GrammarFiles implements IFileLoader
     {
         Path dir = Paths.get(args[0]);
         Grammar grammar = new Grammar();
-        new FileLoaderAndReloader(dir, new GrammarFiles(dir, grammar, false)).run();
+        new FileLoaderAndReloader(dir, new GrammarFiles(dir.toString(), grammar, false)).run();
     }
 
 	@Override

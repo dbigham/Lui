@@ -161,10 +161,10 @@ CreateGrammar[name_String, obj_ /; JavaObjectQ[obj]] :=
 	]
 
 CreateGrammar[name_String, Dir[dir_String]] :=
-	Block[{grammar},
+	Block[{grammar, grammarFiles},
 		grammar = JavaNew["com.danielbigham.lui.Grammar"];
 		LoadJavaClass["com.danielbigham.lui.loading.GrammarFiles"];
-		GrammarFiles`create[dir, grammar, True];
+		grammarFiles = JavaNew["com.danielbigham.lui.loading.GrammarFiles", dir, grammar, True];
 		CreateGrammar[name, grammar]
 	]
 

@@ -1,4 +1,6 @@
 webpage:
+	~do console -> "https://cloud.digitalocean.com/droplets/33526164/console?no_layout"
+	droplets -> "https://cloud.digitalocean.com/droplets"
 	moto -> "http://www.coolmath-games.com/0-moto-x3m"
 	vim|vi|vimscript "cheat sheet"|cheatsheet -> "http://ricostacruz.com/cheatsheets/vimscript-functions.html"
 	intercooler -> "https://github.com/LeadDyno/intercooler-js"

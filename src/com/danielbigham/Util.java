@@ -21,6 +21,8 @@ import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.HashMap;
+import java.util.Map;
 
 import com.danielbigham.io.Out;
 
@@ -359,5 +361,44 @@ public class Util
 		}
 		
 		return builder.toString();
+	}
+
+	public static boolean allDigits(String str)
+	{
+		for (int i = 0; i < str.length(); ++i)
+		{
+			if (!Character.isDigit(str.charAt(i)))
+			{
+				return false;
+			}
+		}
+		return true;
+	}
+	
+	/**
+	 * Read a file containing a list of key/value pairs into a map. Each line is of the form
+	 * 
+	 * key: value
+	 * 
+	 * @param file		the file to read.
+	 * @return			the map.
+	 * @throws IOException
+	 */
+	public static Map<String, String> readMap(String file) throws IOException
+	{
+		Map<String, String> map = new HashMap<String, String>();
+		String lines = readFile(file);
+		for(String line : lines.split("\n"))
+		{
+			line = line.trim();
+			if (!line.isEmpty())
+			{
+				String[] parts = line.trim().split("=");
+				String key = parts[0].trim();
+				String value = parts[1].trim();
+				map.put(key, value);
+			}
+		}
+		return map;
 	}
 }
