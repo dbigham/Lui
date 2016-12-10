@@ -113,7 +113,7 @@ Lui[] :=
 Lui[input_String] :=
 	Block[{interpretation},
 		interpretation = LuiParse[input];
-		ReleaseHold[interpretation /. HeldHead[h_] :> h]
+		ReleaseHold[interpretation]
 	]
 
 (*!

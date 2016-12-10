@@ -4,7 +4,7 @@ webpage:
 	moto -> "http://www.coolmath-games.com/0-moto-x3m"
 	vim|vi|vimscript "cheat sheet"|cheatsheet -> "http://ricostacruz.com/cheatsheets/vimscript-functions.html"
 	intercooler -> "https://github.com/LeadDyno/intercooler-js"
-	how local webpage|page -> "file:///E:/Users/Daniel/Dropbox/Projects/How/check-whether-string-contains-substring-cpp.html"
+	how local webpage|page -> "http://localhost/how/"
 	ace howto -> "https://ace.c9.io/#nav"
 	how bash webpage|page -> "http://www.danielbigham.ca/how/check-if-string-contains-substring-bash.html"
 	modem event? log -> "http://192.168.100.1/EventLog.asp"

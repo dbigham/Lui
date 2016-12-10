@@ -74,8 +74,9 @@ public class Util
 		HttpURLConnection connection = (HttpURLConnection) new URL(url).openConnection();
 		connection.setRequestMethod("POST");
 		connection.setRequestProperty("Content-Type", contentType);
-		connection.setRequestProperty("Content-Length", 
-			Integer.toString(data.getBytes().length));  
+		connection.setRequestProperty("Content-Length",
+			Integer.toString(data.getBytes().length));
+		connection.setConnectTimeout(4000);
 		connection.setUseCaches(false);
 		connection.setDoOutput(true);
 		return connection;
@@ -121,16 +122,31 @@ public class Util
 		return response.toString();
 	}
 	
-	public static String createDoubleQuotedString(String str)
+	public static String createDoubleQuotedString(String str, boolean encodeNewlines)
 	{
 		if (str == null)
 		{
-			return "Null";
+			return "null";
 		}
 		else
 		{
-			return "\"" + str.replace("\\", "\\\\").replace("\"", "\\\"").replaceAll("\r?\n", "\\n") + "\"";
+			String res = "\"" + str.replace("\\", "\\\\").replace("\"", "\\\"") + "\"";
+			if (encodeNewlines)
+			{
+				res = res.replaceAll("\r?\n", "\\\\n");
+			}
+			else
+			{
+				res = res.replaceAll("\r?\n", "\n");
+			}
+			
+			return res;
 		}
+	}
+	
+	public static String createDoubleQuotedString(String str)
+	{
+		return createDoubleQuotedString(str, true);
 	}
 
 	/**
@@ -400,5 +416,19 @@ public class Util
 			}
 		}
 		return map;
+	}
+	
+	/**
+	 * Invert a map so that its keys become values and its values become keys.
+	 * Assumes there are no duplicate values.
+	 * 
+	 * @param map	the map to be inverted.
+	 */
+	public static <Type1, Type2> Map<Type2, Type1> invertMap(Map<Type1, Type2> map) {
+		Map<Type2, Type1> invertedMap = new HashMap<>();
+		for (Map.Entry<Type1, Type2> entry : map.entrySet()) {
+			invertedMap.put(entry.getValue(), entry.getKey());
+		}
+		return invertedMap;
 	}
 }

@@ -27,7 +27,7 @@ import com.danielbigham.lui.patternmatch.IPatternMatch;
  */
 public class Grammar
 {
-	public final int UNKNOWN_TOKEN_ID = -2;
+	public final static int UNKNOWN_TOKEN_ID = -2;
 	
 	private Map<Integer, List<IPattern>> triggers;
 	

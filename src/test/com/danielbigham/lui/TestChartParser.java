@@ -423,7 +423,6 @@ public class TestChartParser
 	@Test
 	public void test26()
 	{
-		ChartParser.debugFlag = true;
 		assertEquals(
 			1,
 			parses(
@@ -431,6 +430,24 @@ public class TestChartParser
 				"one three four five six eight eleven thirteen"
 			)
 		);
+	}
+	
+	@Test
+	public void testGetLongestPrefix()
+	{
+		Grammar grammar = new Grammar("mySymbol: one", debugFlag);
+		ParserState state = ChartParser.parse(grammar, "one two three");
+		Integer pos = state.getLongestPrefix("$mySymbol");
+		assertEquals(2, (int)pos);
+	}
+	
+	@Test
+	public void testGetLongestPrefix2()
+	{
+		Grammar grammar = new Grammar("mySymbol: one two", debugFlag);
+		ParserState state = ChartParser.parse(grammar, "one two three");
+		Integer pos = state.getLongestPrefix("$mySymbol");
+		assertEquals(6, (int)pos);
 	}
 	
 	/**

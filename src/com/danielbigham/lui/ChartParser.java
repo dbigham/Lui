@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import com.danielbigham.Util;
 import com.danielbigham.io.Out;
 import com.danielbigham.lui.evaluation.ParseForestEvaluation;
 import com.danielbigham.lui.patternmatch.IPatternMatch;
@@ -51,11 +52,12 @@ public class ChartParser
 			regexParser.parse(grammar, tokens, str);
 		}
 		
-		adjustTokenPositions(tokens);
+		Map<Integer, Integer> tokenIndexToStringPositionMap = adjustTokenPositions(tokens);
 		
 		Chart chart = new Chart(tokens.size(), grammar.getNumTokenIds(), tokens.size() - 1);
 		ParserState state = new ParserState(tokens, chart, grammar);
 		state.populateChartWithTokens(tokens);
+		state.setTokenIndexToStringPositionMap(tokenIndexToStringPositionMap);
 
 		mainLoop(state);
 
@@ -86,8 +88,9 @@ public class ChartParser
 	 * Here, we convert those into token index positions.
 	 * 
 	 * @param tokens	the tokens to adjust.
+	 * @return			the mapping from token index to string position.
 	 */
-	private static void adjustTokenPositions(List<IPatternMatch> tokens)
+	private static Map<Integer, Integer> adjustTokenPositions(List<IPatternMatch> tokens)
 	{
 		Map<Integer, Integer> posMap =
 			createCharPositionToTokenIndexMap(tokens);
@@ -102,6 +105,8 @@ public class ChartParser
 				Out.print(newStart + "-" + newEnd + ": " + token);
 			}
 		}
+		
+		return Util.invertMap(posMap);
 	}
 	
 	/**

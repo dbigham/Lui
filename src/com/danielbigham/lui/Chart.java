@@ -206,7 +206,7 @@ public class Chart
 	 * Given a starting position and a token ID (which corresponds to a particular
 	 * literal or symbol), returns the ending positions of all known matches, or
 	 * null if there are none.
-	 * 	
+	 * 
 	 * @param startPos		the starting position of the matches we seek.
 	 * @param tokenId		the token ID that corresponds to a literal or symbol.
 	 * @return				the list of ending positions of known matches. (or null if none)

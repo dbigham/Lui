@@ -80,15 +80,30 @@ LuiParse[input_String, opts:OptionsPattern[]] :=
 		
 		parse = LuiParse[$Grammar, input, opts];
 		
-		Which[
-			Length[parse] > 1,
-			Return[ChooseParse[parse]];
-			,
-			Length[parse] == 1,
-			Return[First[parse] /. Score[e_, _] :> e];
-		];
+		parse =
+			Which[
+				Length[parse] > 1,
+				ChooseParse[parse]
+				,
+				Length[parse] == 1,
+				First[parse]
+				,
+				True,
+				$Failed
+			];
 		
-		ConsiderFileInterpretation[input]
+		If [!FailureQ[parse],
+			
+			parse = parse /. Scored[e_, score_] :> e;
+			
+			If [!FreeQ[parse, HeldHead],
+				parse = ReleaseHold[parse];
+			];
+			
+			parse
+			,
+			ConsiderFileInterpretation[input]
+		]
 	]
 
 LuiParse[g_Grammar, inputIn_String, opts:OptionsPattern[]] :=

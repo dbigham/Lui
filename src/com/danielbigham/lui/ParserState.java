@@ -1,6 +1,7 @@
 package com.danielbigham.lui;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -34,6 +35,7 @@ public class ParserState
 	// Useful for whitebox unit tests to ensure we're not trying to extend
 	// partials that we shouldn't be.
 	public int numTimesWeCheckedAPartialForPossibleExtension;
+	private Map<Integer, Integer> tokenIndexToStringPositionMap;
 	
 	public ParserState(List<IPatternMatch> tokens, Chart chart, Grammar grammar)
 	{
@@ -327,5 +329,40 @@ public class ParserState
 			keys.addAll(variableSet.keySet());
 		}
 		return keys;
+	}
+
+	/**
+	 * Given a token index, what is the corresponding string position?
+	 */
+	public void setTokenIndexToStringPositionMap(Map<Integer, Integer> map)
+	{
+		this.tokenIndexToStringPositionMap = map;
+	}
+	
+	/**
+	 * Given a grammar symbol, what is the ending position of the longest match
+	 * that starts at the beginning of the input?
+	 * 
+	 * @param grammarSymbol		the grammar symbol.
+	 * @return					the position, or null if none.
+	 */
+	public Integer getLongestPrefix(String grammarSymbol)
+	{
+		int tokenId = grammar.getTokenId(grammarSymbol);
+		if (tokenId == Grammar.UNKNOWN_TOKEN_ID)
+		{
+			throw new IllegalArgumentException("Unknown grammar symbol: " + grammarSymbol);
+		}
+		
+		Set<Integer> positions = chart.getMatchExtensionPositionsToRight(0, grammar.getTokenId(grammarSymbol));
+		
+		if (positions == null)
+		{
+			return null;
+		}
+		else
+		{
+			return tokenIndexToStringPositionMap.get(Collections.max(positions));
+		}
 	}
 }
