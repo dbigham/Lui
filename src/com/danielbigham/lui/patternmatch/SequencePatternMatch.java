@@ -111,20 +111,22 @@ public class SequencePatternMatch extends PatternMatch
 			extensionPositions = nextPattern.getMatchExtensionPositionsToRight(chart, endPos + 1);
 		}
 		
-		if (extensionPositions == null && nextPattern.isOptional() && rightDot + 2 >= pattern.length() && endPos == state.getEndPos())
-		{
-			if (ChartParser.debugOptionals) { Out.print("Skipping right optional reaches end of input: " + this); }
-			extensionPositions = new HashSet<Integer>(Arrays.asList(endPos));
-		}
+		// I guess this isn't required now that I'm using "rightDot + 1 < pattern.length()" below? (instead of "rightDot + 2")
+//		if (extensionPositions == null && nextPattern.isOptional() && rightDot + 2 >= pattern.length() && endPos == state.getEndPos())
+//		{
+//			if (ChartParser.debugOptionals) { Out.print("Skipping right optional reaches end of input: " + this); }
+//			extensionPositions = new HashSet<Integer>(Arrays.asList(endPos));
+//		}
 		
 		if (extensionPositions != null)
 		{
 			newMatches = extendRightHelper(extensionPositions, rightDot + 1);
 		}
 		
-		if (nextPattern.isOptional() &&
+		if (newMatches == null &&
+			nextPattern.isOptional() &&
 			!theMatchWereExtendingIsAlreadyInPartialsChart &&
-			rightDot + 2 < pattern.length())
+			rightDot + 1 < pattern.length())
 		{
 			if (ChartParser.debugOptionals) { Out.print("Skipping right optional: " + this); }
 			extensionPositions = new HashSet<Integer>(Arrays.asList(endPos));
@@ -167,20 +169,22 @@ public class SequencePatternMatch extends PatternMatch
 			extensionPositions = nextPattern.getMatchExtensionPositionsToLeft(chart, startPos - 1);
 		}
 		
-		if (extensionPositions == null && nextPattern.isOptional() && leftDot - 2 < 0 && startPos == 0)
-		{
-			if (ChartParser.debugOptionals) { Out.print("Skipping left optional reaches start of input: " + this); }
-			extensionPositions = new HashSet<Integer>(Arrays.asList(0));
-		}
+		// I guess this isn't required now that I'm using "leftDot - 1 >= 0" below? (instead of "leftDot - 2")
+//		if (extensionPositions == null && nextPattern.isOptional() && leftDot - 2 < 0 && startPos == 0)
+//		{
+//			if (ChartParser.debugOptionals) { Out.print("Skipping left optional reaches start of input: " + this); }
+//			extensionPositions = new HashSet<Integer>(Arrays.asList(0));
+//		}
 		
 		if (extensionPositions != null)
 		{
 			newMatches = extendLeftHelper(state, extensionPositions, leftDot - 1);
 		}
 		
-		if (nextPattern.isOptional() &&
+		if (newMatches == null &&
+			nextPattern.isOptional() &&
 			!theMatchWereExtendingIsAlreadyInPartialsChart &&
-			leftDot - 2 >= 0)
+			leftDot - 1 >= 0)
 		{
 			if (ChartParser.debugOptionals) { Out.print("Skipping left optional: " + this); }
 			extensionPositions = new HashSet<Integer>(Arrays.asList(startPos));

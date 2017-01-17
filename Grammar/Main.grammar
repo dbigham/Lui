@@ -1,9 +1,11 @@
 start:
+	start how ahk -> SystemOpen["E:\\Users\\Daniel\\Dropbox\\Projects\\How\\autohotkey\\how.ahk"]
+	
 	createAddAnswerUi -> EditFile["E:\\Users\\Daniel\\Dropbox\\Projects\\How\\js\\add_answer.js", "Substring" -> "function createAddAnswerUi"]
 
 	reset how log -> ResetHowLog[]
 	
-	js|javascript str|string -> CreateMultilineJavaScriptString[]
+	(new|create)? js|javascript str|string -> CreateMultilineJavaScriptString[]
 	
 	java str|string -> CreateMultilineJavaString[]
 	
@@ -77,6 +79,16 @@ start:
 			HeldHead[EditFile][file, "Substring" -> substring]
 			,
 			HeldHead[EditFile][FindFile[file], "Substring" -> substring]
+		]
+		
+	file=$sourceFile substring=$quotedString
+		Scored[
+			If [StringFreeQ[file, "`"],
+				HeldHead[EditFile][file, "Substring" -> substring]
+				,
+				HeldHead[EditFile][FindFile[file, "Substring" -> substring]]
+			],
+			0.6
 		]
 		
 	file=$sourceFile
@@ -276,3 +288,5 @@ function:
 
 ~do:
 	~digitalocean
+notebook:
+	npm | node | "node.js" -> "npm.nb"

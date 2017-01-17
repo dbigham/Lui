@@ -337,6 +337,8 @@ public class TestChartParser
 	@Test
 	public void test19()
 	{
+		//ChartParser.debugFlag = true;
+		//ChartParser.debugOptionals = true;
 		assertEquals(
 			1,
 			parses(
@@ -448,6 +450,35 @@ public class TestChartParser
 		ParserState state = ChartParser.parse(grammar, "one two three");
 		Integer pos = state.getLongestPrefix("$mySymbol");
 		assertEquals(6, (int)pos);
+	}
+	
+	@Test
+	public void test27()
+	{
+		//ChartParser.debugFlag = true;
+		assertEquals(
+			1,
+			parses(
+				"start: one $symbol\n" +
+				"symbol: two? three",
+				"one three"
+			)
+		);
+	}
+	
+	@Test
+	public void test28()
+	{
+		ChartParser.debugFlag = true;
+		ChartParser.debugOptionals = true;
+		assertEquals(
+			1,
+			parses(
+				"start: $symbol three\n" +
+				"symbol: one two?",
+				"one three"
+			)
+		);
 	}
 	
 	/**

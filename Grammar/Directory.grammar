@@ -1,8 +1,8 @@
 directory:
+	how js -> "E:\\Users\\Daniel\\Dropbox\\Projects\\How\\web\\js"
 	ssh -> "E:\\Users\\Daniel\\.ssh"
 	how ahk|autohotkey -> "E:\\Users\\Daniel\\Dropbox\\Projects\\How\\autohotkey"
 	how? gen -> "E:\\Users\\Daniel\\Dropbox\\Projects\\How\\linguistics\\gen"
-	how js -> "E:\\Users\\Daniel\\Dropbox\\Projects\\How\\js"
 	ace download -> "E:\\ace-builds-master"
 	q | question | questions -> "E:\\Users\\Daniel\\Dropbox\\Projects\\How\\questions"
 	how -> "E:\\Users\\Daniel\\Dropbox\\Projects\\How"

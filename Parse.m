@@ -98,6 +98,9 @@ LuiParse[input_String, opts:OptionsPattern[]] :=
 			
 			If [!FreeQ[parse, HeldHead],
 				parse = ReleaseHold[parse];
+				With[{parse2 = parse},
+					parse = HoldComplete[parse2] /. HeldHead[h_] :> h;
+				]
 			];
 			
 			parse

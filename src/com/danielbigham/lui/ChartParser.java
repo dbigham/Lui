@@ -1,5 +1,7 @@
 package com.danielbigham.lui;
 
+import how.How;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -8,7 +10,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import com.danielbigham.Util;
 import com.danielbigham.io.Out;
 import com.danielbigham.lui.evaluation.ParseForestEvaluation;
 import com.danielbigham.lui.patternmatch.IPatternMatch;
@@ -106,7 +107,7 @@ public class ChartParser
 			}
 		}
 		
-		return Util.invertMap(posMap);
+		return How.invertMap(posMap);
 	}
 	
 	/**

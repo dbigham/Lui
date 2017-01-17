@@ -6,7 +6,7 @@ import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.UnsupportedFlavorException;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
-import java.io.DataOutputStream;
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
@@ -14,112 +14,89 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
-import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+
+import org.w3c.dom.Document;
+import org.w3c.dom.NamedNodeMap;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
 
 import com.danielbigham.io.Out;
 
 public class Util
 {
 	/**
-	 * Perform an HTTP POST.
+	 * Reads an XML string into a list of maps.
 	 * 
-	 * @param url			the URL.
-	 * @param data			the data to upload.
-	 * @param contentType	the content type.
-	 * @return				the response.
-	 * 
+	 * @param xml		the XML string.
+	 * @param tag		the tag of interest.
+	 * @return			the list of maps.
+	 * @throws SAXException
 	 * @throws IOException
+	 * @throws ParserConfigurationException
 	 */
-	public static String httpPost(String url, String data, String contentType) throws IOException
+	public static List<Map<String, String>> parseXml(
+			String xml, String tag) throws SAXException, IOException, ParserConfigurationException
 	{
-		HttpURLConnection connection = null;
-	
-		try
-		{
-			connection = httpConnection(url, contentType, data);
+		List<Map<String, String>> result = new ArrayList<>();
 		
-			httpUpload(connection, data);
-			
-			return httpDownload(connection);
-		}
-		finally
+		// Create InputStream from String
+		InputStream inputStream = new ByteArrayInputStream(xml.getBytes());
+		
+		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+		DocumentBuilder builder = factory.newDocumentBuilder();
+		Document doc = builder.parse(inputStream);
+		
+		doc.getDocumentElement().normalize();
+		
+		NodeList nodes = doc.getElementsByTagName(tag);
+		
+		// For each XML element.
+		for (int i = 0; i < nodes.getLength(); ++i)
 		{
-			if (connection != null)
+			Map<String, String> map = new HashMap<>();
+			result.add(map);
+			
+			Node node = nodes.item(i);
+			if (node.getNodeType() == Node.ELEMENT_NODE)
 			{
-				connection.disconnect();
+				// For each child of the XML element.
+				NodeList childNodes = node.getChildNodes();
+				for (int j = 0; j < childNodes.getLength(); ++j)
+				{
+					Node childNode = childNodes.item(j);
+					map.put(childNode.getNodeName(), childNode.getTextContent());
+				}
+				
+				// For each attribute.
+				if (node.hasAttributes())
+				{
+					NamedNodeMap nodeMap = node.getAttributes();
+					for (int k = 0; k < nodeMap.getLength(); ++k)
+					{
+						Node attribute = nodeMap.item(k);
+						map.put(attribute.getNodeName(), attribute.getNodeValue());
+					}
+				}
 			}
 		}
-	}
-	
-	/**
-	 * Creates an HTTP POST connection.
-	 * 
-	 * @param url				the URL.
-	 * @param contentType		the content type.
-	 * @param data				the data to upload.
-	 * @return					the HTTP connection.
-	 * 
-	 * @throws IOException
-	 */
-	public static HttpURLConnection httpConnection(String url, String contentType, String data) throws IOException
-	{
-		HttpURLConnection connection = (HttpURLConnection) new URL(url).openConnection();
-		connection.setRequestMethod("POST");
-		connection.setRequestProperty("Content-Type", contentType);
-		connection.setRequestProperty("Content-Length",
-			Integer.toString(data.getBytes().length));
-		connection.setConnectTimeout(4000);
-		connection.setUseCaches(false);
-		connection.setDoOutput(true);
-		return connection;
-	}
-	
-	/**
-	 * Uploads data for an HTTP POST operation.
-	 * 
-	 * @param connection		the HTTP connection.
-	 * @param data				the data to upload.
-	 * 
-	 * @throws IOException
-	 */
-	public static void httpUpload(HttpURLConnection connection, String data) throws IOException
-	{
-		DataOutputStream uploadStream = new DataOutputStream(connection.getOutputStream());
-		uploadStream.writeBytes(data);
-		uploadStream.close();
-	}
-	
-	/**
-	 * Downloads the data for an HTTP POST operation.
-	 * 
-	 * @param connection		the HTTP connection.
-	 * @return					the HTTP response.
-	 * 
-	 * @throws IOException
-	 */
-	public static String httpDownload(HttpURLConnection connection) throws IOException
-	{
-		InputStream downloadStream = connection.getInputStream();
-		BufferedReader reader = new BufferedReader(new InputStreamReader(downloadStream));
-		StringBuilder response = new StringBuilder();
-		while (true)
-		{
-			String line = reader.readLine();
-			if (line == null) { break; }
-			response.append(line);
-			response.append('\n');
-		}
-		reader.close();
 		
-		return response.toString();
+		return result;
 	}
 	
 	public static String createDoubleQuotedString(String str, boolean encodeNewlines)
@@ -234,7 +211,7 @@ public class Util
 		
 		for (int i = 0; i < levels; ++i)
 		{
-			indent += "    ";
+			indent += "	";
 		}
 		
 		return str.replaceAll("(?m)^", indent);
@@ -277,36 +254,6 @@ public class Util
 		
 		return str.toString();
 	}
-	
-	/**
-	 * Given a string and a substring, returns the line number where the substring
-	 * first occurs, or -1 if it doesn't occur.
-	 * 
-	 * @param str		the string.
-	 * @param substr	the substring.
-	 * @return			the line number where the substring first occurs, or -1 if it doesn't occur.
-	 */
-	public static int getLineNum(String str, String substr)
-	{
-		int index = str.indexOf(substr);
-		if (index == -1)
-		{
-			return -1;
-		}
-		else
-		{
-			int numNewlineCharacters = 0;
-			for (int i = 0; i <= index; ++i)
-			{
-				if (str.charAt(i) == '\n')
-				{
-					++numNewlineCharacters;
-				}
-			}
-			
-			return numNewlineCharacters + 1;
-		}
-	}
 
 	/**
 	 * Convert a string's newlines to Windows format.
@@ -338,45 +285,6 @@ public class Util
 		double millis = Math.round(((now - prevTime) / 1000000.0) * 100.0) / 100.0;
 		Out.print("+" + millis + " ms: " + name);
 		prevTime = now;
-	}
-	
-	/**
-	 * Replace the tabs in a string with spaces.
-	 * 
-	 * @param str				the string.
-	 * @param spacesPerTab		the number of spaces per tab.
-	 * @return					the string with tabs converted to spaces.
-	 */
-	public static String replaceTabsWithSpaces(String str, int spacesPerTab)
-	{
-		StringBuilder builder = new StringBuilder((int)Math.round(str.length() * 1.5));
-		int column = -1;
-		for (int i = 0; i < str.length(); ++i)
-		{
-			++column;
-			
-			char c = str.charAt(i);
-			
-			if (c == '\n') {
-				column = -1;
-				builder.append(c);
-			}
-			else if (c == '\t')
-			{
-				int spacesNeededHere = 4 - (column % spacesPerTab);
-				for (int j = 0; j < spacesNeededHere; ++j)
-				{
-					builder.append(' ');
-				}
-				column += spacesNeededHere - 1;
-			}
-			else
-			{
-				builder.append(c);
-			}
-		}
-		
-		return builder.toString();
 	}
 
 	public static boolean allDigits(String str)
@@ -418,17 +326,127 @@ public class Util
 		return map;
 	}
 	
-	/**
-	 * Invert a map so that its keys become values and its values become keys.
-	 * Assumes there are no duplicate values.
-	 * 
-	 * @param map	the map to be inverted.
-	 */
-	public static <Type1, Type2> Map<Type2, Type1> invertMap(Map<Type1, Type2> map) {
-		Map<Type2, Type1> invertedMap = new HashMap<>();
-		for (Map.Entry<Type1, Type2> entry : map.entrySet()) {
-			invertedMap.put(entry.getValue(), entry.getKey());
+	public static String escapeHTML(String s) {
+		
+		// Not sure if ultimately I'll want this.
+		if (s == null) { return ""; }
+		
+		StringBuilder out = new StringBuilder(Math.max(16, s.length()));
+		for (int i = 0; i < s.length(); i++) {
+			char c = s.charAt(i);
+			if (c > 127 || c == '"' || c == '<' || c == '>' || c == '&') {
+				out.append("&#");
+				out.append((int) c);
+				out.append(';');
+			} else {
+				out.append(c);
+			}
 		}
-		return invertedMap;
+		return out.toString();
+	}
+	
+	/**
+	 * Returns the values of a map, sorted.
+	 * 
+	 * @param map		the map.
+	 * @return			the values of the map sorted.
+	 */
+	public static List<String> sortedValues(Map<String, String> map)
+	{
+		List<String> list = new ArrayList<String>();
+		list.addAll(map.values());
+		Collections.sort(list);
+		
+		return list;
+	}
+	
+	/**
+	 * Returns the keys of a map, sorted.
+	 * 
+	 * @param map		the map.
+	 * @return			the keys of the map sorted.
+	 */
+	public static List<String> sortedKeys(Map<String, String> map)
+	{
+		List<String> list = new ArrayList<String>();
+		list.addAll(map.keySet());
+		Collections.sort(list);
+		
+		return list;
+	}
+
+	/**
+	 * Given a string and a position within that string of an opening bracket --
+	 * where that bracket could be something like "{" or "[" or "(" -- return the
+	 * position of the matching closing bracket. (for AutoHotKey, where double
+	 * quoted strings work differently)
+	 * 
+	 * If single or double quoted strings occur, closing brackets within them are
+	 * ignored.
+	 * 
+	 * @param str					the string.
+	 * @param posOfOpeningBracket	the position of the opening bracket.
+	 * @param openingBracket		the opening bracket character.
+	 * @param closing				the closing bracket character.
+	 * @return						the position of the closing bracket,
+	 *								or -1 if not found.
+	 */
+	public static int getMatchingClosingBracketAutoHotKey(String str, int posOfOpeningBracket, char openingBracket, char closingBracket) {
+		
+		if (str.charAt(posOfOpeningBracket) != openingBracket) {
+			throw new IllegalArgumentException("Initial character expected to be: '" + openingBracket + "'");
+		}
+	
+		int depth = 1;
+		
+		for (int i = posOfOpeningBracket + 1; i < str.length(); ++i) {
+			
+			char thisChar = str.charAt(i);
+			
+			if (thisChar == closingBracket) {
+				--depth;
+				if (depth == 0) {
+					return i;
+				}
+			} else if (thisChar == openingBracket) {
+				++depth;
+			} else if (thisChar == '"') {
+				i = getClosingDoubleQuoteOfStringAutoHotKey(str, i);
+				if (i == -1) { break; }
+			}
+		}
+		
+		return -1;
+	}
+	
+	/**
+	 * Given a string and a position within that string that is the double quote of
+	 * the start of a double quoted string, returns the string position of the
+	 * closing double quote. (for AutoHotKey strings)
+	 * 
+	 * @param str						the string.
+	 * @param posOfOpeningDoubleQuote	the position of the opening double quote.
+	 * @return						  	the position of the closing double quote,
+	 *								  	or -1 if not found.
+	 */
+	public static int getClosingDoubleQuoteOfStringAutoHotKey(String str, int posOfOpeningDoubleQuote) {
+		
+		if (str.charAt(posOfOpeningDoubleQuote) != '"') {
+			throw new IllegalArgumentException("Initial character expected to be a double quote.");
+		}
+				
+		for (int i = posOfOpeningDoubleQuote + 1; i < str.length(); ++i) {
+			char thisChar = str.charAt(i);
+			
+			if (thisChar == '"') {
+				if (i == str.length() - 1 || str.charAt(i + 1) != '"') {
+					return i;
+				} else if (str.charAt(i + 1) == '"') {
+					++i;
+				}
+			}
+		}
+		
+		return -1;
 	}
 }

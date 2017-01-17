@@ -321,7 +321,7 @@ TailHowLog[numLines_:20] :=
 				GetHowLog[],
 				numLines
 			],
-			UpdateInterval -> 1
+			UpdateInterval -> 2
 		]
 	];
 
