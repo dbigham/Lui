@@ -8,10 +8,16 @@ import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.security.InvalidKeyException;
+import java.security.KeyFactory;
 import java.security.NoSuchAlgorithmException;
 import java.security.PrivateKey;
 import java.security.PublicKey;
+import java.security.spec.InvalidKeySpecException;
+import java.security.spec.PKCS8EncodedKeySpec;
+import java.security.spec.X509EncodedKeySpec;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -675,6 +681,54 @@ public class How
 		Cipher cipher = Cipher.getInstance("RSA/ECB/OAEPWithSHA1AndMGF1Padding");	
 		cipher.init(Cipher.DECRYPT_MODE, key);	
 		return cipher.doFinal(bytes);
+	}
+	
+	// </answer>
+
+	// <answer questionid="load-public-encryption-key" version="2017-01-29 02:24:31">
+	
+	/**
+	 * Load a public encryption key.
+	 * 
+	 * See also: Create encryption keys
+	 * 
+	 * @param path	the path to the key file. (.der)
+	 * @return		the public key.
+	 * 
+	 * @throws IOException
+	 * @throws NoSuchAlgorithmException
+	 * @throws InvalidKeySpecException
+	 */
+	public static PublicKey loadPublicKey(String path) throws IOException, NoSuchAlgorithmException, InvalidKeySpecException
+	{
+		X509EncodedKeySpec keySpecification =
+			new X509EncodedKeySpec(Files.readAllBytes(Paths.get(path)));
+		KeyFactory keyFactory = KeyFactory.getInstance("RSA");
+		return keyFactory.generatePublic(keySpecification);		
+	}
+	
+	// </answer>
+
+	// <answer questionid="load-private-encryption-key" version="2017-01-29 02:24:44">
+	
+	/**
+	 * Load a private encryption key.
+	 * 
+	 * See also: Create encryption keys
+	 * 
+	 * @param path	the path to the key file. (.der)
+	 * @return		the private key.
+	 * 
+	 * @throws IOException
+	 * @throws NoSuchAlgorithmException
+	 * @throws InvalidKeySpecException
+	 */
+	public static PrivateKey loadPrivateKey(String path) throws IOException, NoSuchAlgorithmException, InvalidKeySpecException
+	{
+		PKCS8EncodedKeySpec keySpecification =
+			new PKCS8EncodedKeySpec(Files.readAllBytes(Paths.get(path)));
+		KeyFactory keyFactory = KeyFactory.getInstance("RSA");
+		return keyFactory.generatePrivate(keySpecification);     
 	}
 	
 	// </answer>
