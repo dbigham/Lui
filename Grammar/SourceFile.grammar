@@ -1,4 +1,6 @@
 sourceFile:
+	how funcs|func js? -> "E:\\Users\\Daniel\\Dropbox\\Projects\\How\\web\\js\\funcs.js"
+	sc|"source code"|code proc|processing -> "E:\\Users\\Daniel\\Dropbox\\Projects\\How\\src\\com\\danielbigham\\how\\codeproc\\SourceCodeProcessing.java"
 	HowPage | "how page" -> "E:\\Users\\Daniel\\Dropbox\\Projects\\How\\src\\com\\danielbigham\\how\\HowPage.java"
 	"testing.js" | testing js -> "E:\\Users\\Daniel\\Dropbox\\Projects\\How\\web\\js\\testing.js"
 	"code.js" | code -> "E:\\Users\\Daniel\\Dropbox\\Projects\\How\\web\\js\\code.js"

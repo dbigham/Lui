@@ -5,8 +5,13 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
+import java.security.PrivateKey;
+import java.security.PublicKey;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -16,10 +21,16 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import javax.crypto.BadPaddingException;
+import javax.crypto.Cipher;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
+import javax.xml.bind.DatatypeConverter;
+
 public class How
 {
 	// <answer questionid="get-matching-double-quote-of-string" version="2017-01-04 09:36:44">
-	
+
 	/**
 	 * Given a string and a position within that string that is the double quote of
 	 * the start of a double quoted string, returns the string position of the
@@ -594,6 +605,76 @@ public class How
 		}
 		
 		return -1;
+	}
+
+	// <answer questionid="encrypt-data" version="2017-01-29 11:37:43">
+	
+	/**
+	 * Encrypt data.
+	 * 
+	 * @param publicKey		the public key. 
+	 * @param bytes			the bytes to encrypt.
+	 * @return				the encrypted bytes.
+	 * 
+	 * @throws NoSuchAlgorithmException
+	 * @throws NoSuchPaddingException
+	 * @throws InvalidKeyException
+	 * @throws IllegalBlockSizeException
+	 * @throws BadPaddingException
+	 */
+	public static byte[] encryptByteArray(PublicKey publicKey, byte[] bytes) throws NoSuchAlgorithmException, NoSuchPaddingException, InvalidKeyException, IllegalBlockSizeException, BadPaddingException
+	{
+		Cipher cipher = Cipher.getInstance("RSA/ECB/OAEPWithSHA1AndMGF1Padding");	
+		cipher.init(Cipher.ENCRYPT_MODE, publicKey);  
+		return cipher.doFinal(bytes);
+	}
+	
+	// </answer>
+
+	// <answer questionid="encrypt-data-as-base64-encoded-string" version="2017-01-29 11:38:20">
+	
+	/**
+	 * Encrypt an array of bytes as a BASE64 encoded string.
+	 * 
+	 * @param publicKey		the public key.
+	 * @param bytes			the bytes to encrypt.
+	 * @return				the encrypted data as a BASE64 encoded string.
+	 * 
+	 * @throws NoSuchAlgorithmException
+	 * @throws NoSuchPaddingException
+	 * @throws InvalidKeyException
+	 * @throws IllegalBlockSizeException
+	 * @throws BadPaddingException
+	 * @throws UnsupportedEncodingException
+	 */
+	public static String encryptByteArrayToString(PublicKey publicKey, byte[] bytes) throws NoSuchAlgorithmException, NoSuchPaddingException, InvalidKeyException, IllegalBlockSizeException, BadPaddingException, UnsupportedEncodingException
+	{
+		byte[] encryptedBytes = encryptByteArray(publicKey, bytes);
+		return DatatypeConverter.printBase64Binary(encryptedBytes);
+	}
+	
+	// </answer>
+
+	// <answer questionid="decrypt-data" version="2017-01-29 11:26:01">
+	
+	/**
+	 * Decrypt an array of bytes.
+	 * 
+	 * @param key		the private key.
+	 * @param bytes		the bytes to decrypt.
+	 * @return			the decrypted bytes.
+	 * 
+	 * @throws NoSuchAlgorithmException
+	 * @throws NoSuchPaddingException
+	 * @throws InvalidKeyException
+	 * @throws IllegalBlockSizeException
+	 * @throws BadPaddingException
+	 */
+	public static byte[] decryptByteArray(PrivateKey key, byte[] bytes) throws NoSuchAlgorithmException, NoSuchPaddingException, InvalidKeyException, IllegalBlockSizeException, BadPaddingException
+	{
+		Cipher cipher = Cipher.getInstance("RSA/ECB/OAEPWithSHA1AndMGF1Padding");	
+		cipher.init(Cipher.DECRYPT_MODE, key);	
+		return cipher.doFinal(bytes);
 	}
 	
 	// </answer>

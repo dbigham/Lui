@@ -469,8 +469,8 @@ public class TestChartParser
 	@Test
 	public void test28()
 	{
-		ChartParser.debugFlag = true;
-		ChartParser.debugOptionals = true;
+		//ChartParser.debugFlag = true;
+		//ChartParser.debugOptionals = true;
 		assertEquals(
 			1,
 			parses(
