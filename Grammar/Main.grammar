@@ -9,7 +9,7 @@ start:
 	
 	java str|string -> CreateMultilineJavaString[]
 	
-	to|create multiline? java string
+	to|create|new multiline? java string
 		CopyToClipboard[CreateMultiLineJavaString[GetClipboard[]]]
 
 	google query=$quotedString

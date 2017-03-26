@@ -115,7 +115,11 @@ public class Chart
 				// (so long as triggerPartials==true, which is the case other
 				// than when we initially populate the chart with literal tokens)
 				if (triggerPartials &&
-					!(match instanceof LiteralPattern) &&
+					// Commented out because we already pass in 'triggerPartials = false'
+					// when populating the chart with the tokens from the tokenizer, but
+					// we DO want to add partials for phases of the parse such as adding
+					// global alternatives after the initial parse fails.
+					//!(match instanceof LiteralPattern) &&
 					!(match.startPos() == 0 && match.endPos() == inputEndPos))
 				{
 					if (ChartParser.debugPartials) { Out.print("New result might trigger partials: " + match.toString()); }

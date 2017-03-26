@@ -21,4 +21,9 @@ public class PatternMatchWrapper
 		this.match = match;
 		this.valueOfIterationCounterWhenCreated = valueOfIterationCounterWhenCreated;
 	}
+	
+	public String toString()
+	{
+		return match.toString();
+	}
 }

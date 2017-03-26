@@ -834,6 +834,13 @@ public class Grammar
 	 */
 	public Set<Integer> getGlobalAlternatives(Integer tokenId)
 	{
-		return globalAlternatives.get(tokenId);
+		if (globalAlternatives == null)
+		{
+			return null;
+		}
+		else
+		{
+			return globalAlternatives.get(tokenId);
+		}
 	}
 }

@@ -68,9 +68,7 @@ public class ChartParser
 		if (state.getSpanningStartResults() == null)
 		{
 			// Try global alternatives.
-			List<IPatternMatch> globalAlternativeTokens = applyGlobalAlternatives(tokens, grammar);
-			state.populateChartWithTokens(globalAlternativeTokens);
-			mainLoop(state);
+			applyGlobalAlternatives(tokens, state, grammar);
 		}
 
 		return state;
@@ -85,11 +83,12 @@ public class ChartParser
 	 * @return				The list of new tokens that were created from
 	 * 						alternatives.
 	 */
-	private static List<IPatternMatch> applyGlobalAlternatives(
+	private static void applyGlobalAlternatives(
 			List<IPatternMatch> tokens,
+			ParserState state,
 			Grammar grammar)
 	{
-		List<IPatternMatch> newTokens = new ArrayList<>();
+		boolean printedDebug = false;
 		
 		for (IPatternMatch token: tokens)
 		{
@@ -97,17 +96,29 @@ public class ChartParser
 			Set<Integer> alternatives = grammar.getGlobalAlternatives(tokenId);
 			if (alternatives != null)
 			{
+				if (debugFlag && printedDebug)
+				{
+					Out.print("Apply global alternatives");
+					printedDebug = true;
+				}
+				
 				for (Integer alternative : alternatives)
 				{
 					String literal = grammar.getSymbolOrLiteral(alternative);
 					IPatternMatch newToken =
 							new LiteralPattern(grammar, literal, token.startPos(), token.endPos(), false);
-					newTokens.add(newToken);
+					state.matchCompleted(newToken, state);
 				}
 			}
 		}
 		
-		return newTokens;
+		// If we called matchCompleted for any global alternatives above,
+		// we now call swapTriggerList to move them from toTrigger2 into
+		// the main toTrigger list so that our call to mainLoop later on
+		// will find them.
+		state.swapTriggerList();
+		
+		mainLoop(state);
 	}
 
 	/**
@@ -223,7 +234,7 @@ public class ChartParser
 	{
 		List<IPatternMatch> toTrigger = state.toTrigger();
 		Grammar grammar = state.grammar();
-
+		
 		while(toTrigger.size() > 0)
 		{
 			for (IPatternMatch trigger : toTrigger)

@@ -560,6 +560,9 @@ public class TestChartParser
 	@Test
 	public void test33()
 	{
+		//ChartParser.debugFlag = true;
+		//ChartParser.debugPartials = true;
+		//ChartParser.debugIterationCounter = true;
 		Grammar grammar = new Grammar("start: reverse a list", debugFlag);
 		grammar.addGlobalAlternative("reverse", "reversing");
 		assertEquals(
@@ -570,6 +573,40 @@ public class TestChartParser
 			)
 		);
 	}
+	
+	// Regression test: We were previously not allowing all-literal sequence
+	// patterns partials to be extended, which was preventing this from working.
+	// (wrt global alternatives)
+	@Test
+	public void test34()
+	{
+		Grammar grammar = new Grammar("start: reverse|reversed|\"reverse the order of\" a list", debugFlag);
+		grammar.addGlobalAlternative("reverse", "reversing");
+		assertEquals(
+			1,
+			parses(
+				grammar,
+				"reversing the order of a list"
+			)
+		);
+	}
+	
+//	@Test
+//	public void testForDebuggingGrammarPattern()
+//	{
+//		ChartParser.debugFlag = true;
+//		ChartParser.debugIterationCounter = true;
+//		ChartParser.debugPartials = true;
+//		Grammar grammar = new Grammar("start: reverse|reversed|\"reverse the order of\" a list", debugFlag);
+//		grammar.addGlobalAlternative("reverse", "reversing");
+//		assertEquals(
+//			1,
+//			parses(
+//				grammar,
+//				"reversing the order of a list"
+//			)
+//		);
+//	}
 	
 	/**
 	 * Returns the number of times the given input parses to a spanning START result for the

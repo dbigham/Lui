@@ -170,7 +170,11 @@ public abstract class BasicPattern implements IPattern, IPatternMatch
 	
 	public IPatternMatch resultToSymbolPattern()
 	{
-		throw new UnsupportedOperationException();
+		// Not really a 'symbol pattern' in the case that this is a literal pattern,
+		// but this gets used when we apply global alternatives, and we need to
+		// treat new alternatives that we add to the chart as if they were complete
+		// pattern matches so that they can trigger partials.
+		return new SymbolPattern(tokenId, startPos, endPos);
 	}
 	
 	@Override

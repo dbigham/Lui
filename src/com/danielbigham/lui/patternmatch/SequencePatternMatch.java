@@ -97,14 +97,18 @@ public class SequencePatternMatch extends PatternMatch
 		
 		nextPattern = (BasicPattern)pattern.subPattern(rightDot + 1);
 		
-		// Add this partial match to the partials chart.
-		if (!pattern.subPatternsAreAllLiterals())
-		{
+		// Commented out this IF since we *do* now want all-literal sequence
+		// patterns to add partials to the chart. Why? Because the global
+		// alternatives system may add new literals to the chart after the
+		// initial parse fails, which should be able to extend partials.
+		//if (!pattern.subPatternsAreAllLiterals())
+		//{
 			if (!theMatchWereExtendingIsAlreadyInPartialsChart)
 			{
+				// Add this partial match to the partials chart.
 				chart.addStartPosPartial(this, endPos + 1, nextPattern.resultSymbol(), state.iterationCounter());
 			}
-		}
+		//}
 		
 		if (extensionPositions == null)
 		{
@@ -208,14 +212,18 @@ public class SequencePatternMatch extends PatternMatch
 	
 		nextPattern = (BasicPattern)pattern.subPattern(leftDot - 1);
 		
-		// Add this partial match to the partials chart.
-		if (!pattern.subPatternsAreAllLiterals())
-		{
+		// Commented out this IF since we *do* now want all-literal sequence
+		// patterns to add partials to the chart. Why? Because the global
+		// alternatives system may add new literals to the chart after the
+		// initial parse fails, which should be able to extend partials.
+		//if (!pattern.subPatternsAreAllLiterals())
+		//{
 			if (!theMatchWereExtendingIsAlreadyInPartialsChart)
 			{
+				// Add this partial match to the partials chart.
 				chart.addEndPosPartial(this, startPos - 1, nextPattern.resultSymbol(), state.iterationCounter());
 			}
-		}
+		//}
 		
 		if (extensionPositions == null)
 		{
