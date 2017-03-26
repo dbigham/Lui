@@ -12,6 +12,8 @@ import java.util.Set;
 
 import com.danielbigham.io.Out;
 import com.danielbigham.lui.evaluation.ParseForestEvaluation;
+import com.danielbigham.lui.pattern.BasicPattern;
+import com.danielbigham.lui.pattern.LiteralPattern;
 import com.danielbigham.lui.patternmatch.IPatternMatch;
 import com.danielbigham.lui.patternmatch.PatternMatchWrapper;
 import com.danielbigham.lui.regex.IdParser;
@@ -61,10 +63,53 @@ public class ChartParser
 		state.setTokenIndexToStringPositionMap(tokenIndexToStringPositionMap);
 
 		mainLoop(state);
+		
+		// If we couldn't find a spanning parse, then try fuzzier matching.
+		if (state.getSpanningStartResults() == null)
+		{
+			// Try global alternatives.
+			List<IPatternMatch> globalAlternativeTokens = applyGlobalAlternatives(tokens, grammar);
+			state.populateChartWithTokens(globalAlternativeTokens);
+			mainLoop(state);
+		}
 
 		return state;
 	}
 	
+	/**
+	 * For each token, look up whether it has any alternatives. Return the
+	 * list of tokens that result from this process.
+	 * 
+	 * @param tokens		The tokens.
+	 * @param grammar		The grammar.
+	 * @return				The list of new tokens that were created from
+	 * 						alternatives.
+	 */
+	private static List<IPatternMatch> applyGlobalAlternatives(
+			List<IPatternMatch> tokens,
+			Grammar grammar)
+	{
+		List<IPatternMatch> newTokens = new ArrayList<>();
+		
+		for (IPatternMatch token: tokens)
+		{
+			Integer tokenId = ((BasicPattern)token.pattern()).getTokenId();
+			Set<Integer> alternatives = grammar.getGlobalAlternatives(tokenId);
+			if (alternatives != null)
+			{
+				for (Integer alternative : alternatives)
+				{
+					String literal = grammar.getSymbolOrLiteral(alternative);
+					IPatternMatch newToken =
+							new LiteralPattern(grammar, literal, token.startPos(), token.endPos(), false);
+					newTokens.add(newToken);
+				}
+			}
+		}
+		
+		return newTokens;
+	}
+
 	/**
 	 * Given a grammar and an input string, returns the parsed expression,
 	 * or null if none.
@@ -176,7 +221,6 @@ public class ChartParser
 	 */
 	private static void mainLoop(ParserState state)
 	{
-		List<IPatternMatch> tokens = state.tokens();
 		List<IPatternMatch> toTrigger = state.toTrigger();
 		Grammar grammar = state.grammar();
 

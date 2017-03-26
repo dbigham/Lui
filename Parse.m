@@ -602,6 +602,8 @@ permuteBindingsImpl2[bindings_] :=
 		res
 	];
 
+$debugParseForestEvaluation = False;
+
 (*!
 	\function evaluateChild
 	
@@ -643,11 +645,16 @@ evaluateChild[key:{startPos_Integer, endPos_Integer, symbol_Integer}, "L", bindi
 evaluateChild[key:{startPos_Integer, endPos_Integer, symbol_Integer}, "S", Null] := {{}, <||>}
 evaluateChild[key:{startPos_Integer, endPos_Integer, symbol_Integer}, "S", binding_] :=
 	Block[{ruleMatches, values, evaluatedRules},
-		XPrint["evaluateChild: ", key];
+		If [TrueQ[$debugParseForestEvaluation], Print["evaluateChild for symbol: ", key]];
 		ruleMatches = $parseForestLookup[key];
-		XPrint["ruleMatches: ", ruleMatches];
-		evaluatedRules = evaluateRule /@ ruleMatches;
-		XPrint["evaluatedRules: ", evaluatedRules];
+		If [TrueQ[$debugParseForestEvaluation], Print["ruleMatches: ", ruleMatches]];
+		If [MissingQ[ruleMatches],
+			(* ex. Unmatched optional. *)
+			evaluatedRules = {};
+			,
+			evaluatedRules = evaluateRule /@ ruleMatches;
+		];
+		If [TrueQ[$debugParseForestEvaluation], Print["evaluatedRules: ", evaluatedRules]];
 		{
 			{},
 			<|binding -> evaluatedRules[[All, 1]]|>
@@ -657,11 +664,16 @@ evaluateChild[key:{startPos_Integer, endPos_Integer, symbol_Integer}, "S", bindi
 (* Dynamic sub-rule *)
 evaluateChild[key:{startPos_Integer, endPos_Integer, symbol_Integer}, "D", binding_] :=
 	Block[{ruleMatches, values, evaluatedRules},
-		XPrint["evaluateChild: ", key];
+		If [TrueQ[$debugParseForestEvaluation], Print["evaluateChild for dynamic sub-rule: ", key]];
 		ruleMatches = $parseForestLookup[key];
-		XPrint["ruleMatches: ", ruleMatches];
-		evaluatedRules = evaluateRule /@ ruleMatches;
-		XPrint["evaluatedRules: ", evaluatedRules];
+		If [TrueQ[$debugParseForestEvaluation], Print["ruleMatches: ", ruleMatches]];
+		If [MissingQ[ruleMatches],
+			(* ex. Unmatched optional. *)
+			evaluatedRules = {};
+			,
+			evaluatedRules = evaluateRule /@ ruleMatches;
+		];
+		If [TrueQ[$debugParseForestEvaluation], Print["evaluatedRules: ", evaluatedRules]];
 		{
 			{},
 			If [binding =!= Null,
@@ -751,18 +763,17 @@ evaluateRule[type_, action_, children_List] :=
 			evaluatedChildren,
 			mergedVariables,
 			permutedVariableValues,
-			res,
-			debugFlag = False
+			res
 		},
-		If [debugFlag, Print["evaluateRule: ", {type, action, children}]];
+		If [$debugParseForestEvaluation, Print["evaluateRule: ", {type, action, children}]];
 		evaluatedChildren = evaluateChild /@ children;
-		If [debugFlag, Print["evaluatedChildren: ", evaluatedChildren]];
+		If [$debugParseForestEvaluation, Print["evaluatedChildren: ", evaluatedChildren]];
 		mergedVariables =
 			Merge[
 				evaluatedChildren[[All, 2]],
 				DeleteDuplicates[Flatten[Join[#], 1]] &
 			];
-		If [debugFlag, Print["mergedVariables: ", Normal[mergedVariables]]];
+		If [$debugParseForestEvaluation, Print["mergedVariables: ", Normal[mergedVariables]]];
 		If [type === "E",
 			res =
 			{
@@ -776,7 +787,7 @@ evaluateRule[type_, action_, children_List] :=
 				mergedVariables
 			};
 		];
-		If [debugFlag, Print["res: ", type, ": ", res]];
+		If [$debugParseForestEvaluation, Print["res: ", type, ": ", res]];
 		res
 	];
 

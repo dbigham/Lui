@@ -1,5 +1,7 @@
 package com.danielbigham.lui;
 
+import how.How;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -60,6 +62,12 @@ public class Grammar
 	// Given a grammar symbol and expression, is there an existing
 	// file and position in that file where we define its linguistic?
 	private Map<String, FilePositionSpan> objectFileSpan;
+	private Map<Integer, List<IPattern>> patternsThatProduceSymbol;
+	
+	private Set<Integer> skippableTokenIds;
+	
+	// See: addGlobalAlternative
+	private Map<Integer, Set<Integer>> globalAlternatives;
 	
 	static
 	{
@@ -75,12 +83,15 @@ public class Grammar
 	}
 
 	private Tokenizer tokenizer;
+
+	private HashSet<Integer> optionalItems;
 	
 	public Grammar()
 	{
 		init();
 		
 		tokenizer = new Tokenizer();
+		globalAlternatives = new HashMap<>();
 	}
 	
 	/**
@@ -127,6 +138,43 @@ public class Grammar
 	}
 	
 	/**
+	 * Process all of the grammar patterns, making sub-patterns optional
+	 * if they are words like 'a', 'the', etc.
+	 * 
+	 * See also: "Lui Always Optional"
+	 */
+	private void makeSubPatternsOptional()
+	{
+		for (IPattern pattern : finalPatterns)
+		{
+			makeSubPatternsOptional(pattern);
+		}
+	}
+	
+	/**
+	 * Consult the 'optionalItems' list, making sub-patterns optional
+	 * if they are words like 'a', 'the', etc.
+	 * 
+	 * See also: "Lui Always Optional"
+	 * 
+	 * @param rule		The rule to modify.
+	 */
+	private void makeSubPatternsOptional(IPattern pattern)
+	{
+		for (IPattern subPattern : pattern.patterns())
+		{
+			if (subPattern instanceof BasicPattern)
+			{
+				if (isGrammarPatternOptional(((BasicPattern) subPattern).getTokenId()) &&
+						!subPattern.isOptional())
+				{
+					subPattern.setOptional(true);
+				}
+			}
+		}
+	}
+	
+	/**
 	 * Ones rules have been added, they are processed.
 	 * 
 	 * @return The resultant patterns.
@@ -149,13 +197,48 @@ public class Grammar
 		
 		setTriggers(finalPatterns);
 		
+		populatePatternsThatProduceSymbol(finalPatterns);
+		
+		makeSubPatternsOptional();
+		
 		List<IPattern> res = finalPatterns;
-		// We won't clear this for now since it's so handy
-		// for testing.
-		//finalPatterns = null;
+
 		finalPatternsToResultSymbol = null;
 		
 		return res;
+	}
+	
+	/**
+	 * Populate a lookup that, given a grammar symbol, provides the patterns
+	 * that produce that grammar symbol.
+	 * 
+	 * @param finalPatterns		the final grammar patterns.
+	 */
+	private void populatePatternsThatProduceSymbol(List<IPattern> finalPatterns)
+	{
+		patternsThatProduceSymbol = new HashMap<Integer, List<IPattern>>();
+		for (IPattern pattern : finalPatterns)
+		{
+			int symbolProduced = pattern.resultSymbol();
+			List<IPattern> list = patternsThatProduceSymbol.get(symbolProduced);
+			if (list == null)
+			{
+				list = new ArrayList<IPattern>();
+				patternsThatProduceSymbol.put(symbolProduced, list);
+			}
+			list.add(pattern);
+		}
+	}
+	
+	/**
+	 * Returns true if the given grammar symbol is produced by one or more rules.
+	 * 
+	 * @param symbol	the grammar symbol.
+	 * @return			true if the given grammar symbol is produced by one or more rules.
+	 */
+	public boolean grammarSymbolProducedByRules(int symbol)
+	{
+		return patternsThatProduceSymbol.containsKey(symbol);
 	}
 
 	/**
@@ -359,7 +442,8 @@ public class Grammar
 	
 	/**
 	 * Given a literal string from an input, returns the corresponding
-	 * token ID integer. Returns null if there is no applicable token ID.
+	 * token ID integer. Returns UNKNOWN_TOKEN_ID if there is no applicable
+	 * token ID.
 	 * 
 	 * @param str		generally a word or character.
 	 */
@@ -374,6 +458,15 @@ public class Grammar
 		{
 			return res;
 		}
+	}
+	
+	/**
+	 * @param str	The word/token. 
+	 * @return		true if the grammar makes use of the given word/token.
+	 */
+	public boolean hasWord(String str)
+	{
+		return tokenIds.get(str) != null;
 	}
 	
 	/**
@@ -637,5 +730,110 @@ public class Grammar
 			str.append(pattern.toString2(this)).append('\n');
 		}
 		return str.toString();
+	}
+	
+	/**
+	 * Specify which words can be skipped if they are seen in the input but
+	 * not permitted by a grammar rule. Typical examples include words like
+	 * "a" and "the".
+	 * 
+	 * @param words		The list of words to consider skippable.
+	 */
+	public void setSkippableWords(List<String> words)
+	{
+		skippableTokenIds = new HashSet<Integer>();
+		skippableTokenIds.clear();
+		for (String word : words)
+		{
+			Integer tokenId = getTokenIdAndDefineIfNecessary(word);
+			skippableTokenIds.add(tokenId);
+		}
+	}
+	
+	/**
+	 * Check if a token is considered 'skippable' if seen in an input string.
+	 *  
+	 * @param tokenId		The Token's ID.
+	 * @return				true if the token can be skipped without it being
+	 * 						explicitly matched by a grammar pattern.
+	 */
+	public boolean isSkippableToken(int tokenId)
+	{
+		if (skippableTokenIds == null)
+		{
+			return false;
+		}
+		else
+		{
+			return skippableTokenIds.contains(tokenId);
+		}
+	}
+	
+	/**
+	 * Specify which words / grammar symbols we want to always treat as being
+	 * optional when they occur in a grammar pattern.
+	 * 
+	 * See: "Lui Always Optional"
+	 */
+	public void setOptionalItems(List<String> optionalItems)
+	{
+		this.optionalItems = new HashSet<Integer>();
+		this.optionalItems.clear();
+		for (String word : optionalItems)
+		{
+			Integer tokenId = getTokenIdAndDefineIfNecessary(word);
+			this.optionalItems.add(tokenId);
+		}
+		
+		makeSubPatternsOptional();
+	}
+	
+	/**
+	 * Check if a grammar pattern literal or symbol should always be considered
+	 * optional.
+	 *  
+	 * @param tokenId		The Token's ID.
+	 * @return				true if the pattern can be considered optional.
+	 */
+	public boolean isGrammarPatternOptional(int tokenId)
+	{
+		if (optionalItems == null)
+		{
+			return false;
+		}
+		else
+		{
+			return optionalItems.contains(tokenId);
+		}
+	}
+	
+	/**
+	 * Registers two words/tokens as being allowed to act as alternatives
+	 * of each other in a global sense. (not limited to a single rule)
+	 * 
+	 * @param a		The first word/token.
+	 * @param b		The second word/token.
+	 */
+	public void addGlobalAlternative(String a, String b)
+	{
+		//System.out.println("Global alternative: " + a + " -> " + b);
+		
+		Integer tokenId1 = this.getTokenIdAndDefineIfNecessary(a);
+		Integer tokenId2 = this.getTokenIdAndDefineIfNecessary(b);
+		
+		How.addToMultimap(globalAlternatives, tokenId1, tokenId2);
+		
+		// For now we'll make global alternatives bi-directional.
+		How.addToMultimap(globalAlternatives, tokenId2, tokenId1);
+	}
+	
+	/**
+	 * @param tokenId	The token ID.
+	 * @return			Returns the global alternatives for a given token,
+	 * 					or null if none.
+	 */
+	public Set<Integer> getGlobalAlternatives(Integer tokenId)
+	{
+		return globalAlternatives.get(tokenId);
 	}
 }

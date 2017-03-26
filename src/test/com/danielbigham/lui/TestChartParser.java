@@ -481,6 +481,96 @@ public class TestChartParser
 		);
 	}
 	
+	// Ensure that "throw a ball" matches the grammar pattern "throw ball"
+	// when "a" is considered a skippable word.
+	@Test
+	public void test29()
+	{
+		//ChartParser.debugFlag = true;
+		//ChartParser.debugMatchExtension = true;
+		Grammar grammar = new Grammar("start: throw ball", debugFlag);
+		List<String> skippableWords = new ArrayList<>();
+		skippableWords.add("a");
+		grammar.setSkippableWords(skippableWords);
+		assertEquals(
+			1,
+			parses(
+				grammar,
+				"throw a ball"
+			)
+		);
+	}
+	
+	@Test
+	public void test30()
+	{
+		//ChartParser.debugFlag = true;
+		//ChartParser.debugMatchExtension = true;
+		Grammar grammar = new Grammar("start: throw ball to dog", debugFlag);
+		List<String> skippableWords = new ArrayList<>();
+		skippableWords.add("a");
+		skippableWords.add("the");
+		grammar.setSkippableWords(skippableWords);
+		assertEquals(
+			1,
+			parses(
+				grammar,
+				"throw a ball to the dog"
+			)
+		);
+	}
+	
+	// Test skipping "a" when extending match left.
+	@Test
+	public void test31()
+	{
+		//ChartParser.debugFlag = true;
+		//ChartParser.debugMatchExtension = true;
+		Grammar grammar = new Grammar("start: throw throw ball", debugFlag);
+		List<String> skippableWords = new ArrayList<>();
+		skippableWords.add("a");
+		grammar.setSkippableWords(skippableWords);
+		assertEquals(
+			1,
+			parses(
+				grammar,
+				"throw throw a ball"
+			)
+		);
+	}
+	
+	// Test globally optional grammar patterns.
+	@Test
+	public void test32()
+	{
+		Grammar grammar = new Grammar("start: throw a ball", debugFlag);
+		List<String> optionalItems = new ArrayList<>();
+		optionalItems.add("a");
+		grammar.setOptionalItems(optionalItems);
+		assertEquals(
+			1,
+			parses(
+				grammar,
+				"throw ball"
+			)
+		);
+	}
+	
+	// Test global alternatives.
+	@Test
+	public void test33()
+	{
+		Grammar grammar = new Grammar("start: reverse a list", debugFlag);
+		grammar.addGlobalAlternative("reverse", "reversing");
+		assertEquals(
+			1,
+			parses(
+				grammar,
+				"reversing a list"
+			)
+		);
+	}
+	
 	/**
 	 * Returns the number of times the given input parses to a spanning START result for the
 	 * given grammar.
@@ -490,14 +580,24 @@ public class TestChartParser
 	 */
 	public static int parses(String grammar, String input)
 	{
-		Grammar grammarObj = new Grammar(grammar, debugFlag);
-		
+		return parses(new Grammar(grammar, debugFlag), input);
+	}
+	
+	/**
+	 * Returns the number of times the given input parses to a spanning START result for the
+	 * given grammar.
+	 * 
+	 * @param grammar		the grammar.
+	 * @param input			the input.
+	 */
+	public static int parses(Grammar grammar, String input)
+	{
 		if (false)
 		{
-			Out.print(grammarObj.toString());
+			Out.print(grammar.toString());
 		}
 		
-		ParserState state = ChartParser.parse(grammarObj, input);
+		ParserState state = ChartParser.parse(grammar, input);
 		List<IPatternMatch> matches = state.chart().getMatchesForSpan(ChartParser.START_SYMBOL, 0, state.getEndPos());
 		return matches == null ? 0 : matches.size();
 	}

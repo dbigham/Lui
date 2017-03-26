@@ -22,6 +22,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
@@ -32,6 +33,12 @@ import javax.crypto.Cipher;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
 import javax.xml.bind.DatatypeConverter;
+import java.io.FileReader;
+import java.util.Arrays;
+import java.io.FileInputStream;
+import java.nio.charset.StandardCharsets;
+import java.util.HashSet;
+import java.util.Set;
 
 public class How
 {
@@ -613,10 +620,13 @@ public class How
 		return -1;
 	}
 
-	// <answer questionid="encrypt-data" version="2017-01-29 11:37:43">
+	// <answer questionid="encrypt-data" version="2017-01-29 02:19:35">
 	
 	/**
 	 * Encrypt data.
+	 * 
+	 * See also: Create encryption keys
+	 * See also: Load public encryption key
 	 * 
 	 * @param publicKey		the public key. 
 	 * @param bytes			the bytes to encrypt.
@@ -729,6 +739,107 @@ public class How
 			new PKCS8EncodedKeySpec(Files.readAllBytes(Paths.get(path)));
 		KeyFactory keyFactory = KeyFactory.getInstance("RSA");
 		return keyFactory.generatePrivate(keySpecification);     
+	}
+	
+	// </answer>
+
+	// <answer questionid="sum-of-lengths-of-list-elements" version="2017-01-29 10:35:17">
+	
+	/**
+	 * Given a list of strings, returns the sum of the lengths of the elements
+	 * in the list.
+	 * 
+	 * @param list		the list.
+	 * @return			the sum of the lengths of the items in the list.
+	 */
+	public static long sumOfLengthsOfItems(List<String> list) {
+		long sum = 0;
+		for (String item : list) {
+			sum += item.length();
+		}
+		return sum;
+	}
+	
+	// </answer>
+
+	// <answer questionid="convert-milliseconds-to-days" version="2017-02-04 05:28:30">
+	
+	/**
+	 * Convert a number of milliseconds to the corresponding number of days.
+	 * 
+	 * @param milliseconds	the number of milliseconds.
+	 */
+	public static double convertMillisecondsToDays(long milliseconds) {
+		long millisecondsPerDay = 1000 * 60 * 60 * 24;
+		return (double)milliseconds / (double)millisecondsPerDay;
+	}
+	
+	// </answer>
+
+	// <answer questionid="delete-duplicates" version="2017-03-04 11:17:22">
+	
+	/**
+	 * Given a list of elements, return a list with any duplicate elements
+	 * removed.
+	 * 
+	 * @param list		the list of elements.
+	 * @return			the list with duplicates removed.
+	 *					Preserves order.
+	 */
+	public static <T> List<T> deleteDuplicates(List<T> list) {
+		return new ArrayList<>(new LinkedHashSet<>(list));
+	}
+
+	// <answer questionid="load-a-space-separated-value-file" version="2017-03-26 01:50:53">
+	
+	/**
+	 * Read and parse a space separated value file.
+	 * 
+	 * One record per line, with columns separated by whitespace.
+	 * 
+	 * @param path	The path to the file.
+	 * @return		A list of string arrays.
+	 */
+	public static List<String[]> parseSpaceDelimitedFile(String path) throws IOException {
+		
+		List<String[]> records = new ArrayList<>();
+		
+		try (BufferedReader reader = new BufferedReader(
+				new InputStreamReader(
+					new FileInputStream(path),
+					StandardCharsets.UTF_8))) {
+		
+			String line = null;
+			while ((line = reader.readLine()) != null) {
+				// Skip empty lines
+				if (!line.trim().isEmpty()) {
+					String[] array = line.trim().split("\\s+");
+					records.add(array);
+				}
+			}
+		}
+		
+		return records;
+	}
+	
+	// </answer>
+
+	// <answer questionid="append-to-multimap" version="2017-03-26 02:58:30">
+	
+	/**
+	 * Add an entry to simulated multi-map. Each value is a set.
+	 *
+	 * @param map	The map.
+	 * @param key	The key.
+	 * @param value The value.
+	 */
+	public static <T1, T2> void addToMultimap(Map<T1, Set<T2>> map, T1 key, T2 value) {
+		Set<T2> set = map.get(key);
+		if (set == null) {
+			set = new HashSet<>();
+			map.put(key, set);
+		}
+		set.add(value);
 	}
 	
 	// </answer>

@@ -140,6 +140,59 @@ public class SequencePatternMatch extends PatternMatch
 				newMatches.addAll(newMatches2);
 			}
 		}
+		else if (newMatches == null)
+		{
+			
+			newMatches = trySkippingWord(state, 1);
+		}
+		
+		return newMatches;
+	}
+	
+	/**
+	 * If the next word to the left/right (depending on which direction we're
+	 * matching) is a skippable word, then skip the word.
+	 * 
+	 * @param state		The ParserState.
+	 * @param dir		The direction we're trying to extend the match.
+	 * @return			The new match (in a list) if the word was skippable,
+	 * 					or null otherwise.
+	 */
+	private List<IPatternMatch> trySkippingWord(ParserState state, int dir)
+	{
+		List<Integer> skipPositions;
+		List<IPatternMatch> newMatches = null;
+		
+		if (dir == 1)
+		{
+			skipPositions = state.getSkipRightPositions(endPos);
+		}
+		else
+		{
+			skipPositions = state.getSkipLeftPositions(startPos);
+		}
+		
+		if (skipPositions != null)
+		{
+			for (Integer pos : skipPositions)
+			{
+				int[] newSubPatternStartPositions = subPatternStartPositions.clone();
+				int startPos = this.startPos;
+				int endPos = this.endPos;
+				if (dir == 1)
+				{
+					endPos = pos;
+				}
+				else
+				{
+					startPos = pos;
+				}
+				SequencePatternMatch newMatch = new SequencePatternMatch(pattern, startPos, endPos, leftDot, rightDot, dir, newSubPatternStartPositions);
+				newMatches = new ArrayList<>();
+				newMatches.add(newMatch);
+				if (ChartParser.debugMatchExtension) { Out.print("Skipping skippable word."); }
+			}
+		}
 		
 		return newMatches;
 	}
@@ -197,6 +250,11 @@ public class SequencePatternMatch extends PatternMatch
 			{
 				newMatches.addAll(newMatches2);
 			}
+		}
+		else if (newMatches == null)
+		{
+			
+			newMatches = trySkippingWord(state, -1);
 		}
 		
 		return newMatches;

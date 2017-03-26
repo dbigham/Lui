@@ -84,3 +84,22 @@ Test[
 	,
 	TestID -> "evaluateChild-20160911-KKCDM3"
 ]
+
+(* For example, an unmatched optional. When we use $parseForestLookup to get the 'ruleMatches', we'll get a Missing (key absent), so we need to detect that and handle it properly. *)
+Test[
+	Lui`Parse`Private`blockParseForestLookup[
+		{
+			{
+				{-1, 0, 1},
+				"E",
+				HoldComplete[HoldComplete[1]],
+				{{{0, 0, 1}, "L", Null}, {{3, 2, 1}, "D", Null}}
+			}
+		},
+		Lui`Parse`Private`evaluateChild[{{3, 2, 1}, "D", Null}]
+	]
+	,
+	{{}, {}}
+	,
+	TestID -> "evaluateChild-20170318-011WS5"
+]

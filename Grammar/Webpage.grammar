@@ -1,6 +1,8 @@
 webpage:
+	when will it happen -> "https://docs.google.com/document/d/11e1nwrvZ8vl5q_sTHQCXOIuyeYl6jW3xAPubOWJnHq8/edit"
+	missing|needed java answers? -> "http://localhost/how/page.html?page=questions&lang=not(java)"
 	Vim script? (cheatsheet|"cheat sheet") -> "http://ricostacruz.com/cheatsheets/vimscript.html"
-	create regex|"regular expression" -> "https://www.debuggex.com/"
+	create|debug regex|"regular expression" -> "https://www.debuggex.com/"
 	how gdrive|"google docs" dir -> "https://drive.google.com/drive/u/0/folders/0B1m9lIRgFVMROFJsTzNIRXE0cUU?ths"
 	~do console -> "https://cloud.digitalocean.com/droplets/33526164/console?no_layout"
 	droplets -> "https://cloud.digitalocean.com/droplets"
