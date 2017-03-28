@@ -9,7 +9,7 @@ import com.danielbigham.lui.Grammar;
 import com.danielbigham.lui.pattern.SymbolPattern;
 import com.danielbigham.lui.patternmatch.IPatternMatch;
 
-public abstract class RegexParserBase implements RegexParser
+public abstract class RegexParserBase implements ParserHelper
 {
 	protected Pattern pattern;
 	protected List<String> symbols;

@@ -11,14 +11,14 @@ import org.junit.Test;
 
 import com.danielbigham.lui.Grammar;
 import com.danielbigham.lui.patternmatch.IPatternMatch;
-import com.danielbigham.lui.regex.RegexParser;
+import com.danielbigham.lui.regex.ParserHelper;
 
 public class TestRegexParser extends TestCase
 {
 	protected String grammarSymbol;
-	protected RegexParser parser;
+	protected ParserHelper parser;
 	
-	protected void setUp(RegexParser parser, String grammarSymbol) throws Exception
+	protected void setUp(ParserHelper parser, String grammarSymbol) throws Exception
 	{
 		this.parser = parser;
 		this.grammarSymbol = grammarSymbol;

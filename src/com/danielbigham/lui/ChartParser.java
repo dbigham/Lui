@@ -18,7 +18,7 @@ import com.danielbigham.lui.patternmatch.IPatternMatch;
 import com.danielbigham.lui.patternmatch.PatternMatchWrapper;
 import com.danielbigham.lui.regex.IdParser;
 import com.danielbigham.lui.regex.QuotedStringParser;
-import com.danielbigham.lui.regex.RegexParser;
+import com.danielbigham.lui.regex.ParserHelper;
 import com.danielbigham.lui.regex.UrlParser;
 
 public class ChartParser
@@ -31,17 +31,17 @@ public class ChartParser
 	public static boolean debugPartials = false;
 	public static boolean debugIterationCounter = false;
 	
-	private static List<RegexParser> regexParsers;
+	private static List<ParserHelper> parserHelpers;
 	
 	private static Tokenizer tokenizer;
 	
 	static
 	{
 		tokenizer = new Tokenizer();
-		regexParsers = new ArrayList<RegexParser>();
-		regexParsers.add(new IdParser());
-		regexParsers.add(new UrlParser());
-		regexParsers.add(new QuotedStringParser());
+		parserHelpers = new ArrayList<ParserHelper>();
+		parserHelpers.add(new IdParser());
+		parserHelpers.add(new UrlParser());
+		parserHelpers.add(new QuotedStringParser());
 	}
 
 	public static ParserState parse(Grammar grammar, String str)
@@ -50,9 +50,15 @@ public class ChartParser
 		
 		List<IPatternMatch> tokens = tokenizer.tokenize(grammar, str);
 		
-		for (RegexParser regexParser : regexParsers)
+		for (ParserHelper parserHelper : parserHelpers)
 		{
-			regexParser.parse(grammar, tokens, str);
+			parserHelper.parse(grammar, tokens, str);
+		}
+		
+		// Run parser helpers added by the Lui API user.
+		for (ParserHelper parserHelper : grammar.getParserHelpers())
+		{
+			parserHelper.parse(grammar, tokens, str);
 		}
 		
 		Map<Integer, Integer> tokenIndexToStringPositionMap = adjustTokenPositions(tokens);
@@ -214,7 +220,7 @@ public class ChartParser
 	 */
 	public static void defineRegexParserSymbols(Grammar grammar)
 	{
-		for (RegexParser regexParser : regexParsers)
+		for (ParserHelper regexParser : parserHelpers)
 		{
 			List<String> symbols = regexParser.grammarSymbols();
 			for (String symbol : symbols)

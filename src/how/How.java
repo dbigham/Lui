@@ -2,12 +2,14 @@ package how;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.security.InvalidKeyException;
@@ -22,9 +24,11 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -33,12 +37,6 @@ import javax.crypto.Cipher;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
 import javax.xml.bind.DatatypeConverter;
-import java.io.FileReader;
-import java.util.Arrays;
-import java.io.FileInputStream;
-import java.nio.charset.StandardCharsets;
-import java.util.HashSet;
-import java.util.Set;
 
 public class How
 {
@@ -840,6 +838,180 @@ public class How
 			map.put(key, set);
 		}
 		set.add(value);
+	}
+	
+	// </answer>
+
+	// <answer questionid="get-component-types-of-java-type" version="2017-03-27 02:23:53">
+	
+	/**
+	 * Given a Java type such as Map<String, Integer>, returns the list of component
+	 * types. (ie. ["Map", "String", "Integer"])
+	 *
+	 * @param type	The type.
+	 * @return		The list of component types.
+	 */
+	public static List<String> getComponentTypesOfJavaType(String type) {
+		
+		String regex = "[A-Za-z0-9.]+";
+		Pattern patternObj = Pattern.compile(regex);
+		
+		List<String> substrings = extractSubstrings(type, patternObj);
+		
+		return substrings;
+	}
+	
+	// </answer>
+
+	// <answer questionid="concatenate-lists" version="2017-03-27 02:33:59">
+	
+	/**
+	 * Concatenate two lists.
+	 * 
+	 * @param list1		the first list.
+	 * @param list2		the second list.
+	 * @return			the concatenation of the two lists.
+	 */
+	public static <T> List<T> concatenateLists(List<T> list1, List<T> list2) {
+		List<T> result = new ArrayList<>(list1);
+		result.addAll(list2);
+		return result;
+	}
+	
+	// </answer>
+
+	// <answer questionid="remove-namespace-from-java-type" version="2017-03-27 02:57:02">
+	
+	/**
+	 * Given a Java type (ex. "java.util.Map"), remove the namespace portion
+	 * if present.
+	 *
+	 * @param type	The type.
+	 * @return		The type without its namespace portion.
+	 *				ex. "java.util.Map" -> "Map"
+	 */
+	public static String removeNamespaceFromJavaType(String type) {
+		return deleteUntilCharacter(type, '.', true);
+	}
+	
+	// </answer>
+
+	// <answer questionid="delete-portion-of-string-to-given-character" version="2017-03-27 02:55:22">
+	
+	/**
+	 * Delete the portion of a string up to the given character.
+	 * 
+	 * @param str			The string.
+	 * @param character			The character to find.
+	 * @param deleteCharacter	Should we include the last match of the character
+	 *							in what we return?
+	 * @return					The string with the portion up to the last match
+	 *							of the given character deleted.
+	 */
+	public static String deleteUntilCharacter(String str, char character, boolean deleteCharacter) {
+	
+		int lastIndexOfCharacter = str.lastIndexOf(character);
+		if (lastIndexOfCharacter == -1) {
+			return str;
+		} else {
+			if (deleteCharacter) {
+				return str.substring(lastIndexOfCharacter + 1);
+			} else {
+				return str.substring(lastIndexOfCharacter);
+			}
+		}
+	}
+	
+	// </answer>
+
+	// <answer questionid="get-trimmed-lines-from-string" version="2017-03-25 12:51:38">
+	
+	/**
+	 * Split some text into one or more lines.
+	 * 
+	 * - Trailing newline characters are stripped.
+	 * - Blank lines are removed.
+	 * - Whitespace at the beginning and/or end of lines is removed.
+	 *
+	 * @param str	The string.
+	 * @return		
+	 */
+	public static List<String> trimmedLines(String str) {
+		
+		List<String> lines = new ArrayList<>();
+		
+		boolean withinLine = false;
+		int startOfLine = 0;
+		int endIndex = str.length() - 1;
+		
+		for (int i = 0; i < str.length(); ++i) {
+			char character = str.charAt(i);
+			
+			if (!withinLine) {
+				if (!Character.isWhitespace(character)) {
+					// Start of a line.
+					startOfLine = i;
+					withinLine = true;
+				}
+			} else {
+				if (character == '\r' || character == '\n') {
+					// End of a line.
+					int endOfLineExclusive = i;
+					String line = str.substring(startOfLine, endOfLineExclusive);
+					lines.add(line);
+					withinLine = false;
+				} else if (i == endIndex) {
+					// End of string.
+					String line = str.substring(startOfLine, endIndex + 1);
+					lines.add(line);
+				}
+			}
+		}
+		
+		return lines;
+	}
+	
+	// </answer>
+
+	// <answer questionid="escape-a-double-quote" version="2017-02-26 10:16:55">
+	
+	/**
+	 * Create a double quoted string, with double quotes, backslashes, etc. escaped.
+	 * 
+	 * @param str	the string.
+	 * @return		the escaped string.
+	 */
+	public static String createDoubleQuotedString(String str) {
+		
+		StringBuilder builder =
+			new StringBuilder(Math.max((int)(str.length() * 1.1), str.length() + 10));
+	     
+		builder.append("\"");
+		
+		for (int i = 0; i < str.length(); ++i) {
+			char character = str.charAt(i);
+			switch (character){
+				case '"': 
+					builder.append("\\\"");
+					break;
+				case '\\': 
+					builder.append("\\\\");
+					break;
+				case '\r':
+					builder.append("\\r");
+					break;
+				case '\n':
+					builder.append("\\n");
+					break;
+				default:
+					builder.append(character);
+					break;
+			}
+		}
+		
+		builder.append("\"");
+			
+		return builder.toString();
 	}
 	
 	// </answer>

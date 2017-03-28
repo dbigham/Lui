@@ -1,4 +1,12 @@
 notebook:
+	(lookup by function name?) | (function name? lookup) -> "LookupByFunctionName.nb"
+	((giving|give) what we can) | (effective altruism) -> "GivingWhatWeCan.nb"
+	my cra | "my cra" | cra -> "MyCRA.nb"
+	how? ((auto? imports for (function|func|method) (call|calls)) | ((function|func|method) call auto? imports)) -> "HowImportsForFunctionCall.nb"
+	how stack|stacks -> "HowStack.nb"
+	housework | "house work" | house | h -> "Housework.nb"
+	housework | "house work" | house | h -> "Housework.nb"
+	lui? automatic|auto grammar|ling|linguistic reload -> "LuiAutomaticGrammarReload.nb"
 	how? function|method signature? parser|parsing -> "HowFunctionParser.nb"
 	(grammar induction) | ((auto|automatic) (grammar|grammars)) -> "GrammarInduction.nb"
 	smarter|smart|intelligent ide -> "SmarterIDE.nb"

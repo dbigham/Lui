@@ -817,9 +817,9 @@ InitializeParser[] :=
 ConsiderFileInterpretation[input_String] :=
 	Block[{},
 		Block[{dir},
-			dir = "E:\\Users\\" <> $UserName <> "\\Dropbox\\Maluuba\\Notebooks";
+			dir = "E:\\Users\\" <> $UserName <> "\\Dropbox\\Notebooks2";
 			If [!FileExistsQ[dir],
-				dir = "C:\\Users\\" <> $UserName <> "\\Dropbox\\Maluuba\\Notebooks";
+				dir = "C:\\Users\\" <> $UserName <> "\\Dropbox\\Notebooks2";
 			];
 			If [ResolveIssueNotebook[input] =!= $Failed,
 				HoldComplete @ OpenNotebook[input]

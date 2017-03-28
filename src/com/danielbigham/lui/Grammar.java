@@ -19,6 +19,7 @@ import com.danielbigham.lui.pattern.IPattern;
 import com.danielbigham.lui.pattern.Pattern;
 import com.danielbigham.lui.pattern.SymbolPattern;
 import com.danielbigham.lui.patternmatch.IPatternMatch;
+import com.danielbigham.lui.regex.ParserHelper;
 
 /**
  * The grammar, consisting of grammar rules that have been wired up to
@@ -83,8 +84,8 @@ public class Grammar
 	}
 
 	private Tokenizer tokenizer;
-
 	private HashSet<Integer> optionalItems;
+	private List<ParserHelper> parserHelpers;
 	
 	public Grammar()
 	{
@@ -141,7 +142,7 @@ public class Grammar
 	 * Process all of the grammar patterns, making sub-patterns optional
 	 * if they are words like 'a', 'the', etc.
 	 * 
-	 * See also: "Lui Always Optional"
+	 * See also: "Lui Global Optionals"
 	 */
 	private void makeSubPatternsOptional()
 	{
@@ -155,7 +156,7 @@ public class Grammar
 	 * Consult the 'optionalItems' list, making sub-patterns optional
 	 * if they are words like 'a', 'the', etc.
 	 * 
-	 * See also: "Lui Always Optional"
+	 * See also: "Lui Global Optionals"
 	 * 
 	 * @param rule		The rule to modify.
 	 */
@@ -556,17 +557,25 @@ public class Grammar
 	public void init()
 	{
 		triggers = new HashMap<Integer, List<IPattern>>();
-		tokenIds = new HashMap<String, Integer>();
-		tokenIdToSymbolOrLiteral = new HashMap<Integer, String>();
-		tokenCounter = 0;
+		
+		// For now we'll avoid destroying these when we reload a grammar. Why?
+		// Because otherwise the token IDs used by 'optionalItems', etc. will
+		// suddenly be invalid, breaking global optionals, global alternatives, etc.
+		if (tokenIds == null)
+		{
+			tokenIds = new HashMap<String, Integer>();
+			tokenIdToSymbolOrLiteral = new HashMap<Integer, String>();
+			tokenCounter = 0;
+		}
+		
 		dynamicRuleCounter = 0;
 		finalPatterns = new ArrayList<IPattern>();
 		finalPatternsToResultSymbol = new HashMap<IPattern, Integer>();
 		grammarSymbolFileSpan = new HashMap<String, FilePositionSpan>();
 		objectFileSpan = new HashMap<String, FilePositionSpan>();
-		
 		tokenIds.put("$start", ChartParser.START_SYMBOL);
 		tokenIdToSymbolOrLiteral.put(ChartParser.START_SYMBOL, "$start");
+		parserHelpers = new ArrayList<>();
 	}
 	
 	/**
@@ -773,7 +782,7 @@ public class Grammar
 	 * Specify which words / grammar symbols we want to always treat as being
 	 * optional when they occur in a grammar pattern.
 	 * 
-	 * See: "Lui Always Optional"
+	 * See: "Lui Global Optionals"
 	 */
 	public void setOptionalItems(List<String> optionalItems)
 	{
@@ -842,5 +851,25 @@ public class Grammar
 		{
 			return globalAlternatives.get(tokenId);
 		}
+	}
+	
+	/**
+	 * Add a parser helper. Parser helpers are mini parsers that get called
+	 * with the results of basic tokenization and have the opportunity to
+	 * add additional tokens.
+	 * 
+	 * @param parserHelper		The parser helper to add.
+	 */
+	public void addParserHelper(ParserHelper parserHelper)
+	{
+		parserHelpers.add(parserHelper);
+	}
+	
+	/**
+	 * Get the list of parser helpers.
+	 */
+	public List<ParserHelper> getParserHelpers()
+	{
+		return parserHelpers;
 	}
 }

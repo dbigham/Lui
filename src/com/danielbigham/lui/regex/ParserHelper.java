@@ -5,7 +5,7 @@ import java.util.List;
 import com.danielbigham.lui.Grammar;
 import com.danielbigham.lui.patternmatch.IPatternMatch;
 
-public interface RegexParser
+public interface ParserHelper
 {
 	public void parse(Grammar grammar, List<IPatternMatch> tokens, String str);
 	
