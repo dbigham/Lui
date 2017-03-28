@@ -328,8 +328,8 @@ public class Util
 	
 	public static String escapeHTML(String s) {
 		
-		// Not sure if ultimately I'll want this.
-		if (s == null) { return ""; }
+		// Hard to know what to do here.
+		if (s == null) { return "null"; }
 		
 		StringBuilder out = new StringBuilder(Math.max(16, s.length()));
 		for (int i = 0; i < s.length(); i++) {
