@@ -1,4 +1,5 @@
 webpage:
+	open|start|(go to?) ("code pad" | codepad) -> "http://localhost/how/page.html?page=codepad&lang=java"
 	when will it happen -> "https://docs.google.com/document/d/11e1nwrvZ8vl5q_sTHQCXOIuyeYl6jW3xAPubOWJnHq8/edit"
 	missing|needed java answers? -> "http://localhost/how/page.html?page=questions&lang=not(java)"
 	Vim script? (cheatsheet|"cheat sheet") -> "http://ricostacruz.com/cheatsheets/vimscript.html"

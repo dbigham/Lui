@@ -37,6 +37,7 @@ import javax.crypto.Cipher;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
 import javax.xml.bind.DatatypeConverter;
+import java.lang.StringBuilder;
 
 public class How
 {
@@ -245,27 +246,14 @@ public class How
 	
 	// </answer>
 
-	// <answer questionid="get-list-of-substrings-matched-by-regex" version="2016-12-15 10:57:08">
+	// <answer questionid="get-list-of-substrings-matched-by-regex" version="2017-03-29 07:09:44">
 	
 	/**
 	 * Extract substrings using a regular expression.
 	 * 
-	 * @param str		the string.
-	 * @param pattern	the regex to match.
-	 * @return			the list of values for the first capturing group
-	 *					or the list of matched substrings if no capturing groups
-	 */
-	public static List<String> extractSubstrings(String str, String pattern) {
-		Pattern patternObj = Pattern.compile(pattern);
-		return extractSubstrings(str, patternObj);
-	}
-	
-	/**
-	 * Extract substrings using a regular expression.
-	 * 
-	 * @param str			the string.
-	 * @param pattern		the regex to match.
-	 * @return				the list of values for the first capturing group
+	 * @param str			The string.
+	 * @param pattern		The pattern to match.
+	 * @return				The list of values for the first capturing group
 	 *						or the list of matched substrings if no capturing groups
 	 */
 	public static List<String> extractSubstrings(String str, Pattern pattern) {
@@ -287,6 +275,19 @@ public class How
 		}
 		
 		return list;
+	}
+	
+	/**
+	 * Extract substrings using a regular expression.
+	 * 
+	 * @param str			The string.
+	 * @param regex			The regex to match.
+	 * @return				The list of values for the first capturing group
+	 *						or the list of matched substrings if no capturing groups
+	 */
+	public static List<String> extractSubstrings(String str, String regex) {
+		Pattern patternObj = Pattern.compile(regex);
+		return extractSubstrings(str, patternObj);
 	}
 	
 	// </answer>
@@ -1011,6 +1012,35 @@ public class How
 		
 		builder.append("\"");
 			
+		return builder.toString();
+	}
+	
+	// </answer>
+
+	// <answer questionid="concatenate-values-in-multimap" version="2017-03-29 07:08:53">
+	
+	/**
+	 * Concatenates the values of a multi-map using the given delimiter.
+	 *
+	 * @param map		The map.
+	 * @param delimiter The delimiter to use between values.
+	 * @return			The concatenation of the map's values using the given
+	 *					delimiter.
+	 */
+	public static <T1, T2> String concatenateMultimapValues(Map<T1, Set<T2>> map, String delimiter) {
+		
+		StringBuilder builder = new StringBuilder();
+		
+		boolean first = true;
+		
+		for (Set<T2> value : map.values()) {
+			for (T2 innerValue : value) {
+				if (!first) { builder.append(delimiter); }
+				builder.append(innerValue.toString());
+				first = false;
+			}
+		}
+		
 		return builder.toString();
 	}
 	

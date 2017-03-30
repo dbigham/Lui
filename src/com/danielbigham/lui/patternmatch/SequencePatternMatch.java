@@ -127,7 +127,9 @@ public class SequencePatternMatch extends PatternMatch
 			newMatches = extendRightHelper(extensionPositions, rightDot + 1);
 		}
 		
-		if (newMatches == null &&
+		boolean nonOptionalMatches = newMatches != null;
+		
+		if (!nonOptionalMatches &&
 			nextPattern.isOptional() &&
 			!theMatchWereExtendingIsAlreadyInPartialsChart &&
 			rightDot + 1 < pattern.length())
@@ -144,10 +146,18 @@ public class SequencePatternMatch extends PatternMatch
 				newMatches.addAll(newMatches2);
 			}
 		}
-		else if (newMatches == null)
+		
+		if (!nonOptionalMatches)
 		{
-			
-			newMatches = trySkippingWord(state, 1);
+			List<IPatternMatch> newMatches2 = trySkippingWord(state, 1);
+			if (newMatches == null)
+			{
+				newMatches = newMatches2;
+			}
+			else if (newMatches2 != null)
+			{
+				newMatches.addAll(newMatches2);
+			}
 		}
 		
 		return newMatches;
@@ -180,6 +190,7 @@ public class SequencePatternMatch extends PatternMatch
 		{
 			for (Integer pos : skipPositions)
 			{
+				
 				int[] newSubPatternStartPositions = subPatternStartPositions.clone();
 				int startPos = this.startPos;
 				int endPos = this.endPos;
@@ -194,7 +205,7 @@ public class SequencePatternMatch extends PatternMatch
 				SequencePatternMatch newMatch = new SequencePatternMatch(pattern, startPos, endPos, leftDot, rightDot, dir, newSubPatternStartPositions);
 				newMatches = new ArrayList<>();
 				newMatches.add(newMatch);
-				if (ChartParser.debugMatchExtension) { Out.print("Skipping skippable word."); }
+				if (ChartParser.debugMatchExtension || ChartParser.debugSkipping) { Out.print("Skipping skippable word."); }
 			}
 		}
 		
@@ -242,7 +253,9 @@ public class SequencePatternMatch extends PatternMatch
 			newMatches = extendLeftHelper(state, extensionPositions, leftDot - 1);
 		}
 		
-		if (newMatches == null &&
+		boolean nonOptionalMatches = newMatches != null;
+		
+		if (!nonOptionalMatches &&
 			nextPattern.isOptional() &&
 			!theMatchWereExtendingIsAlreadyInPartialsChart &&
 			leftDot - 1 >= 0)
@@ -259,10 +272,18 @@ public class SequencePatternMatch extends PatternMatch
 				newMatches.addAll(newMatches2);
 			}
 		}
-		else if (newMatches == null)
+		
+		if (!nonOptionalMatches)
 		{
-			
-			newMatches = trySkippingWord(state, -1);
+			List<IPatternMatch> newMatches2 = trySkippingWord(state, -1);
+			if (newMatches == null)
+			{
+				newMatches = newMatches2;
+			}
+			else if (newMatches2 != null)
+			{
+				newMatches.addAll(newMatches2);
+			}
 		}
 		
 		return newMatches;

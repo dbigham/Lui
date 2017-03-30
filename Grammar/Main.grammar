@@ -74,7 +74,7 @@ start:
 			HeldHead[EditFile][FindFile[file]]
 		]
 	
-	~edit file=$sourceFile substring=$quotedString
+	~edit file=($file|$sourceFile) substring=$quotedString
 		If [StringFreeQ[file, "`"],
 			HeldHead[EditFile][file, "Substring" -> substring]
 			,
@@ -290,3 +290,8 @@ function:
 	~digitalocean
 notebook:
 	npm | node | "node.js" -> "npm.nb"
+
+~mer
+	meredith
+	mer
+	mb

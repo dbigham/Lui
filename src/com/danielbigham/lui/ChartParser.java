@@ -30,6 +30,7 @@ public class ChartParser
 	public static boolean debugMatchExtension = false;
 	public static boolean debugPartials = false;
 	public static boolean debugIterationCounter = false;
+	public static boolean debugSkipping = false;
 	
 	private static List<ParserHelper> parserHelpers;
 	

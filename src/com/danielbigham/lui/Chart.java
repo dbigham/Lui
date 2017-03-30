@@ -98,7 +98,9 @@ public class Chart
 		
 		if (state != null)
 		{
-			if (ChartParser.debugFlag) { Out.print("New result: " + match.toString(state.grammar())); }
+			if (ChartParser.debugFlag) {
+				Out.print("New result: " + match.toString(state.grammar()) + " (" + match.startPos() + "-" + match.endPos() + ")");
+			}
 		}
 		
 		{

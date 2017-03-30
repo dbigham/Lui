@@ -25,6 +25,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -361,12 +362,33 @@ public class Util
 	}
 	
 	/**
+	 * Returns the values of a map, sorted.
+	 * 
+	 * @param map		the map.
+	 * @return			the values of the map sorted.
+	 */
+	public static List<String> sortedMultimapValues(Map<String, Set<String>> map)
+	{
+		List<String> list = new ArrayList<String>();
+		for (Set<String> set : map.values())
+		{
+			for (String str : set)
+			{
+				list.add(str);
+			}
+		}
+		Collections.sort(list);
+		
+		return list;
+	}
+	
+	/**
 	 * Returns the keys of a map, sorted.
 	 * 
 	 * @param map		the map.
 	 * @return			the keys of the map sorted.
 	 */
-	public static List<String> sortedKeys(Map<String, String> map)
+	public static <T> List<String> sortedKeys(Map<String, T> map)
 	{
 		List<String> list = new ArrayList<String>();
 		list.addAll(map.keySet());

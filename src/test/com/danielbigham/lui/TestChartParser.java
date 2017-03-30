@@ -501,6 +501,26 @@ public class TestChartParser
 		);
 	}
 	
+	// Skippable word with trailing optional.
+	@Test
+	public void test29b()
+	{
+		ChartParser.debugFlag = true;
+		ChartParser.debugMatchExtension = true;
+		ChartParser.debugSkipping = true;
+		Grammar grammar = new Grammar("start: throw ball?", debugFlag);
+		List<String> skippableWords = new ArrayList<>();
+		skippableWords.add("a");
+		grammar.setSkippableWords(skippableWords);
+		assertEquals(
+			1,
+			parses(
+				grammar,
+				"throw a ball"
+			)
+		);
+	}
+	
 	@Test
 	public void test30()
 	{
