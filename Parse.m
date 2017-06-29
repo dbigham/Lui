@@ -18,7 +18,7 @@ GetParseForest::usage = "GetParseForest  "
 
 GetParserState::usage = "GetParserState  "
 
-$TestGrammar1::usage = "$TestGrammar1  "
+$TestGrammares1::usage = "$TestGrammares1  "
 
 $GrammarDir::usage = "$GrammarDir  "
 
@@ -46,10 +46,13 @@ Score::usage = "Score  "
 
 Begin["`Private`"]
 
-$GrammarDir = FileNameJoin[{$LuiDir, "Grammar"}];
+If [!ValueQ[$GrammarDir],
+    $GrammarDir = FileNameJoin[{$LuiDir, "Grammar"}];
+];
+
 $GrammarFile = FileNameJoin[{$GrammarDir, "Main.grammar"}];
 
-$TestGrammar1 =
+$TestGrammares1 =
 "start: a=$a PLUS b=$b -> a+b
 a: ONE -> 1
 b: TWO -> 2
@@ -313,6 +316,8 @@ ProcessParseForest[state_] :=
 		(* Most -> Drop the last item which is always 'Null' *)
 		forest = Most[state["Forest"]];
 		
+		If [TrueQ[$debugParseForestEvaluation], Print["Parse forest:\n", Indent2[forest]]];
+		
 		(* Select the parse forest nodes that span the entire input string
 		   and who's result symbol is the STARTSYM symbol. *)
 		topLevelNodes = Select[forest, First[#] === {STARTSYM, 0, endPos} &];
@@ -429,7 +434,9 @@ GetParserState[grammar_, input_] :=
 		state = ChartParser`parse[grammar["JavaObject"], input];
 		wlString = state@toWL[];
 		If [StringQ[wlString],
-			state2 = ToExpression[wlString];
+			Block[{$ContextPath = Append[$ContextPath, "WUtils`WUtils`"]},
+				state2 = ToExpression[wlString];
+			];
 			If [FailureQ[state2],
 				Message[LuiParse::te];
 				Print["Expression returned from Java was:"];
@@ -515,8 +522,8 @@ evaluateAction[heldAction_, bindings_] :=
 			]
 			,
 			_,
-			Print["Unexpected bindings: ", bindings];
-			$Failed
+			Print["Unexpected bindings: ", InputForm[bindings]];
+			Throw["Unexpected bindings"];
 		]
 	];
 

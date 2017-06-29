@@ -1,2 +1,0 @@
-
-- BUG: When I modify a file in Workbench, it seems to trigger the modification event 3 times.

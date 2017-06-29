@@ -88,7 +88,10 @@ Lui[] :=
 								(
 									HandleInput[input, $interpHeldVar, $actionResHeldVar]
 								)
-							}
+							},
+					       (* If we don't set this, then if the computation takes more than 5 seconds or so, it is
+					           silently killed. We don't want that. *)
+					        Method -> "Queued"
 						],
 						displayIfNotNull[interp, formatInterpretation],
 						With[{actionResult2 = actionResult},

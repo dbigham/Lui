@@ -1,12 +1,7 @@
 person:
-	dad | bighamres
+	daniel | danielb
 		Person[
-			"FirstName" -> "Howard",
-			"Email" -> "bighamres@outlook.com"
+			"FirstName" -> "Daniel",
+			"LastName" -> "Bigham",
+			"Email" -> "daniel.bigham@gmail.com"
 		]
-	meredith | mer
-		Person[
-			"FirstName" -> "Meredith",
-			"Email" -> "meredith.bigham@gmail.com"
-		]
-

@@ -1,6 +1,2 @@
 app:
-	debug ahk|autohotkey -> "C:\\Program Files\\AutoHotkey\\SciTE\\SciTE.exe"
-	m -> "E:\\Program Files (x86)\\Minecraft\\MinecraftLauncher.exe"
-	virtualbox | "virtual box" | ubuntu | linux -> "E:\\Program Files\\Oracle\\VirtualBox\\VirtualBox.exe"
-	sourcetree | st -> "E:\\Program Files (x86)\\Atlassian\\SourceTree\\SourceTree.exe"
-	"project manager" | projman -> "E:\\Users\\Daniel\\Dropbox\\Apps\\Project Manager.exe"
+	sourcetree | st -> "TODO"

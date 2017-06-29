@@ -38,6 +38,7 @@ import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
 import javax.xml.bind.DatatypeConverter;
 import java.lang.StringBuilder;
+import java.util.Arrays;
 
 public class How
 {
@@ -1042,6 +1043,74 @@ public class How
 		}
 		
 		return builder.toString();
+	}
+	
+	// </answer>
+
+	// <answer questionid="java-primitive-types" version="2017-03-31 10:22:47">
+	
+	/**
+	 * @return The set of Java primitive types.
+	 */
+	public static Set<String> javaPrimitiveTypes() {
+		Set<String> set = new HashSet<>();
+		set.addAll(Arrays.asList(
+			"boolean",
+			"byte",
+			"char",
+			"short",
+			"int",
+			"long",
+			"float",
+			"double"
+			));
+		return set;
+	}
+	
+	// </answer>
+
+	// <answer questionid="java-boxed-primitive-types" version="2017-03-31 10:27:34">
+	
+	/**
+	 * @return The set of Java boxed primitive types.
+	 */
+	public static Set<String> javaBoxedPrimitiveTypes() {
+		Set<String> set = new HashSet<>();
+		set.addAll(Arrays.asList(
+			"Boolean",
+			"Byte",
+			"Character",
+			"Short",
+			"Integer",
+			"Long",
+			"Float",
+			"Double"
+			));
+		return set;
+	}
+	
+	// </answer>
+
+	// <answer questionid="check-if-a-java-type-is-primitive" version="2017-03-31 10:38:40">
+	
+	/**
+	 * Checks whether the given type is a Java primitive type.
+	 *
+	 * @param type							The type.
+	 * @param considerBoxedTypesPrimitive	Whether boxed primitive types
+	 *										(ex. "Integer") should be considered
+	 *										primitive.
+	 * @return								true if the given type is a primitive
+	 *										Java type.
+	 */
+	public static boolean isJavaTypePrimitive(String type, boolean considerBoxedTypesPrimitive) {
+		if (javaPrimitiveTypes().contains(type)) {
+			return true;
+		} else if (considerBoxedTypesPrimitive && javaBoxedPrimitiveTypes().contains(type)) {
+			return true;
+		} else {
+			return false;
+		}
 	}
 	
 	// </answer>

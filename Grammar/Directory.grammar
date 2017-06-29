@@ -1,23 +1,6 @@
 directory:
-	lui? lang|language data -> "E:\\Users\\Daniel\\Dropbox\\Projects\\Lui\\LanguageData"
-	how java -> "E:\\Users\\Daniel\\Dropbox\\Projects\\How\\src\\com\\danielbigham\\how"
-	how java src|source -> "E:\\Users\\Daniel\\Dropbox\\Projects\\How\\src"
-	how js -> "E:\\Users\\Daniel\\Dropbox\\Projects\\How\\web\\js"
-	ssh -> "E:\\Users\\Daniel\\.ssh"
-	how ahk|autohotkey -> "E:\\Users\\Daniel\\Dropbox\\Projects\\How\\autohotkey"
-	how? gen -> "E:\\Users\\Daniel\\Dropbox\\Projects\\How\\linguistics\\gen"
-	ace download -> "E:\\ace-builds-master"
-	q | question | questions -> "E:\\Users\\Daniel\\Dropbox\\Projects\\How\\questions"
-	how -> "E:\\Users\\Daniel\\Dropbox\\Projects\\How"
-	old ling|linguistics -> $OldLinguisticsDir
-	downloads -> "E:\\Users\\Daniel\\Downloads"
-	dir=$sourceCodeDirectory -> dir["Directory"]
-	~jlang data -> "E:\\Users\\Daniel\\Dropbox\\Projects\\JitLang\\Data"
-	lui java -> "E:\\Users\\Daniel\\Dropbox\\Projects\\Lui\\src\\com\\danielbigham\\lui"
-	documents | docs -> "E:\\Users\\Daniel\\Documents"
-	projects|project|proj -> "E:\\Users\\Daniel\\Dropbox\\Projects"
+	base | (wolfram? (workspaces|workspace)) -> "TODO"
+	downloads -> "TODO"
+	documents | docs -> "TODO"
 	lui -> $LuiDir
-	issues -> FileNameJoin[{$DropboxDir, "Notebooks"}]
-	personal -> FileNameJoin[{$DropboxDir, "PersonalWL", "danielb", "Daniel"}]
-	~spacex videos -> "E:\Users\Daniel\Videos\SpaceXVideos"
 	notebooks|nbs -> $NotebookDirectory

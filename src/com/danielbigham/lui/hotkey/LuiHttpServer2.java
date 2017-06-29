@@ -122,7 +122,7 @@ public class LuiHttpServer2
 		public void handle(HttpExchange t) throws IOException
 		{			
 			Util2.callWL(
-				"EvaluateEvaluationTarget[]");
+				"WUtils`WUtils`EvaluateEvaluationTarget[]");
 			LuiHttpServer2.defaultResponse(t);
 		}
 	}
@@ -138,7 +138,7 @@ public class LuiHttpServer2
 		public void handle(HttpExchange t) throws IOException
 		{			
 			Util2.callWL(
-				"SetEvaluationTarget[]");
+				"WUtils`WUtils`SetEvaluationTarget[]");
 			LuiHttpServer2.defaultResponse(t);
 		}
 	}
@@ -156,7 +156,7 @@ public class LuiHttpServer2
 			Map<String, String> parms = LuiHttpServer2.queryToMap(t.getRequestURI().getQuery());			
 			String name = parms.get("name");
 			Util2.callWL(
-				"CreateIssueNotebook["  +
+				"WUtils`WUtils`CreateIssueNotebook["  +
 					"\"Name\" -> " + Util.createDoubleQuotedString(name) +
 				"]");
 			LuiHttpServer2.defaultResponse(t);

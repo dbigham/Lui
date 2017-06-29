@@ -1,10 +1,4 @@
 start:
-	start how ahk -> SystemOpen["E:\\Users\\Daniel\\Dropbox\\Projects\\How\\autohotkey\\how.ahk"]
-	
-	createAddAnswerUi -> EditFile["E:\\Users\\Daniel\\Dropbox\\Projects\\How\\js\\add_answer.js", "Substring" -> "function createAddAnswerUi"]
-
-	reset how log -> ResetHowLog[]
-	
 	(new|create)? js|javascript str|string -> CreateMultilineJavaScriptString[]
 	
 	java str|string -> CreateMultilineJavaString[]
@@ -15,10 +9,8 @@ start:
 	google query=$quotedString
 		HeldHead[SystemOpen][StringJoin["https://www.google.ca/search?sourceid=chrome-psyapi2&ion=1&espv=2&ie=UTF-8&q=", query]]
 
-	training report -> ReplayTrainingReport[]
-
 	search for $name -> SearchFiles[name]
-	search $dir for $name -> SearchFiles[name, "Directories" -> {dir}]
+	(search $dir for $name) | (search for $name in $dir) -> SearchFiles[name, "Directories" -> {dir}]
 	
 	replace from=$quotedString with to=$quotedString in $dir
 		StringReplaceInDir[dir, from, to]
@@ -28,15 +20,6 @@ start:
 	
 	(search ~nbs for $name) | (search ~nbs $name) | (~nbs search $name)
 		SearchNotebooks[name]
-	
-	key mappings
-		OpenFileInWorkbench[
-			FindFile["JitLang`UI`"],
-			"Substring" -> "LetterToChunkType[letter_"
-		]
-
-	~jlang input=$quotedString
-		JLang[input]
 	
 	word=$id "->" type=$id
 		ChunkSet[word, "Type" -> type]
@@ -56,8 +39,11 @@ start:
 	~new ~nb name=($id|$quotedString)
 		CreateIssueNotebook["Name" -> name]
 	
-	open ~nb name=($id|$quotedString)
+	open? ~nb? name=($id|$quotedString) ~nb?
 		OpenNotebook[name]
+
+    name=($id|$quotedString) ~nb
+        OpenNotebook[name]
 	
 	name=$notebook -> OpenNotebook[name]
 	
@@ -80,7 +66,7 @@ start:
 			,
 			HeldHead[EditFile][FindFile[file], "Substring" -> substring]
 		]
-		
+	
 	file=$sourceFile substring=$quotedString
 		Scored[
 			If [StringFreeQ[file, "`"],
@@ -109,29 +95,29 @@ start:
 	
 	$url -> URL[url]
 	
-	run tests -> Print[RunUnitTests[FileNameDrop[FindFile["Lui`"], -2]]]
+	run unit? tests -> Print[RunUnitTests[]]
+	
+	run (all|every) unit? tests -> Print[RunUnitTests["IncludeSlowTests" -> True]]
 	
 	run $id tests -> Print[RunUnitTests[FileNameDrop[FindFile[StringJoin[id, "`"]], -2]]]
 	
 	~new $sourceFile ~function name=$id "[" $funcArgs "]" $quotedString
-		HeldHead[CreateFunctionInFile][
+		HeldHead[CreateFunction][
 			FindFile[sourceFile], 
 			StringJoin[name, "[", Riffle[funcArgs, ", "], "]"],
-			"Description" -> quotedString
+			quotedString
 		]
-		
+	
 	~new $sourceFile ~function name=$id "[" "]" $quotedString
-		HeldHead[CreateFunctionInFile][
+		HeldHead[CreateFunction][
 			FindFile[sourceFile], 
 			StringJoin[name, "[]"],
-			"Description" -> quotedString
+			quotedString
 		]
-		
-	"work on"|wo|w $function -> WorkOn["Function", function]
+	
+	"work on"|wo|w $function -> WorkOn[function]
 	
 	delete ~nb -> DeleteCurrentNotebook[]
-	
-	$sourceCodeDirectory
 	
 	~new $sourceCodeDirectory file name=($id|$quotedString)
 		CreateSourceFile[
@@ -158,9 +144,14 @@ start:
 			"Symbol" -> StringJoin["~", id],
 			"Expression" -> Null
 		]
-	
-	ftp
-		HeldHead[RunProcess][{"E:\\Program Files (x86)\\FileZilla FTP Client\\filezilla.exe", "--site=\"0/CWH\""}]
+
+~project
+    project
+    proj
+
+~syn:
+    syn
+    synonym
 
 dir:
 	dir=$directory ~dir -> dir
@@ -205,93 +196,26 @@ function:
 
 ~webpage: webpage|website
 
-~spacex: spacex|spx|"space x"
-~spx: spacex|spx|"space x"
-
-~project: proj|project
-~proj: proj|project
-
-~jlang: "jit language" | jlang | jlanguage | jitlang | jit
-
-~syn: synonym | syn
-
-~curt:
-	(curt | curtis) | ((curt | curtis) beattie)
-		"CurtisBeattie"
-~login:
-	login | username | "user name" | password | account
-		None
-~bb:
-	bb | blackberry | "black berry" -> "BlackBerry"
-~bb10:
-	~bb 10 -> "BlackBerry10"
-~ps:
-	photostar | "photo star" | ps -> "PhotoStar"
-~bb10:
-	~bb | ~bb10 -> "BlackBerry"
-~sb:
-	sabbatical | sb -> "Sabbatical"
-~its:
-	(its | iTunesSync | "iTunes Sync") "sync for itunes"
-		None
-~ml:
-	"machine learning" | ml -> "MachineLearning"
-~markov:
-	markov | (markov (model | models)) -> "MarkovModels"
-~kn:
-	kn | "kneser ney" | "kneser-ney" -> "KneserNey"
-~lang:
-	language | lang
-~impl:
-	implementation | imp | impl
-~fb:
-	(fb | facebook | "face book") page?
-~lm:
-	lm | (~lang (model | modelling | modeling))
-~nlu:
-	nlu | nlp | "natural language understanding" | "natural language processing"
 ~wl:
 	wl | "wolfram language" -> "WolframLanguage"
-~libri:
-	librispeech | "libri speech" | libri
-~ling:
-	linguistics | linguistic | ling | xxxxx
-~spacex:
-	spacex | "space x" | sx | spx | spcx
-~classify:
-	classify | classifier | classification
-~bp:
-	"back propagation" | backpropagation | "back propogation" | backpropogation
-		"BackPropagation"
-~nn:
-	"neural nets" | "neural net" | NN | NNs -> "NeuralNetwork"
-~wdocs:
-	"wolfram docs" | wdocs | wdoc | ((wl | m | mathematica | wolfram) (docs | doc | documentation | help | "help pages"))
-		"WolframDocumentation"
-~multilang:
-	"cross-lingual" | "cross lingual" | "multi-lingual" | "multi lingual" | "multi language" | "multi-language"
-~nn:
-	nn | "neural networks" | "neural network"
-~bot:
-	bot | bots | chatbots | chatbot | "chat bot" | "chat bots"
-~mye:
-	mye
-	enitites
-	entity
-	"my entities"
 
-~chandler:
-	chandler | ch | mowat | "chandler mowat"
+~js
+	java script
+	javascript
+	js
 
-~digitalocean:
-	"digital ocean" | digitalocean | do
+~ui
+	ui
+	user interface
 
-~do:
-	~digitalocean
-notebook:
-	npm | node | "node.js" -> "npm.nb"
+~libraries
+	libraries
+	libs
+	frameworks
 
-~mer
-	meredith
-	mer
-	mb
+~db
+	database
+	db
+
+~m
+	~wl | m | mathematica | wolfram

@@ -161,6 +161,11 @@ public abstract class PatternMatch implements IPatternMatch
 			{
 				binding = dynamicBinding;
 			}
+			else if (binding != null && binding.contains("_"))
+			{
+				binding = binding.replace("_", "");
+			}
+			
 			if (binding == null)
 			{
 				wl.append("Null");
@@ -169,6 +174,7 @@ public abstract class PatternMatch implements IPatternMatch
 			{
 				wl.append("HoldComplete[").append(binding).append("]");
 			}
+			
 			wl.append("}");
 			
 			if (i < subMatchPos.length - 2)
