@@ -2,7 +2,7 @@
 
 ## Summary
 
-LUI implements a parser for a Context Free Grammar (CFG).  While CFGs have been around for a long time (Chomsky formalized then in the 1950s), they remain a very powerful way to create linguistic UIs.
+LUI implements a parser for a Context Free Grammar (CFG).  While CFGs have been around for a long time (Chomsky formalized them in the 1950s), they remain a very powerful way to create linguistic UIs.
 
 When paired with the Wolfram Language, we can use CFGs to associate linguistics with snippets of code that we want to run.
 
@@ -130,7 +130,7 @@ Example AutoHotKey script that opens / shows a Mathematica notebook named LuiUI.
     OpenDirectoryOrFile(Name, Path, ScreenSide)
     {
         IsWindowOpen := WinExist(Name)
-    
+        
         if (IsWindowOpen)
         {
             ;; If the file/dir is already open, then display it
