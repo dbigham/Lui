@@ -16,6 +16,9 @@ Needs["Lui`UI`"];
 If [DownValues[Lui`CustomReload] =!= {},
     Lui`CustomReload[];
 ];
+If [DownValues[Lui`CustomReload2] =!= {},
+    Lui`CustomReload2[];
+];
 
 InitializeParser[];
 
