@@ -12,6 +12,10 @@ Needs["Lui`Actions`"];
 Needs["Lui`Parse`"];
 Needs["Lui`UI`"];
 
+If [!FailureQ[FindFile["DevTools`"]],
+    Needs["DevTools`"];
+];
+
 (* Allow external systems to setup some code that gets run each time we do a Get["Lui`"]. *)
 If [DownValues[Lui`CustomReload] =!= {},
     Lui`CustomReload[];
