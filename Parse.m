@@ -72,16 +72,24 @@ Attributes[HeldHead] = {HoldAllComplete};
 	
 	\maintainer danielb
 *)
+Clear[LuiParse];
 Options[LuiParse] =
 {
 	"Debug" -> False			(*< Debug output? *)
 }
 LuiParse[input_String, opts:OptionsPattern[]] :=
-	Block[{parse},
+	Block[{parse, customParse},
 		
 		ReloadFiles[];
 		
 		parse = LuiParse[$Grammar, input, opts];
+		
+		(* To allow external systems to also have a shot at acting on user input. *)
+		customParse = Lui`Parse`CustomParse[input, parse];
+		
+		If [(parse === {} || parse === HoldComplete[$Failed]) && !FailureQ[customParse],
+		    parse = {customParse};
+		];
 		
 		parse =
 			Which[
