@@ -1,6 +1,8 @@
 package com.danielbigham.lui.loading;
 
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -75,7 +77,11 @@ public class GrammarFiles implements IFileLoader
 		}
 		else
 		{
-			Out.print("TODO");
+		    // TODO
+		    StringWriter sw = new StringWriter();
+		    PrintWriter pw = new PrintWriter(sw);
+		    e.printStackTrace(pw);
+		    Out.print(sw.toString());
 		}
 	}
 	

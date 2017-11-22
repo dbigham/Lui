@@ -11,6 +11,7 @@ import org.antlr.v4.runtime.BailErrorStrategy;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 
+import com.danielbigham.io.Out;
 import com.danielbigham.lui.Grammar;
 import com.danielbigham.lui.antlr.DescriptiveErrorListener;
 import com.danielbigham.lui.antlr.GrammarLexer;
@@ -21,6 +22,7 @@ import com.danielbigham.lui.antlr.GrammarParser.BindingContext;
 import com.danielbigham.lui.antlr.GrammarParser.GrammarRuleContext;
 import com.danielbigham.lui.antlr.GrammarParser.GrammarRulesContext;
 import com.danielbigham.lui.antlr.GrammarParser.OptionalRulePartContext;
+import com.danielbigham.lui.antlr.GrammarParser.OrRulePart2Context;
 import com.danielbigham.lui.antlr.GrammarParser.OrRulePartContext;
 import com.danielbigham.lui.antlr.GrammarParser.RulePart2Context;
 import com.danielbigham.lui.antlr.GrammarParser.RulePart3Context;
@@ -379,8 +381,14 @@ public class AntlrHelpers
 			pattern.setOptional(true);
 			return pattern;
 		}
+		else if (rulePart instanceof OrRulePart2Context)
+		{
+            IPattern pattern = convert(((OrRulePart2Context) rulePart).rulePart2(), grammar);
+            return pattern;
+		}
 		else
 		{
+		    Out.print("Unhandled rule: " + rulePart.getClass().getSimpleName());
 			throw new IllegalArgumentException();
 		}
 	}
