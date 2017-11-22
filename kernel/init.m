@@ -3,15 +3,6 @@ If [$Context =!= "Global`",
     Print["Rather, it is: ", $Context];
 ];
 
-Get["Lui`Lui`"];
-
-WUtils`WUtils`ReloadFiles[];
-
-Needs["Lui`Util`"];
-Needs["Lui`Actions`"];
-Needs["Lui`Parse`"];
-Needs["Lui`UI`"];
-
 If [!FailureQ[FindFile["DevTools`"]],
     Needs["DevTools`"];
 ];
@@ -20,9 +11,19 @@ If [!FailureQ[FindFile["DevTools`"]],
 If [DownValues[Lui`CustomReload] =!= {},
     Lui`CustomReload[];
 ];
+
 If [DownValues[Lui`CustomReload2] =!= {},
     Lui`CustomReload2[];
 ];
+
+Get["Lui`Lui`"];
+
+WUtils`WUtils`ReloadFiles[];
+
+Needs["Lui`Util`"];
+Needs["Lui`Actions`"];
+Needs["Lui`Parse`"];
+Needs["Lui`UI`"];
 
 InitializeParser[];
 
