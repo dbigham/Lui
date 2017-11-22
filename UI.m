@@ -202,7 +202,7 @@ displayIfNotNull[val_, formatFuncIn_:Automatic] :=
 			Sequence @@ {}
 			,
 			If [formatFunc === Automatic,
-				If [!MatchQ[val, _Column | _Row | _Grid | _DynamicModule | _Dataset],
+				If [!MatchQ[val, _Column | _Row | _Grid | _DynamicModule | _Dataset | _Graphics],
 					formatFunc = Indent2;
 					,
 					formatFunc = Identity;
