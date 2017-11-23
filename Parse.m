@@ -40,7 +40,7 @@ Scored::usage = "Scored  "
 
 Score::usage = "Score  "
 
-$Grammars::usage = "$Grammars  "
+$Grammar::usage = "$Grammar  "
 
 Begin["`Private`"]
 
@@ -74,14 +74,7 @@ LuiParse[input_String, opts:OptionsPattern[]] :=
 		
 		failedParseQ[p_] := (p === {} || p === HoldComplete[$Failed]);
 		
-		Function[{grammar},
-		    parse = LuiParse[grammar, input, opts];
-		    If [!failedParseQ[parse],
-		        Goto[done];
-		    ];
-		] /@ $Grammars;
-		
-		Label[done];
+		parse = LuiParse[$Grammar, input, opts];
 		
 		(* To allow external systems to also have a shot at acting on user input. *)
 		customParse = Lui`Parse`CustomParse[input, parse];
@@ -188,11 +181,14 @@ CreateGrammar[name_String, obj_ /; JavaObjectQ[obj]] :=
 		|>
 	]
 
-CreateGrammar[name_String, Dir[dir_String]] :=
+CreateGrammar[name_String, dir : Dir[_String]] :=
+    CreateGrammar[name, {dir}]
+
+CreateGrammar[name_String, dirs : {Dir[_String]..}] :=
 	Block[{grammar, grammarFiles},
 		grammar = JavaNew["com.danielbigham.lui.Grammar"];
 		LoadJavaClass["com.danielbigham.lui.loading.GrammarFiles"];
-		grammarFiles = JavaNew["com.danielbigham.lui.loading.GrammarFiles", dir, grammar, True];
+		grammarFiles = JavaNew["com.danielbigham.lui.loading.GrammarFiles", First /@ dirs, grammar, True];
 		CreateGrammar[name, grammar]
 	]
 
@@ -814,13 +810,9 @@ evaluateRule[type_, action_, children_List] :=
 	\maintainer danielb
 *)
 InitializeParser[] :=
-	Block[{i = 0},
-		If [!ValueQ[$Grammars],
-			$Grammars =
-				Function[{grammarDir},
-				    ++i;
-				    CreateGrammar["Lui" <> ToString[i], Dir[grammarDir]]
-				] /@ $GrammarDirs;
+	Block[{},
+		If [!ValueQ[$Grammar],
+			$Grammar = CreateGrammar["Lui", Dir /@ $GrammarDirs]
 		];
 	];
 

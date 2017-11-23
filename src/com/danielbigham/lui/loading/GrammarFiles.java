@@ -6,6 +6,7 @@ import java.io.StringWriter;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import com.danielbigham.Util;
@@ -35,6 +36,11 @@ public class GrammarFiles implements IFileLoader
 	public GrammarFiles(List<String> dirs, Grammar grammar, boolean hasWolframLanguageNotebook) throws IOException
 	{
 		init(dirs, grammar, hasWolframLanguageNotebook);
+	}
+
+	public GrammarFiles(String[] dirs, Grammar grammar, boolean hasWolframLanguageNotebook) throws IOException
+	{
+	    init(Arrays.asList(dirs), grammar, hasWolframLanguageNotebook);
 	}
 	
 	public GrammarFiles(String dir, Grammar grammar, boolean hasWolframLanguageNotebook) throws IOException
