@@ -18,11 +18,7 @@ GetParseForest::usage = "GetParseForest  "
 
 GetParserState::usage = "GetParserState  "
 
-$TestGrammares1::usage = "$TestGrammares1  "
-
-$GrammarDir::usage = "$GrammarDir  "
-
-$GrammarFile::usage = "$GrammarFile  "
+$GrammarDirs::usage = "$GrammarDir  "
 
 Dir::usage = "Dir  "
 
@@ -44,19 +40,13 @@ Scored::usage = "Scored  "
 
 Score::usage = "Score  "
 
+$Grammars::usage = "$Grammars  "
+
 Begin["`Private`"]
 
-If [!ValueQ[$GrammarDir],
-    $GrammarDir = FileNameJoin[{$LuiDir, "Grammar"}];
+If [!ValueQ[$GrammarDirs],
+    $GrammarDirs = {FileNameJoin[{$LuiDir, "Grammar"}]};
 ];
-
-$GrammarFile = FileNameJoin[{$GrammarDir, "Main.grammar"}];
-
-$TestGrammares1 =
-"start: a=$a PLUS b=$b -> a+b
-a: ONE -> 1
-b: TWO -> 2
-";
 
 (* The start symbol. *)
 STARTSYM = -1;
@@ -78,16 +68,25 @@ Options[LuiParse] =
 	"Debug" -> False			(*< Debug output? *)
 }
 LuiParse[input_String, opts:OptionsPattern[]] :=
-	Block[{parse, customParse},
+	Block[{parse = {}, customParse, failedParseQ},
 		
 		ReloadFiles[];
 		
-		parse = LuiParse[$Grammar, input, opts];
+		failedParseQ[p_] := (p === {} || p === HoldComplete[$Failed]);
+		
+		Function[{grammar},
+		    parse = LuiParse[grammar, input, opts];
+		    If [!failedParseQ[parse],
+		        Goto[done];
+		    ];
+		] /@ $Grammars;
+		
+		Label[done];
 		
 		(* To allow external systems to also have a shot at acting on user input. *)
 		customParse = Lui`Parse`CustomParse[input, parse];
 		
-		If [(parse === {} || parse === HoldComplete[$Failed]) && !FailureQ[customParse],
+		If [failedParseQ[parse] && !FailureQ[customParse],
 		    parse = {customParse};
 		];
 		
@@ -815,9 +814,13 @@ evaluateRule[type_, action_, children_List] :=
 	\maintainer danielb
 *)
 InitializeParser[] :=
-	Block[{},
-		If [!ValueQ[$Grammar],
-			$Grammar = CreateGrammar["Lui", Dir[$GrammarDir]]
+	Block[{i = 0},
+		If [!ValueQ[$Grammars],
+			$Grammars =
+				Function[{grammarDir},
+				    ++i;
+				    CreateGrammar["Lui" <> ToString[i], Dir[grammarDir]]
+				] /@ $GrammarDirs;
 		];
 	];
 
@@ -856,22 +859,6 @@ ConsiderFileInterpretation[input_String] :=
 
 		]
 	];
-
-(*!
-	\function EditGrammar
-	
-	\calltable
-		EditGrammar[] '' edit the LUI grammar.
-	
-	\related '
-	
-	\maintainer danielb
-*)
-EditGrammar[] :=
-	Block[{},
-		OpenFileInWorkbench[$GrammarFile]
-	];
-
 
 (*!
 	\function ChooseParse
