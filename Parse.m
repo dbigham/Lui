@@ -81,26 +81,36 @@ LuiParse[input_String, opts:OptionsPattern[]] :=
 		
 		parse = LuiParse[$Grammar, input, opts];
 		
-		(* To allow external systems to also have a shot at acting on user input. *)
-		customParse = Lui`Parse`CustomParse[input, parse];
-		
-		(* If the Lui parse failed or it has a mediocre score, and the custom/external parser
-		   does have a result, then favor the result of the custom/external parser. *)
-		If [(failedParseQ[parse] || score[parse] <= 0.7) && !FailureQ[customParse],
-		    parse = {customParse};
-		];
-		
-		parse =
-			Which[
-				Length[parse] > 1,
-				ChooseParse[parse]
-				,
-				Length[parse] == 1,
-				First[parse]
-				,
-				True,
-				$Failed
-			];
+        parse =
+            Which[
+                Length[parse] > 1,
+                ChooseParse[parse]
+                ,
+                Length[parse] == 1,
+                First[parse]
+                ,
+                True,
+                $Failed
+            ];
+        
+        (* To allow external systems to also have a shot at acting on user input. *)
+        If [failedParseQ[parse] ||
+            score[parse] <= 0.7 ||
+            (* If Lui's parse succeeds and has a good score, we only consider the custom
+               parser's interpretation if Lui's interpretation was a notebook interpretation.
+               In that case, we want to also open the custom parser's notebook if it has one.
+               But if Lui's interpretation is something like "run unit tests", then we don't
+               want, for example, the custom parser to also open a notebook called "RunTests". *) 
+            !StringFreeQ[ToString[parse], "Notebook"],
+            
+            customParse = Lui`Parse`CustomParse[input, parse];
+            
+            (* If the Lui parse failed or it has a mediocre score, and the custom/external parser
+               does have a result, then favor the result of the custom/external parser. *)
+            If [(failedParseQ[parse] || score[parse] <= 0.7) && !FailureQ[customParse],
+                parse = {customParse};
+            ];
+        ];
 		
 		If [!FailureQ[parse],
 			
