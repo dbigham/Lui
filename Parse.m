@@ -68,18 +68,25 @@ Options[LuiParse] =
 	"Debug" -> False			(*< Debug output? *)
 }
 LuiParse[input_String, opts:OptionsPattern[]] :=
-	Block[{parse = {}, customParse, failedParseQ},
+	Block[{parse = {}, customParse, failedParseQ, score},
 		
 		ReloadFiles[];
 		
+		(* Did the parse fail? *)
 		failedParseQ[p_] := (p === {} || p === HoldComplete[$Failed]);
+		
+		(* What's the score of the parse? *)
+		score[p_ /; !FreeQ[p, Scored]] := First[Cases[p, Scored[_, val_] :> val, {0, Infinity}]];
+		score[p_] := 1;
 		
 		parse = LuiParse[$Grammar, input, opts];
 		
 		(* To allow external systems to also have a shot at acting on user input. *)
 		customParse = Lui`Parse`CustomParse[input, parse];
 		
-		If [failedParseQ[parse] && !FailureQ[customParse],
+		(* If the Lui parse failed or it has a mediocre score, and the custom/external parser
+		   does have a result, then favor the result of the custom/external parser. *)
+		If [(failedParseQ[parse] || score[parse] <= 0.7) && !FailureQ[customParse],
 		    parse = {customParse};
 		];
 		
