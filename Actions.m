@@ -188,13 +188,18 @@ SearchFiles[search_, OptionsPattern[]] :=
 				search
 			];
 		files = res[All, "Location"];
+		
 		If [EmptyQ[files],
 			Print["No search results."];
 			,
 			Row[
 				SmartButton[
 					FileNameTake[#, -1],
-					OpenFileInWorkbench[#, "Substring" -> search]
+					OpenFileInWorkbench[
+					    (* Work around what appears to be a strange TextSearch bug. *)
+					    StringReplace[#, "\\\\" -> "\\"],
+					    "Substring" -> search
+					]
 				] & /@ files[[All, 1]],
 				" "
 			]
