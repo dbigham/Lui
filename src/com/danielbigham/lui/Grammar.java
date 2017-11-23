@@ -675,7 +675,7 @@ public class Grammar
 			FilePositionSpan grammarSymbolSpan =
 				grammarSymbolFileSpan.get(symbol);
 			
-			String ling = symbol + ":\n\t" + newRule;
+			String ling = symbol + ":\n    " + newRule;
 			
 			if (grammarSymbolSpan != null)
 			{
