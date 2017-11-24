@@ -73,7 +73,7 @@ LuiParse[input_String, opts:OptionsPattern[]] :=
 		ReloadFiles[];
 		
 		(* Did the parse fail? *)
-		failedParseQ[p_] := (p === {} || p === HoldComplete[$Failed]);
+		failedParseQ[p_] := (p === {} || p === HoldComplete[$Failed] || FailureQ[p]);
 		
 		(* What's the score of the parse? *)
 		score[p_ /; !FreeQ[p, Scored]] := First[Cases[p, Scored[_, val_] :> val, {0, Infinity}]];
@@ -108,7 +108,7 @@ LuiParse[input_String, opts:OptionsPattern[]] :=
             (* If the Lui parse failed or it has a mediocre score, and the custom/external parser
                does have a result, then favor the result of the custom/external parser. *)
             If [(failedParseQ[parse] || score[parse] <= 0.7) && !FailureQ[customParse],
-                parse = {customParse};
+                parse = customParse;
             ];
         ];
 		
