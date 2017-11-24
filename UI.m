@@ -48,6 +48,8 @@ Begin["`Private`"]
 	
 	\maintainer danielb
 *)
+If [!ListQ[$previousInputs], $previousInputs = {}];
+$previousInput = 0;
 Lui[] :=
 	DynamicModule[{input},
 		
@@ -84,6 +86,20 @@ Lui[] :=
 								BoxID -> boxId
 							],
 							{
+                                "UpArrowKeyDown" :>
+                                {
+                                    If [$previousInput < Length[$previousInputs], ++$previousInput];
+                                    input = $previousInputs[[-$previousInput]];
+                                },
+                                "DownArrowKeyDown" :>
+                                {
+                                    If [$previousInput > 0, --$previousInput];
+                                    If [$previousInput > 0,
+                                        input = $previousInputs[[-$previousInput]];
+                                        ,
+                                        input = ""
+                                    ]
+                                },
 								"ReturnKeyDown" :>
 								(
 									HandleInput[input, $interpHeldVar, $actionResHeldVar]
@@ -131,6 +147,11 @@ Lui[input_String] :=
 *)
 HandleInput[input_, interpHeldVar_, actionResHeldVar_] :=
 	Block[{interpretation, actionResult},
+		
+		$previousInput = 0;
+		If [!MatchQ[$previousInputs, {___, input}],
+		    AppendTo[$previousInputs, input];
+		];
 		
 		If [StringTrim[input] === "",
 			SetHeldVar[interpHeldVar, Null];
