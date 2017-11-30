@@ -226,7 +226,7 @@ public class GrammarFiles implements IFileLoader
 		if (isGrammarFile(path))
 		{
 			allFiles.add(path);
-			Out.print("Grammar file created: " + path);
+			//Out.print("Grammar file created: " + path);
 			
 			// We'll try ignoring fileCreated events for now for fear that they are duplicated
 			// by quickly-following fileModified events. (see also: HowFileLoader's methods of
