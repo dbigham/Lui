@@ -195,11 +195,17 @@ SearchFiles[search_, OptionsPattern[]] :=
 			Row[
 				SmartButton[
 					FileNameTake[#, -1],
-					OpenFileInWorkbench[
-					    (* Work around what appears to be a strange TextSearch bug. *)
-					    StringReplace[#, "\\\\" -> "\\"],
-					    "Substring" -> search
-					]
+						(* Work around what appears to be a strange TextSearch bug. *)
+						With[{filePath = StringReplace[#, "\\\\" -> "\\"]},
+							If [FileExtension[filePath] === "nb",
+							    NotebookOpen[filePath]
+							    ,
+								OpenFileInWorkbench[
+								    filePath,
+								    "Substring" -> search
+								]
+							]
+						]
 				] & /@ files[[All, 1]],
 				" "
 			]

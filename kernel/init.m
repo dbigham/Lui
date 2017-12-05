@@ -3,6 +3,9 @@ If [$Context =!= "Global`",
     Print["Rather, it is: ", $Context];
 ];
 
+<< WUtils`;
+$ContextPath = DeleteCases[$ContextPath, "WUtils`WUtils`"];
+
 If [!FailureQ[FindFile["DevTools`"]],
     Needs["DevTools`"];
 ];
