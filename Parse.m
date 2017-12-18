@@ -42,6 +42,10 @@ Score::usage = "Score  "
 
 $Grammar::usage = "$Grammar  "
 
+PruneFailedParses::usage = "PruneFailedParses  "
+
+DissolveHeldHeads::usage = "DissolveHeldHeads  "
+
 Begin["`Private`"]
 
 If [!ValueQ[$GrammarDirs],
@@ -84,7 +88,7 @@ LuiParse[input_String, opts:OptionsPattern[]] :=
         parse =
             Which[
                 Length[parse] > 1,
-                ChooseParse[parse]
+                ChooseParse[PruneFailedParses[parse]]
                 ,
                 Length[parse] == 1,
                 First[parse]
@@ -117,10 +121,7 @@ LuiParse[input_String, opts:OptionsPattern[]] :=
 			parse = parse /. Scored[e_, score_] :> e;
 			
 			If [!FreeQ[parse, HeldHead],
-				parse = ReleaseHold[parse];
-				With[{parse2 = parse},
-					parse = HoldComplete[parse2] /. HeldHead[h_] :> h;
-				]
+				parse = DissolveHeldHeads[parse];
 			];
 			
 			parse
@@ -533,7 +534,13 @@ evaluateAction[heldAction_, bindings_] :=
 	  					Function[inner, innerAction];
 	  			);
 			Replace[
-				func @@@ permuteBindings[bindings],
+				Replace[
+				    func @@@ permuteBindings[bindings],
+				    {
+				        {$Failed..} :> $Failed,
+				        list_List :> DeleteCases[list, $Failed]
+				    }
+				],
 				{
 					List[arg_] :> arg,
 					List[args__] :> PossibleExpressions[args]
@@ -913,6 +920,48 @@ Score[expr_] :=
 		scores = Max[Cases[expr, Scored[e_, score_] :> score, {0, Infinity}]];
 		scores /. DirectedInfinity[-1] -> 1
 	];
+
+(*!
+    \function PruneFailedParses
+    
+    \calltable
+        PruneFailedParses[parses] '' Remove parse candidates that end up evaluating to $Failed.
+    
+    \maintainer danielb
+*)
+Clear[PruneFailedParses];
+PruneFailedParses[parses_List] :=
+    Module[{},
+        Select[
+            parses,
+            !FailureQ[DissolveHeldHeads[#]] &
+        ]
+    ]
+
+(*!
+    \function DissolveHeldHeads
+    
+    \calltable
+        DissolveHeldHeads[parses] '' If a parse involves HeldHead, then dissolve the HeldHead and remove the whole expression's outer HoldComplete to allow some evaluation to occur. The result of evaluation should be used as the final parse.
+    
+    \maintainer danielb
+*)
+Clear[DissolveHeldHeads];
+DissolveHeldHeads[parse_] :=
+    Module[{},
+        If [!FreeQ[parse, HeldHead],
+            With[{parse2 = ReleaseHold[parse]},
+                Replace[
+                    parse2,
+                    HeldHead[h_] :> h,
+                    {0, Infinity},
+                    Heads -> True
+                ]
+            ]
+            ,
+            parse
+        ]
+    ]
 
 End[]
 
