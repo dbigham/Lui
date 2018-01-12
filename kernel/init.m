@@ -4,12 +4,13 @@ If [$Context =!= "Global`",
 ];
 
 (* WUtils` shares many symbols with Utility` when used within Wolfram Research, so we make sure
-   to avoid shadowing messages by temporarily removing Utility` from the context path if it
-   exists, and being sure not to keep WUtils` on the context path after loading it. *)
-Block[{$ContextPath},
-    $ContextPath = DeleteCases[$ContextPath, "Utility`"];
+   to avoid shadowing messages, and being sure not to keep WUtils` on the context path after
+   loading it so that if Utility` is loaded later, we don't issue shadowing messages then. *)
+Internal`InheritedBlock[{$ContextPath},
+    Off[General::shdw];
     << WUtils`;
-]
+    On[General::shdw];
+];
 
 If [!FailureQ[FindFile["DevTools`"]],
     Needs["DevTools`"];
