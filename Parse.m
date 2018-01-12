@@ -69,7 +69,8 @@ Attributes[HeldHead] = {HoldAllComplete};
 Clear[LuiParse];
 Options[LuiParse] =
 {
-	"Debug" -> False			(*< Debug output? *)
+	"Debug" -> False,          (*< Debug output? *)
+	"ReturnOne" -> True        (*< If there are multiple parses, should we only return one of them? *)
 }
 LuiParse[input_String, opts:OptionsPattern[]] :=
 	Block[{parse = {}, customParse, failedParseQ, score},
@@ -88,7 +89,10 @@ LuiParse[input_String, opts:OptionsPattern[]] :=
         parse =
             Which[
                 Length[parse] > 1,
-                ChooseParse[PruneFailedParses[parse]]
+                ChooseParse[
+                    PruneFailedParses[Select[parse,  !failedParseQ[#1] & ]],
+                    OptionValue["ReturnOne"]
+                ]
                 ,
                 Length[parse] == 1,
                 First[parse]
@@ -896,8 +900,28 @@ ConsiderFileInterpretation[input_String] :=
 
 	\maintainer danielb
 *)
-ChooseParse[parses_] :=
-	First[Reverse[SortBy[parses, Score[#] &]]]
+ChooseParse[parses_, returnOne_] :=
+    If [Length[parses] === 1,
+        First[parses]
+        ,
+        With[{sortedByScore = Reverse[SortBy[parses, Score[#] &]]},
+            With[{bestScore = Score[First[sortedByScore]]},
+                With[
+                    {
+                        bestParses = TakeWhile[
+                            sortedByScore,
+                            Score[#] === bestScore &
+                        ]
+                    },
+                    If [Length[bestParses] === 1 || TrueQ[returnOne],
+                        First[bestParses]
+                        ,
+                        PossibleExpressions[bestParses]
+                    ]
+                ]
+            ]
+        ]
+    ]
 
 (*!
 	\function Score

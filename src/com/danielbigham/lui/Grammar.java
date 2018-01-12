@@ -81,6 +81,8 @@ public class Grammar
 		symbolsSupportingDynamicRuleCreation.add("sourceCodeDirectory");
 		symbolsSupportingDynamicRuleCreation.add("file");
 		symbolsSupportingDynamicRuleCreation.add("app");
+		symbolsSupportingDynamicRuleCreation.add("food");
+		symbolsSupportingDynamicRuleCreation.add("foodType");
 	}
 
 	private Tokenizer tokenizer;

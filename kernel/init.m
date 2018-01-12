@@ -3,8 +3,13 @@ If [$Context =!= "Global`",
     Print["Rather, it is: ", $Context];
 ];
 
-<< WUtils`;
-$ContextPath = DeleteCases[$ContextPath, "WUtils`WUtils`"];
+(* WUtils` shares many symbols with Utility` when used within Wolfram Research, so we make sure
+   to avoid shadowing messages by temporarily removing Utility` from the context path if it
+   exists, and being sure not to keep WUtils` on the context path after loading it. *)
+Block[{$ContextPath},
+    $ContextPath = DeleteCases[$ContextPath, "Utility`"];
+    << WUtils`;
+]
 
 If [!FailureQ[FindFile["DevTools`"]],
     Needs["DevTools`"];
