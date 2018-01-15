@@ -135,6 +135,8 @@ Lui[input_String] :=
 		ReleaseHold[interpretation]
 	]
 
+Lui[""] := $Failed
+
 (*!
 	\function HandleInput
 	

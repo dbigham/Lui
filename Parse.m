@@ -73,7 +73,7 @@ Options[LuiParse] =
 	"ReturnOne" -> True        (*< If there are multiple parses, should we only return one of them? *)
 }
 LuiParse[input_String, opts:OptionsPattern[]] :=
-	Block[{parse = {}, customParse, failedParseQ, score},
+	Block[{parse = {}, customParse, failedParseQ, score, try},
 		
 		ReloadFiles[];
 		
@@ -84,8 +84,37 @@ LuiParse[input_String, opts:OptionsPattern[]] :=
 		score[p_ /; !FreeQ[p, Scored]] := First[Cases[p, Scored[_, val_] :> val, {0, Infinity}]];
 		score[p_] := 1;
 		
-		parse = LuiParse[$Grammar, input, opts];
-		
+        try[thisInput_] := 
+            (
+                parse = LuiParse[$Grammar, thisInput, opts];
+            );
+        
+        try[input];
+        
+        (* If the parse fails, we can try to massage the input in some cases. *)
+        If [failedParseQ[parse],
+            (* If the user has typed something like: "todo: blah blah" where there's a colon
+               after an initial word, try wrapping the remainder in double qoutes and see if
+               that fixes the parse. *)
+            StringReplace[
+                input,
+                StringExpression[
+                   StartOfString,
+                   commandName: Repeated[LetterCharacter | DigitCharacter | "-" | "_"],
+                   ":",
+                   WhitespaceCharacter...,
+                   remainder: StringExpression[
+                       Except["\""],
+                       ___
+                   ],
+                   EndOfString
+                ] :>
+                    (
+                        try[commandName <> ": \"" <> remainder <> "\""];
+                    )
+            ]
+        ];
+        
         parse =
             Which[
                 Length[parse] > 1,
