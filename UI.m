@@ -37,6 +37,8 @@ CreateLuiLink::usage = "CreateLuiLink  "
 
 DefineLinguisticHotkeyForFile::usage = "DefineLinguisticHotkeyForFile  "
 
+$LuiAutocompletionFunction::usage = "$LuiAutocompletionFunction  "
+
 Begin["`Private`"]
 
 (*!
@@ -83,7 +85,12 @@ Lui[] :=
 								ImageSize -> {450, Automatic},
 								(*ReturnEntersInput -> False,*)
 								FrameMargins -> Medium,
-								BoxID -> boxId
+								BoxID -> boxId,
+								If [ValueQ[$LuiAutocompletionFunction],
+								    FieldCompletionFunction -> $LuiAutocompletionFunction
+								    ,
+								    Sequence @@ {}
+								]
 							],
 							{
                                 "UpArrowKeyDown" :>

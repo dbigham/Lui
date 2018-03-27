@@ -119,7 +119,7 @@ LuiParse[input_String, opts:OptionsPattern[]] :=
             Which[
                 Length[parse] > 1,
                 ChooseParse[
-                    PruneFailedParses[Select[parse,  !failedParseQ[#1] & ]],
+                    PruneFailedParses[Select[parse, !failedParseQ[#1] & ]],
                     OptionValue["ReturnOne"]
                 ]
                 ,
@@ -987,7 +987,7 @@ PruneFailedParses[parses_List] :=
     Module[{},
         Select[
             parses,
-            !FailureQ[DissolveHeldHeads[#]] &
+            !MatchQ[DissolveHeldHeads[#], HoldComplete[$Failed | _Failure]] &
         ]
     ]
 
@@ -995,7 +995,7 @@ PruneFailedParses[parses_List] :=
     \function DissolveHeldHeads
     
     \calltable
-        DissolveHeldHeads[parses] '' If a parse involves HeldHead, then dissolve the HeldHead and remove the whole expression's outer HoldComplete to allow some evaluation to occur. The result of evaluation should be used as the final parse.
+        DissolveHeldHeads[parses] '' If a parse involves HeldHead, remove the expression's outer HoldComplete to allow some evaluation to occur. Then, put the HoldComplete back and dissolve the HeldHead so that the expression uses a normal head.
     
     \maintainer danielb
 *)
@@ -1003,7 +1003,7 @@ Clear[DissolveHeldHeads];
 DissolveHeldHeads[parse_] :=
     Module[{},
         If [!FreeQ[parse, HeldHead],
-            With[{parse2 = ReleaseHold[parse]},
+            With[{parse2 = HoldComplete @@ {ReleaseHold[parse]}},
                 Replace[
                     parse2,
                     HeldHead[h_] :> h,
