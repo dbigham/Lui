@@ -46,6 +46,8 @@ PruneFailedParses::usage = "PruneFailedParses  "
 
 DissolveHeldHeads::usage = "DissolveHeldHeads  "
 
+PerformExplicitEvaluations::usage = "PerformExplicitEvaluations  "
+
 Begin["`Private`"]
 
 If [!ValueQ[$GrammarDirs],
@@ -56,6 +58,8 @@ If [!ValueQ[$GrammarDirs],
 STARTSYM = -1;
 
 Attributes[HeldHead] = {HoldAllComplete};
+
+PossibleExpressions[singleParse_] := {singleParse}
 
 (*!
 	\function LuiParse
@@ -115,11 +119,15 @@ LuiParse[input_String, opts:OptionsPattern[]] :=
             ]
         ];
         
+        parse = PerformExplicitEvaluations /@ parse;
+        
+        parse = PruneFailedParses[Select[parse, !failedParseQ[#1] & ]];
+        
         parse =
             Which[
                 Length[parse] > 1,
                 ChooseParse[
-                    PruneFailedParses[Select[parse, !failedParseQ[#1] & ]],
+                    parse,
                     OptionValue["ReturnOne"]
                 ]
                 ,
@@ -576,7 +584,7 @@ evaluateAction[heldAction_, bindings_] :=
 				],
 				{
 					List[arg_] :> arg,
-					List[args__] :> PossibleExpressions[args]
+					List[args__] :> PossibleExpressions @@ DeleteDuplicates[{args}]
 				},
 				{0}
 			]
@@ -937,10 +945,12 @@ ChooseParse[parses_, returnOne_] :=
             With[{bestScore = Score[First[sortedByScore]]},
                 With[
                     {
-                        bestParses = TakeWhile[
-                            sortedByScore,
-                            Score[#] === bestScore &
-                        ]
+                        bestParses =
+                            DeleteDuplicates@
+                            TakeWhile[
+                                sortedByScore,
+                                Score[#] === bestScore &
+                            ]
                     },
                     If [Length[bestParses] === 1 || TrueQ[returnOne],
                         First[bestParses]
@@ -1013,6 +1023,38 @@ DissolveHeldHeads[parse_] :=
             ]
             ,
             parse
+        ]
+    ]
+
+(*!
+    \function PerformExplicitEvaluations
+    
+    \calltable
+        PerformExplicitEvaluations[expr] '' If a held expression has an explicit Evaluate[...] sub-expression, then evaluate it.
+    
+    Examples:
+    
+    PerformExplicitEvaluations[HoldComplete[Evaluate[1 + 1 + HoldComplete[3]]]]
+    
+    ===
+    
+    HoldComplete[2 + HoldComplete[3]]
+    
+    \maintainer danielb
+*)
+Clear[PerformExplicitEvaluations];
+PerformExplicitEvaluations[expr_] :=
+    Module[{},
+        If [!FreeQ[expr, Evaluate],
+            ReplaceAll[
+                expr,
+                HoldPattern[Evaluate][e_] :>
+                    With[{tmp = e},
+                        tmp /; True
+                    ]
+            ]
+            ,
+            expr
         ]
     ]
 
