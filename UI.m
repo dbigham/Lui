@@ -110,7 +110,14 @@ Lui[] :=
 								"ReturnKeyDown" :>
 								(
 									HandleInput[input, $interpHeldVar, $actionResHeldVar]
-								)
+								),
+                                {"MenuCommand", "HandleShiftReturn"} :>
+                                (
+                                    HandleInput[input, $interpHeldVar, $actionResHeldVar]
+                                ),
+                                (* Avoid Shift-ENTER breaking things.
+                                   https://mathematica.stackexchange.com/questions/6459/in-inputfield-how-to-prevent-shift-return-from-generating-a-new-cell *)
+                                {"MenuCommand", "EvaluateCells"} :> {}
 							},
 					       (* If we don't set this, then if the computation takes more than 5 seconds or so, it is
 					           silently killed. We don't want that. *)
