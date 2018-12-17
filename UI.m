@@ -983,16 +983,35 @@ SetLuiInputField[str_] :=
 	\maintainer danielb
 *)
 CreateLuiLink[text_] :=
-	Block[{},
-		With[{nb = SelectedNotebook[]},
-			NotebookWrite[
-				nb,
-				Cell["Lui[" <> ToString[text, InputForm] <> "]", "Input"]
-			];
-			SelectionMove[nb, Previous, Cell];
-			FrontEndTokenExecute[nb, "EvaluateCells"];
-		]
-	];
+	Module[{nb = SelectedNotebook[], relatedQ = False},
+        If [TrueQ[DevTools`NotebookTools`WithinSectionQ["Related"]],
+            relatedQ = True;
+            NotebookWrite[nb, Cell[text, "Subsection"]];
+        ];
+		NotebookWrite[
+			nb,
+			Cell["Lui[" <> ToString[text, InputForm] <> "]", "Input"]
+		];
+		SelectionMove[nb, Previous, Cell];
+        If [Or[
+                TrueQ[relatedQ],
+                (* Title section, so we're specifying this notebook as a child of the notebook
+                   we're linking to. *)
+                PreviousCell[DevTools`NotebookTools`PreviousCell2[], CellStyle -> "Section"] === None
+            ],
+            With[{notebookTitle = DevTools`NotebookTools`NotebookTitle[]},
+                DevTools`NotebookTools`NotebookSectionAppend[
+                    text,
+                    "Related",
+                    {
+                        Cell[notebookTitle, "Subsection"],
+                        Cell["Lui[" <> ToString[notebookTitle, InputForm] <> "]", "Input"]
+                    }
+                ]
+            ];
+        ];
+        FrontEndTokenExecute[nb, "EvaluateCells"];
+	]
 
 End[]
 
