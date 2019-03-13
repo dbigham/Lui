@@ -200,7 +200,7 @@ SearchFiles[search_, OptionsPattern[]] :=
 							If [FileExtension[filePath] === "nb",
 							    NotebookOpen[filePath]
 							    ,
-								OpenFileInWorkbench[
+								OpenFileInIDE[
 								    filePath,
 								    "Substring" -> search
 								]
