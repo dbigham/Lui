@@ -239,7 +239,7 @@ displayIfNotNull[val_, formatFuncIn_:Automatic] :=
 			Sequence @@ {}
 			,
 			If [formatFunc === Automatic,
-				If [!MatchQ[val, _Column | _Row | _Grid | _DynamicModule | _Dataset | _Graphics],
+				If [!MatchQ[val, _Column | _Row | _Grid | _DynamicModule | _Dataset | _Graphics | _String],
 					formatFunc = Indent2;
 					,
 					formatFunc = Identity;
@@ -988,10 +988,10 @@ CreateLuiLink[text_] :=
             relatedQ = True;
             NotebookWrite[nb, Cell[text, "Subsection"]];
         ];
-		NotebookWrite[
-			nb,
-			Cell["Lui[" <> ToString[text, InputForm] <> "]", "Input"]
-		];
+        NotebookWrite[
+            nb,
+            Cell[BoxData[MakeBoxes[Lui[text]]], "Input"]
+        ];
 		SelectionMove[nb, Previous, Cell];
         If [Or[
                 TrueQ[relatedQ],
@@ -1005,7 +1005,7 @@ CreateLuiLink[text_] :=
                     "Related",
                     {
                         Cell[notebookTitle, "Subsection"],
-                        Cell["Lui[" <> ToString[notebookTitle, InputForm] <> "]", "Input"]
+                        Cell[BoxData[MakeBoxes[Lui[notebookTitle]]], "Input"]
                     }
                 ]
             ];

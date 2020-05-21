@@ -82,7 +82,7 @@ LuiParse[input_String, opts:OptionsPattern[]] :=
 		ReloadFiles[];
 		
 		(* Did the parse fail? *)
-		failedParseQ[p_] := (p === {} || p === HoldComplete[$Failed] || FailureQ[p]);
+		failedParseQ[p_] := (p === {} || MatchQ[p, $Failed | _Failure]);
 		
 		(* What's the score of the parse? *)
 		score[p_ /; !FreeQ[p, Scored]] := First[Cases[p, Scored[_, val_] :> val, {0, Infinity}]];
@@ -578,8 +578,8 @@ evaluateAction[heldAction_, bindings_] :=
 				Replace[
 				    func @@@ permuteBindings[bindings],
 				    {
-				        {$Failed..} :> $Failed,
-				        list_List :> DeleteCases[list, $Failed]
+				        {($Failed | _Failure)..} :> $Failed,
+				        list_List :> DeleteCases[list, $Failed | _Failure]
 				    }
 				],
 				{
