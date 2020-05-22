@@ -997,7 +997,11 @@ PruneFailedParses[parses_List] :=
     Module[{},
         Select[
             parses,
-            !MatchQ[DissolveHeldHeads[#], HoldComplete[$Failed | _Failure]] &
+            (* We need this to be FreeQ rather than MatchQ, since some parses will end up with
+               a nested $Failed due to a child grammar symbol evaluating to $Failed. If a
+               grammar action needs to include a nested $Failed as part of an IF statement (etc),
+               then it should use HeldHead appropriately. *) 
+            FreeQ[DissolveHeldHeads[#], HoldComplete[$Failed | _Failure]] &
         ]
     ]
 
