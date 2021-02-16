@@ -76,8 +76,17 @@ Options[LuiParse] =
 	"Debug" -> False,          (*< Debug output? *)
 	"ReturnOne" -> True        (*< If there are multiple parses, should we only return one of them? *)
 }
-LuiParse[input_String, opts:OptionsPattern[]] :=
-	Block[{parse = {}, customParse, failedParseQ, score, parseScore, try},
+LuiParse[inputIn_String, opts:OptionsPattern[]] :=
+    Block[{input, parse = {}, customParse, failedParseQ, score, parseScore, try},
+        
+        (* Normalize characters. *)
+        input = StringReplace[
+            inputIn,
+            {
+                "\[OpenCurlyDoubleQuote]" -> "\"",
+                "\[CloseCurlyDoubleQuote]" -> "\""
+            }
+        ];
 		
 		ReloadFiles[];
 		
